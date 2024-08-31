@@ -18,9 +18,9 @@ const mintNFT = async () => {
     // Create a contract instance
     const gamingNftContract = new ethers.Contract(contractAddress, abi, signer)
 
-    const metadataPath = './nft-metadata/red-skin.json'; // Ensure this path is correct
+    const metadataPath = './nft-metadata/blue-skin.json';
     const metadataContent = fs.readFileSync(metadataPath, { encoding: 'utf8' });
-    const metadataJson = JSON.parse(metadataContent); // Parse the JSON content to ensure it's valid JSON
+    const metadataJson = JSON.parse(metadataContent); 
 
     const jsonURI = JSON.stringify(metadataJson);
 
