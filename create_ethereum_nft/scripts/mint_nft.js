@@ -3,7 +3,7 @@ const ethers = require('ethers');
 const fs = require('fs');
 
 const mintNFT = async () => {
-    const contract = require("../artifacts/contracts/GamingNft.sol/GamingNFT.json");
+    const contract = require("../contract_abi/GamingNFT.json");
     console.log(JSON.stringify(contract.abi));
 
     // Create a signer
@@ -18,7 +18,7 @@ const mintNFT = async () => {
     // Create a contract instance
     const gamingNftContract = new ethers.Contract(contractAddress, abi, signer)
 
-    const metadataPath = './nft-metadata/blue-skin.json';
+    const metadataPath = './nft-metadata/red-skin.json';
     const metadataContent = fs.readFileSync(metadataPath, { encoding: 'utf8' });
     const metadataJson = JSON.parse(metadataContent); 
 

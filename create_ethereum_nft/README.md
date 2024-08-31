@@ -20,5 +20,10 @@ npx hardhat run scripts/deploy.js --network sepolia
 
 mint-nft:
 ```shell
-node scripts/mint-nft.js
+node scripts/mint_nft.js
+```
+
+get nft metadata
+```shell
+node scripts/get_nft_metadata.js
 ```
