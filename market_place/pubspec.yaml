@@ -38,6 +38,7 @@ dependencies:
   flutter_js: ^0.8.1
   webview_flutter: ^4.9.0
   js: ^0.7.1
+  flutter_svg: ^2.0.10+1
 
 dev_dependencies:
   flutter_test:
@@ -61,8 +62,8 @@ flutter:
   # the material Icons class.
   uses-material-design: true
 
-#  assets:
-#    - assets/
+  assets:
+    - assets/metamask.png
 
   # To add assets to your application, add an assets section, like this:
   # assets:
