@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en" onclick="jump()">
+<head>
+    <meta charset="UTF-8">
+    <title>Jump Game</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="wrapper">
+        <div class="game">
+            <div id="character"></div>
+            <div id="block"></div>
+        </div>
+        <p>Score: <span id="scoreSpan"></span></p>
+        <button id="startButton">Start Game</button>
+        <div class="skin_select">
+            <label for="skins">Choose a skin:</label>
+            <select name="skins" id="skins" onchange="changeSkin()">
+                <option value="red">Red</option>
+                <option value="yellow">Yellow</option>
+                <option value="blue">Blue</option>
+            </select>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
