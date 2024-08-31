@@ -1,39 +1,31 @@
 import 'package:flutter/material.dart';
-import 'dart:js' as js;
+import 'pages/game_lib_page.dart';
+import 'pages/login_page.dart';
+import 'pages/trade_page.dart';
 
 void main() {
   runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
+    const mainPage = GameLibPage();
+
     return MaterialApp(
-      title: 'Flutter Web JS Example',
+      title: 'DEGames',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: MyHomePage(),
-    );
-  }
-}
-
-class MyHomePage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Flutter Web with JavaScript'),
-      ),
-      body: Center(
-        child: ElevatedButton(
-          onPressed: () {
-            // Execute JavaScript code using the js package
-            js.context.callMethod('doAll');
-          },
-          child: Text('Run JavaScript'),
-        ),
-      ),
+      initialRoute: '/',
+      routes: {
+        '/': (context) => mainPage,
+        '/games': (context) => mainPage,
+        '/trades': (context) => const TradePage(),
+        '/login': (context) => const LoginPage()
+      },
     );
   }
 }
