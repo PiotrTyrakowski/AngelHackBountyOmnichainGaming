@@ -36,54 +36,49 @@
   <script src="flutter_bootstrap.js" async></script>
   <script src="https://c0f4f41c-2f55-4863-921b-sdk-docs.github.io/cdn/metamask-sdk.js"></script>
   <script>
-    const MMSDK = new MetaMaskSDK.MetaMaskSDK({
+    const sdk = new MetaMaskSDK.MetaMaskSDK({
       dappMetadata: {
-        name: "Example Pure JS Dapp",
-        url: window.location.href,
+        name: "Pure JS example",
+        url: window.location.host,
       },
-      infuraAPIKey: process.env.INFURA_API_KEY,
-      // Other options.
+      logging: {
+        sdk: false,
+      }
     });
-    // Because the init process of MetaMask SDK is async.
-    setTimeout(() => {
-      // You can also access via window.ethereum.
-      const ethereum = MMSDK.getProvider();
-
-      ethereum.request({ method: 'eth_requestAccounts' });
-    }, 0);
   </script>
   <script>
-    // Ensure you have ethers.js installed in your project
-    // npm install ethers
+    let provider;
 
-    // Import ethers.js
-    const { ethers } = require('ethers');
-
-    // Check if MetaMask is installed
-    if (typeof window.ethereum !== 'undefined') {
-      console.log('MetaMask is installed!');
+    function connect() {
+      console.log("CONNECTED")
+      sdk.connect().then((res) => {
+                provider = sdk.getProvider();
+              }).catch((e) => console.log('request accounts ERR', e));
+      console.log("CONNECTED END")
     }
 
-    // Request account access
-    async function connectToMetaMask() {
-      try {
-        // Request account access if needed
-        await ethereum.request({ method: 'eth_requestAccounts' });
+    function addEthereumChain() {
+      console.log("ADD CHAIN")
+      provider.request({
+                method: 'wallet_addEthereumChain',
+                params: [
+                  {
+                    chainId: '0x89',
+                    chainName: 'Polygon',
+                    blockExplorerUrls: ['https://polygonscan.com'],
+                    nativeCurrency: { symbol: 'MATIC', decimals: 18 },
+                    rpcUrls: ['https://polygon-rpc.com/'],
+                  },
+                ],
+              }
+              ).then((res) => console.log('add', res)
+      ).catch((e) => console.log('ADD ERR', e));
+      console.log("ADD CHAIN END")
+    }
 
-        // We use ethers.js to interact with the blockchain
-        const provider = new ethers.providers.Web3Provider(window.ethereum);
-
-        // The signer will be your wallet address
-        const signer = provider.getSigner();
-
-        // Get the user's address
-        const userAddress = await signer.getAddress();
-        console.log('User address:', userAddress);
-
-        return signer;
-      } catch (error) {
-        console.error('User denied account access or an error occurred:', error);
-      }
+    function doAll() {
+      connect()
+      addEthereumChain()
     }
   </script>
 </body>
