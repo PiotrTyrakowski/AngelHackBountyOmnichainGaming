@@ -29,7 +29,7 @@ class MyHomePage extends StatelessWidget {
         child: ElevatedButton(
           onPressed: () {
             // Execute JavaScript code using the js package
-            js.context.callMethod('alert', ['Hello from JavaScript!']);
+            js.context.callMethod('doAll');
           },
           child: Text('Run JavaScript'),
         ),
