@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Snake Game with Selectable Skins</title>
+    <link rel="stylesheet" href="css/styles.css"> 
+</head>
+<body>
+    <canvas id="gameCanvas" width="400" height="400"></canvas>
+    <div id="controls">
+        <select id="skinSelector">
+            <option value="#00FF00">Green</option>
+            <option value="#FF0000">Red</option>
+            <option value="#0000FF">Blue</option>
+            <option value="#FFFF00">Yellow</option>
+            <option value="#FF00FF">Purple</option>
+            <option value="rainbow">Rainbow</option>
+        </select>
+        <span id="score">Score: 0</span>
+    </div>
+    <button id="connectWalletBtn">Connect to Your Wallet</button>
+    <script src="game.js"></script>
+    <script src="snake.js"></script>
+    <script src="food.js"></script>
+    <script src="controls.js"></script>
+    <script src="wallet.js"></script>
+</body>
+</html>
