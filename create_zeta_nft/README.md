@@ -1,22 +1,33 @@
-# Sample Hardhat Project
+# Zetachain NFT
 
+## Setup
+1. Run yarn to install all dependencies
 ```shell
-npx hardhat help
-npx hardhat test
-REPORT_GAS=true npx hardhat test
-npx hardhat node
-npx hardhat ignition deploy ./ignition/modules/Lock.ts
-```
-set up .env: (example .env)
-```shell
-API_URL="https://zetachain-athens-evm.blockpi.network/v1/rpc/public"
-PRIVATE_KEY="your private key"
+yarn
 ```
 
-deploy the contract:
+If you don't have yarn install it with
 ```shell
-npx hardhat run scripts/{file}.js --network zetachain
+npm install --global yarn
 ```
+2. Create the .env file with your API_URL and PRIVATE_KEY
+
+Referencing the .env.example file, create a .env file in the root directory of the project
+
+3. Compile the contracts
+```shell
+npx hardhat compile
+```
+
+4. Deploy the contract:
+```shell
+npx hardhat run scripts/deploy_nft.js --network zetachain
+```
+
+
+## Other scripts
+
+### Descriptions
 deploy_nft - script that creates nft minter for zetachain
 
 mint_nft - script that mints nft
@@ -27,6 +38,7 @@ deploy_swap_nft - scirpt that create swapping functionality for zetachain
 
 make_swap - script that makes swap.
 
-# make_swap
-how do you call?
-
+### Run
+```shell
+npx hardhat run scripts/{file}.js --network zetachain
+```
