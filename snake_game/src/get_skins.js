@@ -1,6 +1,6 @@
-import { fetchUserNFT } from "./lib_nft_eth/fetch_user_nft";
-import { getTokensMetadata } from "./lib_nft_eth/get_nft_metadata";
-import { network, contractAddress } from "./lib_nft_eth/settings";
+import { fetchUserNFT } from "./lib_nft/fetch_user_nft";
+import { getTokensMetadata } from "./lib_nft/get_nft_metadata";
+import { network, contractAddress } from "./lib_nft/settings";
 
 export async function getAvailableSkins() {
     const NFTs = await fetchUserNFT();

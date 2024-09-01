@@ -1,4 +1,4 @@
-import { connectWallet } from "./lib_nft_eth/wallet";
+import { connectWallet } from "./lib_nft/wallet";
 import { getAvailableSkins } from "./get_skins";
 
 const connectWalletBtn = document.getElementById('connectWalletBtn');
