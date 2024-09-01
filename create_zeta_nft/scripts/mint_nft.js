@@ -4,7 +4,10 @@ const fs = require('fs');
 
 const mintNFT = async () => {
     const contract = require("../contract_abi/GamingNFT.json");
-    console.log(JSON.stringify(contract));
+    if(!contract) {
+      console.log('Contract ABI not found');
+      return;
+    }
 
     // Create a signer
     const provider = new ethers.providers.JsonRpcProvider(process.env.API_URL);
@@ -18,7 +21,7 @@ const mintNFT = async () => {
     // Create a contract instance
     const gamingNftContract = new ethers.Contract(contractAddress, abi, signer)
 
-    const metadataPath = './nft-metadata/red-skin.json';
+    const metadataPath = './nft-metadata/blue-skin.json';
     const metadataContent = fs.readFileSync(metadataPath, { encoding: 'utf8' });
     const metadataJson = JSON.parse(metadataContent); 
 

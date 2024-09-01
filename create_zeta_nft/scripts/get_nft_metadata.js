@@ -5,7 +5,10 @@ const fs = require('fs');
 
 const getNFTMetadata = async () => {
     const contract = require("../contract_abi/GamingNFT.json");
-    // console.log(JSON.stringify(contract));
+    if(!contract) {
+      console.log('Contract ABI not found');
+      return;
+    }
 
     // Create a signer
     const provider = new ethers.providers.JsonRpcProvider(process.env.API_URL);
