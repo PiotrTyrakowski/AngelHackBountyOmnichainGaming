@@ -1,5 +1,6 @@
 // wallet.js
 import getNFTMetadata from "./get_nft_metadata.js";
+import {network, contractAddress} from "./settings";
 
 const connectWalletBtn = document.getElementById('connectWalletBtn');
 
@@ -12,6 +13,8 @@ async function connectWallet() {
             const account = accounts[0];
             updateButtonText('Connected');
             alert(`Connected to account: ${account}`);
+            getNFTMetadata(1, network, contractAddress);
+
         } catch (error) {
             console.error('Connection request was rejected or there was an error', error);
             alert('Failed to connect. Please try again.');
