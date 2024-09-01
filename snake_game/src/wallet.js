@@ -12,7 +12,6 @@ async function connectWallet() {
             const account = accounts[0];
             updateButtonText('Connected');
             alert(`Connected to account: ${account}`);
-            await getNFTMetadata(); // Retrieve NFT data once connected
         } catch (error) {
             console.error('Connection request was rejected or there was an error', error);
             alert('Failed to connect. Please try again.');

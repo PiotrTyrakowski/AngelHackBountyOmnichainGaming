@@ -1,6 +1,5 @@
 .idea/
 node_modules/
-<<<<<<< Updated upstream
 dist/
-=======
->>>>>>> Stashed changes
+**/dist/**
+dist/*
