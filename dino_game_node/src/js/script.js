@@ -1,3 +1,5 @@
+import { getAvailableSkins } from "./get_skins";
+
 let character, block, scoreSpan, startButton, skins;
 let counter = 0;
 let gameStarted = false;
@@ -14,10 +16,9 @@ export function initializeElements() {
   skins = document.getElementById("skins");
 
     // Initialize the skin map with some default values
-    skinMap.set("default", "#000000");
-    skinMap.set("green", "#00FF00");
-    skinMap.set("blue", "#0000FF");
-    skinMap.set("red", "#FF0000");
+    skinMap.set("Default", "#000000");
+    skinMap.set("Blue Gaming Skin", "#0000FF");
+    skinMap.set("Red Gaming Skin", "#FF0000");
 }
 
 export function startGame() {
@@ -36,7 +37,6 @@ export function startGame() {
   checkDead = setInterval(function() {
     let characterTop = parseInt(window.getComputedStyle(character).getPropertyValue("top"));
     let blockLeft = parseInt(window.getComputedStyle(block).getPropertyValue("left"));
-    console.log(characterTop, blockLeft);
     if (blockLeft < 60 && blockLeft > 20 && characterTop >= 60) {
       block.style.animation = "none";
       alert("Game Over. Score: " + Math.floor(counter / 100));
@@ -69,12 +69,12 @@ export function jump() {
   }, 300);
 }
 
-export function changeSkin() {
+export async function changeSkin() {
   if (!character || !skins) {
     console.error("Character or skins not initialized");
     return;
   }
   var selectedSkin = skins.value;
-  let skinColor = skinMap.get(selectedSkin) || skinMap.get("default");
+  let skinColor = skinMap.get(selectedSkin) || skinMap.get("Default");
   character.querySelector('g').setAttribute('fill', skinColor);
 }

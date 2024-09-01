@@ -1,15 +1,13 @@
 import '../css/style.css';
 import { initializeElements, startGame, resetGame, jump, changeSkin } from './script.js';
-import { initializeWallet, connectWallet } from './wallet.js';
+import './wallet.js';
+
 
 document.addEventListener('DOMContentLoaded', () => {
   initializeElements();
-  initializeWallet();
 
   const startButton = document.getElementById("startButton");
   const skins = document.getElementById("skins");
-  const connectWalletBtn = document.getElementById('connectWalletBtn');
-  const character = document.getElementById('character');
 
   // Event listeners
   document.addEventListener('keydown', (event) => {
@@ -24,10 +22,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
   if (skins) {
     skins.addEventListener('change', changeSkin);
-  }
-
-  if (connectWalletBtn) {
-    connectWalletBtn.addEventListener('click', connectWallet);
   }
 
   // Initialize game
