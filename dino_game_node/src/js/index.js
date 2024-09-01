@@ -1,6 +1,7 @@
 import '../css/style.css';
 import { initializeElements, startGame, resetGame, jump, changeSkin } from './script.js';
 import { initializeWallet, connectWallet } from './wallet.js';
+import guyImage from '../images/guy.svg';  // Import the image
 
 document.addEventListener('DOMContentLoaded', () => {
   initializeElements();
@@ -9,6 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const startButton = document.getElementById("startButton");
   const skins = document.getElementById("skins");
   const connectWalletBtn = document.getElementById('connectWalletBtn');
+  const character = document.getElementById('character');
 
   // Event listeners
   document.addEventListener('keydown', (event) => {

@@ -4,7 +4,7 @@ let gameStarted = false;
 let checkDead;
 
 export function initializeElements() {
-  character = document.getElementById("character");
+  character = document.getElementById("mySvg");
   block = document.getElementById("block");
   scoreSpan = document.getElementById("scoreSpan");
   startButton = document.getElementById("startButton");
@@ -27,8 +27,8 @@ export function startGame() {
   checkDead = setInterval(function() {
     let characterTop = parseInt(window.getComputedStyle(character).getPropertyValue("top"));
     let blockLeft = parseInt(window.getComputedStyle(block).getPropertyValue("left"));
-
-    if (blockLeft < 20 && blockLeft > -20 && characterTop >= 130) {
+    console.log(characterTop, blockLeft);
+    if (blockLeft < 60 && blockLeft > 20 && characterTop >= 60) {
       block.style.animation = "none";
       alert("Game Over. Score: " + Math.floor(counter / 100));
       resetGame();
