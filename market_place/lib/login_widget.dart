@@ -11,7 +11,7 @@ import 'dart:js' as js;
 import 'dart:js_util' as jsu;
 
 @JS()
-external connect();
+external connectAndGetAccount();
 
 class LoginWidget extends StatefulWidget {
   const LoginWidget({Key? key}) : super(key: key);
@@ -21,7 +21,7 @@ class LoginWidget extends StatefulWidget {
 }
 
 class _LoginWidgetState extends State<LoginWidget> {
-  String? _loginStatus;
+  String? _loginStatus = UserAccount().IsLogged() ? "SUCCESS" : "";
 
   @override
   Widget build(BuildContext context) {
@@ -42,19 +42,24 @@ class _LoginWidgetState extends State<LoginWidget> {
               ),
             ),
         ],
-
       );
     });
   }
 
   Future<void> _loginUser() async {
     try {
-      var jsPromise = connect();
+      var jsPromise = connectAndGetAccount();
       String result = await jsu.promiseToFuture<String>(jsPromise);
 
-      setState(() {
-        _loginStatus = result;
-      });
+      if (result != "FAIL") {
+        UserAccount().OnLogin(result);
+
+        setState(() {
+          _loginStatus = "SUCCESS";
+        });
+      } else {
+        throw Exception("connection to metamask failed");
+      }
     } catch (e) {
       print('Error during login: $e');
       setState(() {

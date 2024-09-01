@@ -47,7 +47,7 @@
     });
 </script>
 <script>
-    let provider;
+    var provider;
 
     async function connect() {
         console.log("CONNECTED");
@@ -64,15 +64,33 @@
             });
     }
 
-    function getAccount(provider) {
+    async function getAccount() {
+        if (provider == null){
+            console.log("PROVIDER NULL")
+            return "FAIL"
+        }
+
         try {
-            const accounts = provider.request({method: 'eth_requestAccounts'});
+            const accounts = await provider.request({
+                method: 'eth_requestAccounts',
+                params: []
+            }).catch((err) => {
+                console.log("REQUEST ERROR")
+                throw `Request error: ${err}`
+            })
+
             const account = accounts[0]; // Get the first account
             console.log('User Account Address:', account);
             return account;
         } catch (error) {
             console.error('Error getting account:', error);
+            return "FAIL";
         }
+    }
+
+    async function connectAndGetAccount(){
+        const status = await connect()
+        return status === "SUCCESS" ? await getAccount() : "FAIL";
     }
 
     function getChainId(provider) {
