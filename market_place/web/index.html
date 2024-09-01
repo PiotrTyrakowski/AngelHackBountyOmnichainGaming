@@ -1,85 +1,113 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <!--
-    If you are serving your web app in a path other than the root, change the
-    href value below to reflect the base path you are serving from.
+    <!--
+      If you are serving your web app in a path other than the root, change the
+      href value below to reflect the base path you are serving from.
 
-    The path provided below has to start and end with a slash "/" in order for
-    it to work correctly.
+      The path provided below has to start and end with a slash "/" in order for
+      it to work correctly.
 
-    For more details:
-    * https://developer.mozilla.org/en-US/docs/Web/HTML/Element/base
+      For more details:
+      * https://developer.mozilla.org/en-US/docs/Web/HTML/Element/base
 
-    This is a placeholder for base href that will be replaced by the value of
-    the `--base-href` argument provided to `flutter build`.
-  -->
-  <base href="$FLUTTER_BASE_HREF">
+      This is a placeholder for base href that will be replaced by the value of
+      the `--base-href` argument provided to `flutter build`.
+    -->
+    <base href="$FLUTTER_BASE_HREF">
 
-  <meta charset="UTF-8">
-  <meta content="IE=Edge" http-equiv="X-UA-Compatible">
-  <meta name="description" content="A new Flutter project.">
+    <meta charset="UTF-8">
+    <meta content="IE=Edge" http-equiv="X-UA-Compatible">
+    <meta name="description" content="A new Flutter project.">
 
-  <!-- iOS meta tags & icons -->
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black">
-  <meta name="apple-mobile-web-app-title" content="market_place">
-  <link rel="apple-touch-icon" href="icons/Icon-192.png">
+    <!-- iOS meta tags & icons -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-title" content="market_place">
+    <link rel="apple-touch-icon" href="icons/Icon-192.png">
 
-  <!-- Favicon -->
-  <link rel="icon" type="image/png" href="favicon.png"/>
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="favicon.png"/>
 
-  <title>market_place</title>
-  <link rel="manifest" href="manifest.json">
+    <title>market_place</title>
+    <link rel="manifest" href="manifest.json">
 </head>
 <body>
-  <script src="flutter_bootstrap.js" async></script>
-  <script src="https://c0f4f41c-2f55-4863-921b-sdk-docs.github.io/cdn/metamask-sdk.js"></script>
-  <script>
+<script src="flutter_bootstrap.js" async></script>
+<script src="https://c0f4f41c-2f55-4863-921b-sdk-docs.github.io/cdn/metamask-sdk.js"></script>
+<script>
     const sdk = new MetaMaskSDK.MetaMaskSDK({
-      dappMetadata: {
-        name: "Pure JS example",
-        url: window.location.host,
-      },
-      logging: {
-        sdk: false,
-      }
+        dappMetadata: {
+            name: "Pure JS example",
+            url: window.location.host,
+        },
+        logging: {
+            sdk: true,
+        }
     });
-  </script>
-  <script>
+</script>
+<script>
     let provider;
 
-    function z() {
-      console.log("CONNECTED")
-      sdk.connect().then((res) => {
+    async function connect() {
+        console.log("CONNECTED");
+
+        return sdk.connect()
+            .then((res) => {
                 provider = sdk.getProvider();
-              }).catch((e) => console.log('request accounts ERR', e));
-      console.log("CONNECTED END")
+                console.log("CONNECTED END");
+                return "SUCCESS";
+            })
+            .catch((e) => {
+                console.log('request accounts ERR', e);
+                return "FAIL";
+            });
+    }
+
+    function getAccount(provider) {
+        try {
+            const accounts = provider.request({method: 'eth_requestAccounts'});
+            const account = accounts[0]; // Get the first account
+            console.log('User Account Address:', account);
+            return account;
+        } catch (error) {
+            console.error('Error getting account:', error);
+        }
+    }
+
+    function getChainId(provider) {
+        try {
+            const chainId = provider.request({method: 'eth_chainId'});
+            console.log('Chain ID:', chainId);
+            return chainId;
+        } catch (error) {
+            console.error('Error getting Chain ID:', error);
+        }
     }
 
     function addEthereumChain() {
-      console.log("ADD CHAIN")
-      provider.request({
+        console.log("ADD CHAIN")
+        provider.request({
                 method: 'wallet_addEthereumChain',
                 params: [
-                  {
-                    chainId: '0x89',
-                    chainName: 'Polygon',
-                    blockExplorerUrls: ['https://polygonscan.com'],
-                    nativeCurrency: { symbol: 'MATIC', decimals: 18 },
-                    rpcUrls: ['https://polygon-rpc.com/'],
-                  },
+                    {
+                        chainId: '0x89',
+                        chainName: 'Polygon',
+                        blockExplorerUrls: ['https://polygonscan.com'],
+                        nativeCurrency: {symbol: 'MATIC', decimals: 18},
+                        rpcUrls: ['https://polygon-rpc.com/'],
+                    },
                 ],
-              }
-              ).then((res) => console.log('add', res)
-      ).catch((e) => console.log('ADD ERR', e));
-      console.log("ADD CHAIN END")
+            }
+        ).then((res) => console.log('add', res)
+        ).catch((e) => console.log('ADD ERR', e));
+        console.log("ADD CHAIN END")
     }
 
     function doAll() {
-      connect()
-      addEthereumChain()
+        connect()
+        addEthereumChain()
     }
-  </script>
+</script>
 </body>
 </html>
