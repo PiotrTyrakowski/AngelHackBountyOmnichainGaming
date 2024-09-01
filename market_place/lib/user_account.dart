@@ -10,6 +10,10 @@ class UserAccount {
     return _instance;
   }
 
+  bool IsLogged() {
+    return _etherId != null;
+  }
+
   void OnLogin(String etherId) {
     _etherId = etherId;
   }
