@@ -1,0 +1,34 @@
+import '../css/style.css';
+import { initializeElements, startGame, resetGame, jump, changeSkin } from './script.js';
+import { initializeWallet, connectWallet } from './wallet.js';
+
+document.addEventListener('DOMContentLoaded', () => {
+  initializeElements();
+  initializeWallet();
+
+  const startButton = document.getElementById("startButton");
+  const skins = document.getElementById("skins");
+  const connectWalletBtn = document.getElementById('connectWalletBtn');
+
+  // Event listeners
+  document.addEventListener('keydown', (event) => {
+    if (event.code === 'Space') {
+      jump();
+    }
+  });
+
+  if (startButton) {
+    startButton.addEventListener('click', startGame);
+  }
+
+  if (skins) {
+    skins.addEventListener('change', changeSkin);
+  }
+
+  if (connectWalletBtn) {
+    connectWalletBtn.addEventListener('click', connectWallet);
+  }
+
+  // Initialize game
+  resetGame();
+});
