@@ -12,6 +12,8 @@ class GamesWidget extends StatefulWidget {
 }
 
 class _GamesWidgetState extends State<GamesWidget> {
+  String? _selectedGameName;
+
   @override
   Widget build(BuildContext context) {
     return Center(
@@ -36,29 +38,53 @@ class _GamesWidgetState extends State<GamesWidget> {
             flex: 3,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children:
-              Games.map((game) => GameBlankWidget(info: game)).toList(),
-            ),),
-          const Expanded(
-            flex: 10,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                VerticalDivider(
-                thickness: 4,
-                width: 32,
-                indent: 20,
-                endIndent: 0,
-                color: Colors.white,
-                          ),
-              ],
-            ),)
+              children: Games.map((game) => GameBlankWidget(
+                info: game,
+                onClick: () {
+                  setState(() {
+                    _selectedGameName = game.name;
+                  });
+                },
+              )).toList(),
+            ),
+          ),
+          const VerticalDivider(
+            thickness: 4,
+            width: 32,
+            indent: 20,
+            endIndent: 0,
+            color: Colors.white,
+          ),
+          Expanded(
+              flex: 10,
+              child: Center(
+                child: _buildGameInfo(context),
+              ))
         ],
       ),
     );
   }
 
-  Widget _buildGameInfo(BuildContext context){
-    return Container();
+  Widget _buildGameInfo(BuildContext context) {
+    return Center(
+        child: _selectedGameName == null
+            ? const RoundedContainer(
+            width: null,
+            height: null,
+            padding: EdgeInsets.all(16),
+            borderColor: Colors.white,
+            child: Text(
+              "Select your game first!",
+              style: TextStyle(fontSize: 18),
+            ))
+            : RoundedContainer(
+            width: null,
+            height: null,
+            padding: EdgeInsets.all(16),
+            borderColor: Colors.white,
+            child: Text(
+              "Selected game: $_selectedGameName",
+              style: TextStyle(fontSize: 18),
+            )));
   }
 }
