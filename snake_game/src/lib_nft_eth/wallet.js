@@ -1,19 +1,21 @@
 // wallet.js
-import getNFTMetadata from "./get_nft_metadata.js";
-import {network, contractAddress} from "./settings";
+let account_public_key = null;
 
-const connectWalletBtn = document.getElementById('connectWalletBtn');
+export function getAccountPublicKey() {
+    return account_public_key;
+}
 
-async function connectWallet() {
+export async function connectWallet(updateButtonText) {
     // Check if MetaMask or other Ethereum provider is installed
     if (typeof window.ethereum !== 'undefined') {
         try {
             // Request account access
             const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-            const account = accounts[0];
+            account_public_key = accounts[0];
+
             updateButtonText('Connected');
-            alert(`Connected to account: ${account}`);
-            getNFTMetadata(1, network, contractAddress);
+
+            alert(`Connected to account: ${account_public_key}`);
 
         } catch (error) {
             console.error('Connection request was rejected or there was an error', error);
@@ -23,11 +25,3 @@ async function connectWallet() {
         alert('MetaMask is not installed. Please install MetaMask and try again.');
     }
 }
-
-function updateButtonText(text) {
-    connectWalletBtn.textContent = text;
-}
-
-connectWalletBtn.addEventListener('click', connectWallet);
-
-updateButtonText('Connect Your Wallet');

@@ -1,5 +1,5 @@
 // get_nft_metadata.js
-import {ethers, Interface} from 'ethers';
+import { ethers, Interface } from 'ethers';
 import jsonData from './GamingNFT.json';
 
 // Retrieve NFT metadata from the contract
