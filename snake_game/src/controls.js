@@ -1,5 +1,5 @@
 // controls.js
-import { getDirection, setDirection } from './snake.js';
+import { getDirection, setDirection, setRainbowSkin, setSnakeColor} from './snake.js';
 
 const skinSelector = document.getElementById('skinSelector');
 
@@ -13,12 +13,13 @@ document.addEventListener('keydown', (e) => {
     }
 });
 
+
 skinSelector.addEventListener('change', (e) => {
     if (e.target.value === 'rainbow') {
-        isRainbowSkin = true;
+        setRainbowSkin(true);
     } else {
-        isRainbowSkin = false;
-        snakeColor = e.target.value;
+        setRainbowSkin(false);
+        setSnakeColor(e.target.value);
     }
 });
 ``

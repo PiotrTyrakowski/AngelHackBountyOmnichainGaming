@@ -44,6 +44,13 @@ export function drawSnake() {
     });
 }
 
+export function setSnakeColor(color) {
+    snakeColor = color;
+}
+export function setRainbowSkin(isRainbowSkin) {
+    isRainbowSkin = isRainbowSkin;
+}
+
 function darkenColor(color, percent) {
     const num = parseInt(color.slice(1), 16);
     const amt = Math.round(2.55 * percent);
@@ -53,4 +60,4 @@ function darkenColor(color, percent) {
     return `#${(1 << 24 | (R < 255 ? R < 1 ? 0 : R : 255) << 16 | (G < 255 ? G < 1 ? 0 : G : 255) << 8 | (B < 255 ? B < 1 ? 0 : B : 255)).toString(16).slice(1)}`;
 }
 
-export { snake, isRainbowSkin, snakeColor };
+export { snake };
