@@ -13,7 +13,7 @@ const mintNFT = async () => {
 
     // Get contract ABI and address
     const abi = contract
-    const contractAddress = '0xB75027AA1084c8fb8AcD99f2859a30f54E74E8a7'
+    const contractAddress = '0x34819B7a4B318D50Ff61941fb372D28cCFD27491'
 
     // Create a contract instance
     const gamingNftContract = new ethers.Contract(contractAddress, abi, signer)
@@ -27,7 +27,8 @@ const mintNFT = async () => {
     // Mint the NFT
     let nftTxn = await gamingNftContract.mintNFT(signer.address, jsonURI);
     await nftTxn.wait();
-    console.log(`NFT Minted! Check it out at: https://sepolia.etherscan.io/tx/${nftTxn.hash}`);
+    https://athens.explorer.zetachain.com/address/
+    console.log(`NFT Minted! Check it out at: https://athens.explorer.zetachain.com/address/${nftTxn.hash}`);
 
     console.log('NFT Metadata:', metadataJson);
     console.log('NFT tx:', nftTxn.hash);
