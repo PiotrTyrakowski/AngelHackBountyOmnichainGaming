@@ -14,12 +14,12 @@ const getNFTMetadata = async () => {
 
     // Get contract ABI and address
     const abi = contract.abi
-    const contractAddress = '0x6479A92F15CC8558c823eaCd1013b047DA90BA8f'
+    const contractAddress = process.env.GAMING_NFT_ADDRESS
 
     const gamingNftContract = new ethers.Contract(contractAddress, abi, signer)
 
     // Define the token ID for which you want to retrieve metadata
-    const tokenId = 1; 
+    const tokenId = 1;
 
     // Retrieve the metadata
     try {

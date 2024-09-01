@@ -13,14 +13,14 @@ const mintNFT = async () => {
 
     // Get contract ABI and address
     const abi = contract.abi
-    const contractAddress = '0x6479A92F15CC8558c823eaCd1013b047DA90BA8f'
+    const contractAddress = process.env.GAMING_NFT_ADDRESS
 
     // Create a contract instance
     const gamingNftContract = new ethers.Contract(contractAddress, abi, signer)
 
     const metadataPath = './nft-metadata/red-skin.json';
     const metadataContent = fs.readFileSync(metadataPath, { encoding: 'utf8' });
-    const metadataJson = JSON.parse(metadataContent); 
+    const metadataJson = JSON.parse(metadataContent);
 
     const jsonURI = JSON.stringify(metadataJson);
 
