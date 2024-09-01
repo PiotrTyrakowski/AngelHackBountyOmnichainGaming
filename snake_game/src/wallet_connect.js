@@ -1,5 +1,5 @@
 import { connectWallet } from "./lib_nft/wallet";
-import { getAvailableSkins } from "./get_skins";
+import { updateSkinSelector } from "./color_selector";
 
 const connectWalletBtn = document.getElementById('connectWalletBtn');
 
@@ -9,8 +9,7 @@ function updateButtonText(text) {
 
 async function connectWalletWrapper() {
     await connectWallet(updateButtonText);
-    let skins = await getAvailableSkins();
-    console.log(skins);
+    updateSkinSelector();
 }
 
 connectWalletBtn.addEventListener('click', connectWalletWrapper);

@@ -5,7 +5,7 @@ import { ctx, gridSize, tileCount } from './setup.js';
 
 let snake = [{ x: 200, y: 200 }];
 let direction = 'right'; // Use a private variable to manage direction
-let snakeColor = '#00FF00';
+let snakeColor = '#666666';
 
 export function getDirection() {
     return direction;
