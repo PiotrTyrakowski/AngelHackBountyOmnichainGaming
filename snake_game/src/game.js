@@ -47,7 +47,7 @@ function checkCollision() {
 function resetGame() {
     snake.length = 0;
     snake.push({ x: 200, y: 200 });
-    setDirection('right');
+    setDirection(null);
     score = 0;
     updateScore();
     import('./food.js').then(module => module.generateFood());

@@ -4,7 +4,7 @@ import { food, generateFood } from "./food.js";
 import { ctx, gridSize, tileCount } from './setup.js';
 
 let snake = [{ x: 200, y: 200 }];
-let direction = 'right'; // Use a private variable to manage direction
+let direction = null; // Use a private variable to manage direction
 let snakeColor = '#666666';
 
 export function getDirection() {
