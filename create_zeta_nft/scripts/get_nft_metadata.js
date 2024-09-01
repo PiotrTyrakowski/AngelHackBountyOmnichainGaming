@@ -14,7 +14,7 @@ const getNFTMetadata = async () => {
 
     // Get contract ABI and address
     const abi = contract
-    const contractAddress = '0xB75027AA1084c8fb8AcD99f2859a30f54E74E8a7'
+    const contractAddress = process.env.GAMING_NFT_ADDRESS
 
     const gamingNftContract = new ethers.Contract(contractAddress, abi, signer)
 

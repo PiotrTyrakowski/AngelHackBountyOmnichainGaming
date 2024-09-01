@@ -42,3 +42,19 @@ make_swap - script that makes swap.
 ```shell
 npx hardhat run scripts/{file}.js --network zetachain
 ```
+
+## Deploy goldsky
+### Install goldsky
+```shell
+curl https://goldsky.com | sh
+```
+### Login
+This will require a goldsky account, and it's **API** key
+```shell
+goldsky login
+```
+### Deploy
+```shell
+goldsky subgraph deploy swap/v1 --from-abi goldsky.json
+```
+This should deploy the subgraph and return the url

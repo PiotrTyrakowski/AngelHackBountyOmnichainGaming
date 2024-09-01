@@ -1,21 +1,27 @@
 async function main() {
-   const [deployer] = await ethers.getSigners();
+  const [deployer] = await ethers.getSigners();
 
-   console.log("Deploying contracts with the account:", deployer.address);
-   
-   // Grab the contract factory 
-   const SwapNFT = await ethers.getContractFactory("swapNFT");
+  console.log("Deploying contracts with the account:", deployer.address);
 
-   // Start deployment, returning a promise that resolves to a contract object
-   const swapNFT = await SwapNFT.deploy(); // Pass the deployer's address as the initial owner
-   
-   await swapNFT.deployed();
-   console.log("Contract deployed to address:", swapNFT.address);
+  // Grab the contract factory 
+  const SwapNftFactory = await ethers.getContractFactory("swapNFT");
 
-   const fs = require('fs');
-   const contract = require("../artifacts/contracts/swapNFT.sol/swapNFT.json");
-   fs.writeFileSync('./contract_abi/swapNFT.json', JSON.stringify(contract.abi)); // u łukasza jest inaczej xd sprawdzcie
-   console.log("Contract ABI written");
+  // Start deployment, returning a promise that resolves to a contract object
+  const swapNft = await SwapNftFactory.deploy(); // Pass the deployer's address as the initial owner
+
+  await swapNft.deployed();
+  console.log("Contract deployed to address:", swapNft.address);
+
+
+  const fs = require('fs');
+  // Append the contract address to .env
+  fs.appendFileSync('.env', `SWAP_NFT_ADDRESS=${swapNft.address}\n`);
+  console.log("Contract address written to .env");
+
+  // Write the contract ABI to a file
+  const contract = require("../artifacts/contracts/swapNFT.sol/swapNFT.json");
+  fs.writeFileSync('./contract_abi/swapNFT.json', JSON.stringify(contract.abi));
+  console.log("Contract ABI written");
 
 }
 

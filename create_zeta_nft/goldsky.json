@@ -1,0 +1,18 @@
+{
+  "version": "1",
+  "name": "GamingNFTZeta",
+  "abis": {
+    "GamingNFTZeta": {
+      "path": "contract_abi/GamingNFT.json"
+    }
+  },
+  "chains": ["zetachain-testnet"],
+  "instances": [
+    {
+      "abi": "GamingNFTZeta",
+      "address": "0x2f1b7b418A51A62685c0E7617ca6c0C5551106e6",
+      "chain": "zetachain-testnet",
+      "startBlock": 6589924
+    }
+  ]
+}

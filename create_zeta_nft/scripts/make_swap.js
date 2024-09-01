@@ -19,7 +19,7 @@ const provider = new ethers.providers.JsonRpcProvider(process.env.API_URL);
 const privateKey = process.env.PRIVATE_KEY;
 const signer = new ethers.Wallet(privateKey, provider);
 
-const swapNFTAddress = "0x1CCfadD6F40875DA208e6dAA8614eC18d72f0ceA"; // Address of the deployed swapNFT contract
+const swapNFTAddress = process.env.SWAP_NFT_ADDRESS
 const swapNFTContract = new ethers.Contract(swapNFTAddress, swapNFTABI, signer);
 
 async function approveNFT(nftContractAddress, tokenId) {
