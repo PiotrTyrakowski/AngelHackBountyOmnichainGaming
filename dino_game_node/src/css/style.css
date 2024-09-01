@@ -17,13 +17,13 @@
 
 #block{
     background-color: blue;
-    width: 20px; 
-    height: 20px;
+    border: 2px solid #000000;
+    width: 18px; 
+    height: 18px;
     position: relative;
-    top: 130px;
+    top: 128px;
     left: 500px;
     animation: block 1s infinite linear;
-    
 }
 @keyframes block{
     0%{left: 500px}

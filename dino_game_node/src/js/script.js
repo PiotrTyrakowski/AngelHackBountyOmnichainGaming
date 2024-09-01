@@ -3,12 +3,21 @@ let counter = 0;
 let gameStarted = false;
 let checkDead;
 
+// Map to store skin options (example: skin name -> color)
+let skinMap = new Map();
+
 export function initializeElements() {
   character = document.getElementById("mySvg");
   block = document.getElementById("block");
   scoreSpan = document.getElementById("scoreSpan");
   startButton = document.getElementById("startButton");
   skins = document.getElementById("skins");
+
+    // Initialize the skin map with some default values
+    skinMap.set("default", "#000000");
+    skinMap.set("green", "#00FF00");
+    skinMap.set("blue", "#0000FF");
+    skinMap.set("red", "#FF0000");
 }
 
 export function startGame() {
@@ -66,5 +75,6 @@ export function changeSkin() {
     return;
   }
   var selectedSkin = skins.value;
-  character.style.backgroundColor = selectedSkin;
+  let skinColor = skinMap.get(selectedSkin) || skinMap.get("default");
+  character.querySelector('g').setAttribute('fill', skinColor);
 }
