@@ -1,6 +1,8 @@
 # Create Ethereum NFT contract
 1. Setup HardHat
 ```shell
+npm install --save-dev hardhat
+npx hardhat
 npx hardhat help
 npx hardhat test
 REPORT_GAS=true npx hardhat test
