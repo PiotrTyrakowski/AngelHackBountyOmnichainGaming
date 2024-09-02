@@ -19,8 +19,8 @@ async function main() {
   console.log("Contract address written to .env");
 
   // Write the contract ABI to a file
-  const contract = require("../artifacts/contracts/swapNFT.sol/swapNFT.json");
-  fs.writeFileSync('./contract_abi/swapNFT.json', JSON.stringify(contract.abi));
+  const contract = require("../artifacts/contracts/SwapNft.sol/SwapNft.json");
+  fs.writeFileSync('./contract_abi/SwapNft.json', JSON.stringify(contract.abi));
   console.log("Contract ABI written");
 
 }

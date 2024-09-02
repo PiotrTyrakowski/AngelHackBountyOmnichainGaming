@@ -15,8 +15,8 @@ async function main() {
   console.log("Contract address written to .env");
 
 
-  const contract = require("../artifacts/contracts/GamingNft.sol/GamingNFT.json");
-  fs.writeFileSync('../contract_abi/GamingNFT.json', JSON.stringify(contract.abi));
+  const contract = require("../artifacts/contracts/GamingNft.sol/GamingNft.json");
+  fs.writeFileSync('../contract_abi/GamingNft.json', JSON.stringify(contract.abi));
   console.log("Contract ABI written");
 
 }

@@ -41,6 +41,16 @@ class Wallet {
             alert('MetaMask is not installed. Please install MetaMask and try again.');
         }
     }
+
+    disconnectWallet(updateButtonText) {
+        this.setWalletAddress(null);
+
+        if (updateButtonText && typeof updateButtonText === 'function') {
+            updateButtonText('Connect Wallet');
+        }
+
+        alert('Disconnected from wallet.');
+    }
 }
 
 // Export the singleton instance
@@ -48,3 +58,4 @@ const walletInstance = new Wallet();
 Object.freeze(walletInstance);
 
 export default walletInstance;
+export { Wallet };

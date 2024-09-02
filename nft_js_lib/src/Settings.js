@@ -45,6 +45,7 @@ const settingsInstance = new Settings();
 Object.freeze(settingsInstance); // Prevent modification of the instance
 
 export default settingsInstance;
+export { settingsInstance, ContractSettings };
 
 settingsInstance.addContractSettings(
     'GamingNftZetachain1',
@@ -65,4 +66,11 @@ settingsInstance.addContractSettings(
     new ethers.Network("https://mainnet.infura.io/v3/", 1),
     '0x6479A92F15CC8558c823eaCd1013b047DA90BA8f',
     'https://api.goldsky.com/api/public/project_cm0jlloqy8ay901vt86y56f0t/subgraphs/nft-sepolia/v1/gn'
+);
+
+settingsInstance.addContractSettings(
+    'SwapperNftZetachain',
+    new ethers.Network("https://zeta-chain-testnet.drpc.org", 7001),
+    '0x68F47ba9878FE221954ecE8b2dB6BbbE05759374',
+    'https://api.goldsky.com/api/public/project_cm0l8yvile64b01wo51lfdaga/subgraphs/nft-swapper-zetachain-testnet/v1/gn'
 );

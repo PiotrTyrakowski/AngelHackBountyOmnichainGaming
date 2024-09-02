@@ -1,20 +1,13 @@
 import { ethers, Interface } from "ethers";
-import contractAbi from "./abi/GamingNFT.json";
+import contractAbi from "./abi/GamingNft.json";
+import { assignCheckNull } from "./Utils.js";
 
 // Fetcher class to fetch NFT metadata for a given token ID
 class NftMetadataFetcher {
     constructor(network, contractAddress) {
-        if (!network) {
-            throw new Error("Network not provided");
-        }
-
-        if (!contractAddress) {
-            throw new Error("Contract address not provided");
-        }
-
-        this.network = network;
-        this.contractAddress = contractAddress;
-        this.iface = new Interface(contractAbi.abi);
+        this.network = assignCheckNull(network, "Network not provided");
+        this.contractAddress = assignCheckNull(contractAddress, "Contract address not provided");
+        this.iface = assignCheckNull(new Interface(contractAbi.abi), "Interface not found");
     }
 
     async getNftMetadata(tokenId) {
@@ -23,16 +16,8 @@ class NftMetadataFetcher {
             return null;
         }
 
-        const provider = new ethers.BrowserProvider(window.ethereum, this.network);
-        if (!provider) {
-            console.error("Provider not found");
-            return null;
-        }
-        const signer = await provider.getSigner();
-        if (!signer) {
-            console.error("Signer not found");
-            return null;
-        }
+        const provider = assignCheckNull(new ethers.BrowserProvider(window.ethereum, this.network), "Provider not found");
+        const signer = assignCheckNull(await provider.getSigner(), "Signer not found");
 
         try {
             const gamingNftContract = new ethers.Contract(this.contractAddress, this.iface, signer);

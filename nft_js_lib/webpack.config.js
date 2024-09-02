@@ -20,7 +20,7 @@ export default {
     },
     devServer: {
         static: {
-            directory: path.join('./dist'), // Replaces contentBase
+            directory: path.join('./dist'),
         },
         compress: true,
         port: 9000,

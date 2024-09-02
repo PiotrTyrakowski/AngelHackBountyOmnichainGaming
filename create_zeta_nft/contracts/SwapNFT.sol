@@ -4,7 +4,7 @@ pragma solidity ^0.8.0;
 import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
 import "@openzeppelin/contracts/token/ERC721/utils/ERC721Holder.sol";
 
-contract swapNFT is ERC721Holder {
+contract SwapNft is ERC721Holder {
     struct Swap {
         address initiator;
         address counterparty;

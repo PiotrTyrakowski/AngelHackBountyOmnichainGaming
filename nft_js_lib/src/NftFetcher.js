@@ -1,27 +1,19 @@
 import { request, gql } from 'graphql-request';
+import { assignCheckNull } from './Utils.js';
 
 // Fetcher class to fetch user's NFTs
 class NftFetcher {
   // Constructor to initialize the API and the wallet address
   constructor(goldskyApi, walletAddress) {
-    this.goldskyApi = goldskyApi;
-    this.walletAddress = walletAddress;
-    if (!this.goldskyApi) {
-      throw new Error('No API found');
-    }
-    if (!this.walletAddress) {
-      throw new Error('No wallet address found');
-    }
+    this.goldskyApi = assignCheckNull(goldskyApi);
+    this.walletAddress = assignCheckNull(walletAddress);
   }
 
   // Method to fetch user's NFT
   async fetchUserNFT() {
     try {
 
-      const transfers = await this.fetchUserTransfers();
-      if (!transfers) {
-        return [];
-      }
+      const transfers = assignCheckNull(await this.fetchUserTransfers());
 
       // Sort the transfers based on block number
       transfers.sort(
