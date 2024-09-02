@@ -10,12 +10,10 @@ class Settings {
         Settings.instance = this;
     }
 
-    // Define settings for a specific contract
     addContractSettings(contractName, network, contractAddress, goldskyApi) {
         this.contracts[contractName] = new ContractSettings(network, contractAddress, goldskyApi);
     }
 
-    // Retrieve settings for a specific contract
     getContractSettings(contractName) {
         return this.contracts[contractName];
     }

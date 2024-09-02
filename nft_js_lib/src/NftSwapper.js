@@ -51,17 +51,8 @@ class NftSwapper {
         }
 
         const nftContract = new ethers.Contract(nftContractAddress, this.nftContractInterface, this.signer);
-        console.error("ABI", this.nftContractInterface);
-        console.error("ADDRESS", nftContractAddress);
-        console.error("SIGNER", this.signer);
-        console.error("NFT CONTRACT", nftContract);
-        try {
-            const approveTx = await nftContract.approve(this.swapperContractAddress, tokenId);
-            await approveTx.wait();
-        } catch (error) {
-            console.error(`Error approving NFT ${tokenId} for swapping:`, error);
-            return;
-        }
+        const approveTx = await nftContract.approve(this.swapperContractAddress, tokenId);
+        await approveTx.wait();
         console.log(`Approved NFT ${tokenId} for swapping`);
     }
 
