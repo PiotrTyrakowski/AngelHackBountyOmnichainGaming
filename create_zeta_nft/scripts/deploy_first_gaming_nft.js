@@ -11,7 +11,7 @@ async function main() {
   console.log("Contract deployed to address:", gamingNft.address);
 
   const fs = require('fs');
-  fs.appendFileSync('.env', `GAMING_NFT_ADDRESS=${gamingNft.address}\n`);
+  fs.appendFileSync('.env', `GAMING_NFT_ADDRESS_1=${gamingNft.address}\n`);
   console.log("Contract address written to .env");
 
 

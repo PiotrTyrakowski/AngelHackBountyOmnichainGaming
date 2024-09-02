@@ -2,7 +2,7 @@ require('dotenv').config();
 const ethers = require('ethers');
 const fs = require('fs');
 
-export const mintNFT = async (contractAddress, metadataPath) => {
+const mintNFT = async (contractAddress, metadataPath) => {
     const contract = require("../contract_abi/GamingNFT.json");
     if (!contract) {
         console.log('Contract ABI not found');
@@ -33,3 +33,42 @@ export const mintNFT = async (contractAddress, metadataPath) => {
     console.log('NFT Metadata:', metadataJson);
     console.log('NFT tx:', nftTxn.hash);
 }
+
+const contractAddresses = [
+    process.env.GAMING_NFT_ADDRESS_1,
+    process.env.GAMING_NFT_ADDRESS_2
+];
+const nftMetadataPaths = [
+    './nft-metadata/red-skin.json',
+    './nft-metadata/blue-skin.json',
+    './nft-metadata/green-skin.json',
+    './nft-metadata/yellow-skin.json',
+    './nft-metadata/purple-skin.json',
+    './nft-metadata/orange-skin.json',
+    './nft-metadata/pink-skin.json',
+];
+
+const mintNFTBatch = async (batch_size) => {
+    const promises = [];
+    for (let x = 0; x < parseInt(batch_size); x++) {
+        for (let i = 0; i < contractAddresses.length; i++) {
+            for (let j = 0; j < nftMetadataPaths.length; j++) {
+                promises.push(mintNFT(contractAddresses[i], nftMetadataPaths[j]));
+            }
+        }
+    }
+    await Promise.all(promises);
+}
+
+const batch_size = 5;
+if (!batch_size) {
+    console.error('Usage: node mint_nft_batch.js <batch_size>');
+    process.exit(1);
+}
+
+mintNFTBatch(batch_size)
+    .then(() => process.exit(0))
+    .catch((error) => {
+        console.error(error);
+        process.exit(1);
+    });
