@@ -70,7 +70,7 @@ To use these tests:
 
 To configure the NFT Library, you can use the `Settings.js` file.
 
-To populate the `Settings.js` file with the desired content, you can refer to the `Contracts.js` file, it provides values for the contracts we use and configured.
+To populate the `Settings.js` file with the desired content, you can refer to the `Contracts.md` file, it provides values for the contracts we use and configured.
 By default it is set up to use our own Smart Contracts
 
 
