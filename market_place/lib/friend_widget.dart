@@ -1,20 +1,13 @@
 import 'package:flutter/material.dart';
+import 'friends.dart';
 
-class BlankGameInfo {
-  final String name;
-  final String path;
-  final String contractId;
-
-  const BlankGameInfo({required this.name, required this.path, required this.contractId});
-}
-
-class GameBlankWidget extends StatelessWidget {
-  final BlankGameInfo _info;
+class FriendWidget extends StatelessWidget {
+  final FriendInfo _info;
   final VoidCallback? onClick;
 
-  const GameBlankWidget({
+  const FriendWidget({
     super.key,
-    required BlankGameInfo info,
+    required FriendInfo info,
     this.onClick,
   }) : _info = info;
 
@@ -31,7 +24,7 @@ class GameBlankWidget extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Image.asset(
-                  _info.path,
+                  _info.icon,
                   width: 64,
                   height: 64,
                   fit: BoxFit.cover,

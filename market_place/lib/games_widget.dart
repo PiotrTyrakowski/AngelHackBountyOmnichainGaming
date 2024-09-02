@@ -3,6 +3,7 @@ import 'user_account.dart';
 import 'rounded_container.dart';
 import 'games/game_blank_widget.dart';
 import 'games/game_widgets.dart';
+import 'login_first_widget.dart';
 
 class GamesWidget extends StatefulWidget {
   const GamesWidget({Key? key}) : super(key: key);
@@ -16,17 +17,7 @@ class _GamesWidgetState extends State<GamesWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-        child: UserAccount().IsLogged()
-            ? const RoundedContainer(
-            width: null,
-            height: null,
-            padding: EdgeInsets.all(16),
-            child: Text(
-              "First you need to login!",
-              style: TextStyle(fontSize: 24),
-            ))
-            : _buildGamesLib(context));
+    return LoginFirstWidget(child: _buildGamesLib(context));
   }
 
   Widget _buildGamesLib(BuildContext context) {
@@ -39,13 +30,13 @@ class _GamesWidgetState extends State<GamesWidget> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: Games.map((game) => GameBlankWidget(
-                info: game,
-                onClick: () {
-                  setState(() {
-                    _selectedGameName = game.name;
-                  });
-                },
-              )).toList(),
+                    info: game,
+                    onClick: () {
+                      setState(() {
+                        _selectedGameName = game.name;
+                      });
+                    },
+                  )).toList(),
             ),
           ),
           const VerticalDivider(
@@ -69,22 +60,22 @@ class _GamesWidgetState extends State<GamesWidget> {
     return Center(
         child: _selectedGameName == null
             ? const RoundedContainer(
-            width: null,
-            height: null,
-            padding: EdgeInsets.all(16),
-            borderColor: Colors.white,
-            child: Text(
-              "Select your game first!",
-              style: TextStyle(fontSize: 18),
-            ))
+                width: null,
+                height: null,
+                padding: EdgeInsets.all(16),
+                borderColor: Colors.white,
+                child: Text(
+                  "Select your game first!",
+                  style: TextStyle(fontSize: 18),
+                ))
             : RoundedContainer(
-            width: null,
-            height: null,
-            padding: EdgeInsets.all(16),
-            borderColor: Colors.white,
-            child: Text(
-              "Selected game: $_selectedGameName",
-              style: TextStyle(fontSize: 18),
-            )));
+                width: null,
+                height: null,
+                padding: EdgeInsets.all(16),
+                borderColor: Colors.white,
+                child: Text(
+                  "Selected game: $_selectedGameName",
+                  style: TextStyle(fontSize: 18),
+                )));
   }
 }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'pages/game_lib_page.dart';
 import 'pages/login_page.dart';
 import 'pages/trade_page.dart';
+import 'pages/offers_page.dart';
 
 void main() {
   runApp(MyApp());
@@ -24,7 +25,8 @@ class MyApp extends StatelessWidget {
         '/': (context) => mainPage,
         '/games': (context) => mainPage,
         '/trades': (context) => const TradePage(),
-        '/login': (context) => const LoginPage()
+        '/login': (context) => const LoginPage(),
+        '/offers': (context) => const OffersPage()
       },
     );
   }
