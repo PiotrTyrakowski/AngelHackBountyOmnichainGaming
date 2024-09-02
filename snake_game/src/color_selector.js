@@ -2,14 +2,15 @@ import { setSnakeColor } from './snake.js';
 import { getAvailableSkins } from './get_skins.js';
 
 export async function updateSkinSelector() {
-    const skins = [
-        { id: 1, name: "Red" },
-        { id: 2, name: "Blue" }
-    ]
 
     const colorMap = {
-        1: "#FF0000",
-        2: "#0000FF"
+        1: "#C92626", //red
+        2: "#3030E3", //blue
+        3: "#29AB29", //green
+        4: "#FFCC00", //yellow
+        5: "#4C00B0", //purple
+        6: "#E65B05", //orange
+        7: "#BE2ED6", //pink
     }
 
     const skinSelector = document.getElementById('skinSelector');

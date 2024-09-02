@@ -1,6 +1,6 @@
 // game.js
 import { ctx, canvas } from './setup.js'; // Import canvas and context setup
-import { drawSnake, moveSnake, snake, setDirection } from './snake.js';
+import { drawSnake, moveSnake, snake, setDirection} from './snake.js';
 import { drawFood } from './food.js';
 
 const scoreSpan = document.getElementById('score');
@@ -14,7 +14,7 @@ export function setScore(newScore) {
 }
 
 export function updateScore() {
-    scoreSpan.textContent = score;
+    scoreSpan.textContent = "Score: " + score;
 }
 
 function drawGame() {
@@ -46,8 +46,8 @@ function checkCollision() {
 
 function resetGame() {
     snake.length = 0;
-    snake.push({ x: 200, y: 200 });
-    setDirection(null);
+    snake.push({x: 200, y: 200});
+    setDirection('');
     score = 0;
     updateScore();
     import('./food.js').then(module => module.generateFood());

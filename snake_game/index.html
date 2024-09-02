@@ -7,13 +7,23 @@
     <link rel="stylesheet" href="css/styles.css"> 
 </head>
 <body>
-    <canvas id="gameCanvas" width="400" height="400"></canvas>
-    <div id="controls">
-        <select id="skinSelector">
-        </select>
-        <span id="score">Score: 0</span>
+    <div>
+        <h1 id="h1">Crypto Snake</h1>
+        <div class="gameContainer">
+            <canvas id="gameCanvas" width="400" height="400"></canvas>
+            <div id="controls">
+                <div class="selector">
+                    <h3 id="h3">Choose your skin</h3>
+                    <select id="skinSelector">
+                    </select>
+                </div>
+                <div id="scoreDiv">
+                    <span id="score">Score: 0</span>
+                </div>
+            </div>
+            <button id="connectWalletBtn">Connect to Your Wallet</button>
+        </div>
     </div>
-    <button id="connectWalletBtn">Connect to Your Wallet</button>
     <script src="dist/bundle.js"></script>
 </body>
 </html>
