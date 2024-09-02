@@ -17,4 +17,11 @@ document.addEventListener('keydown', (e) => {
 skinSelector.addEventListener('change', (e) => {
     setSnakeColor(e.target.value);
 });
+
+skinSelector.addEventListener('keydown', function(event) {
+    // Check if the pressed key is any of the arrow keys
+    if (['ArrowDown', 'ArrowUp', 'ArrowLeft', 'ArrowRight'].includes(event.key)) {
+        event.preventDefault(); // Prevent the default action of changing the option
+    }
+});
 ``
