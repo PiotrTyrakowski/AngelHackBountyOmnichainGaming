@@ -17,7 +17,7 @@ body {
 
 canvas {
     border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); */
 }
 #controls {
     margin-top: 10px;
@@ -32,6 +32,8 @@ canvas {
     background-color: #5ba9e4;
     color: white;
     font-size: 16px;
+    width: 170px;
+    
 }
 #connectWalletBtn {
     position: absolute;
@@ -60,4 +62,16 @@ canvas {
 #score {
     font-size: 24px;
     font-weight: bold;
+}
+
+#scoreDiv {
+    margin: auto;
+}
+
+#h3 {
+    text-align: center;
+}
+
+#h1 {
+    text-align: center;
 }

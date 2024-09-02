@@ -14,7 +14,7 @@ export function setScore(newScore) {
 }
 
 export function updateScore() {
-    scoreSpan.textContent = score;
+    scoreSpan.textContent = "Score: " + score;
 }
 
 function drawGame() {
