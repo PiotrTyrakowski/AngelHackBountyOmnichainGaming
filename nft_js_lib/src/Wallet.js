@@ -31,9 +31,11 @@ class Wallet {
                 }
 
                 alert(`Connected to account: ${this.getWalletAddress()}`);
+                return true;
             } catch (error) {
                 console.error('Connection request was rejected or there was an error', error);
                 alert('Failed to connect. Please try again.');
+                return false;
             }
         } else {
             alert('MetaMask is not installed. Please install MetaMask and try again.');
