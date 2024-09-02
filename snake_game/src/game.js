@@ -1,11 +1,21 @@
-const canvas = document.getElementById('gameCanvas');
-const ctx = canvas.getContext('2d');
+// game.js
+import { ctx, canvas } from './setup.js'; // Import canvas and context setup
+import { drawSnake, moveSnake, snake, setDirection } from './snake.js';
+import { drawFood } from './food.js';
+
 const scoreSpan = document.getElementById('score');
 
 let score = 0;
+export function getScore() {
+    return score;
+}
+export function setScore(newScore) {
+    score = newScore;
+}
 
-const gridSize = 20;
-const tileCount = canvas.width / gridSize;
+export function updateScore() {
+    scoreSpan.textContent = score;
+}
 
 function drawGame() {
     clearCanvas();
@@ -13,7 +23,6 @@ function drawGame() {
     drawFood();
     drawSnake();
     checkCollision();
-    updateScore();
 }
 
 function clearCanvas() {
@@ -36,14 +45,12 @@ function checkCollision() {
 }
 
 function resetGame() {
-    snake = [{x: 200, y: 200}];
-    direction = 'right';
+    snake.length = 0;
+    snake.push({ x: 200, y: 200 });
+    setDirection('right');
     score = 0;
-    generateFood();
-}
-
-function updateScore() {
-    scoreSpan.textContent = `Score: ${score}`;
+    updateScore();
+    import('./food.js').then(module => module.generateFood());
 }
 
 setInterval(drawGame, 100);

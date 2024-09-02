@@ -1,12 +1,25 @@
-let snake = [{x: 200, y: 200}];
-let direction = 'right';
+// snake.js
+import { getScore, setScore, updateScore } from './game.js';
+import { food, generateFood } from "./food.js";
+import { ctx, gridSize, tileCount } from './setup.js';
+
+let snake = [{ x: 200, y: 200 }];
+let direction = 'right'; // Use a private variable to manage direction
 let snakeColor = '#00FF00';
 let isRainbowSkin = false;
 
-function moveSnake() {
-    const head = {x: snake[0].x, y: snake[0].y};
+export function getDirection() {
+    return direction;
+}
 
-    switch(direction) {
+export function setDirection(newDirection) {
+    direction = newDirection;
+}
+
+export function moveSnake() {
+    const head = { x: snake[0].x, y: snake[0].y };
+
+    switch (direction) {
         case 'up': head.y -= gridSize; break;
         case 'down': head.y += gridSize; break;
         case 'left': head.x -= gridSize; break;
@@ -16,20 +29,17 @@ function moveSnake() {
     snake.unshift(head);
 
     if (head.x === food.x && head.y === food.y) {
-        score++;
+        setScore(getScore() + 1);
+        updateScore();
         generateFood();
     } else {
         snake.pop();
     }
 }
 
-function drawSnake() {
+export function drawSnake() {
     snake.forEach((segment, index) => {
-        if (isRainbowSkin) {
-            ctx.fillStyle = `hsl(${(index * 10) % 360}, 100%, 50%)`;
-        } else {
-            ctx.fillStyle = index === 0 ? darkenColor(snakeColor, 20) : snakeColor;
-        }
+        ctx.fillStyle = isRainbowSkin ? `hsl(${(index * 10) % 360}, 100%, 50%)` : index === 0 ? darkenColor(snakeColor, 20) : snakeColor;
         ctx.fillRect(segment.x, segment.y, gridSize - 2, gridSize - 2);
     });
 }
@@ -42,3 +52,5 @@ function darkenColor(color, percent) {
     const B = (num & 0x0000FF) - amt;
     return `#${(1 << 24 | (R < 255 ? R < 1 ? 0 : R : 255) << 16 | (G < 255 ? G < 1 ? 0 : G : 255) << 8 | (B < 255 ? B < 1 ? 0 : B : 255)).toString(16).slice(1)}`;
 }
+
+export { snake, isRainbowSkin, snakeColor };
