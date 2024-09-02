@@ -7,13 +7,15 @@
     <link rel="stylesheet" href="css/styles.css"> 
 </head>
 <body>
-    <canvas id="gameCanvas" width="400" height="400"></canvas>
-    <div id="controls">
-        <select id="skinSelector">
-        </select>
-        <span id="score">Score: 0</span>
+    <div class="gameContainer">
+        <canvas id="gameCanvas" width="400" height="400"></canvas>
+        <div id="controls">
+            <select id="skinSelector">
+            </select>
+            <span id="score">Score: 0</span>
+        </div>
+        <button id="connectWalletBtn">Connect to Your Wallet</button>
     </div>
-    <button id="connectWalletBtn">Connect to Your Wallet</button>
     <script src="dist/bundle.js"></script>
 </body>
 </html>

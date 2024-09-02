@@ -12,7 +12,9 @@ export function generateFood() {
 
 export function drawFood() {
     ctx.fillStyle = 'red';
-    ctx.fillRect(food.x, food.y, gridSize - 2, gridSize - 2);
+    ctx.beginPath();
+    ctx.arc(food.x + gridSize/2, food.y + gridSize/2, gridSize/2 - 2, 0, Math.PI * 2);
+    ctx.fill();
 }
 
 generateFood(); // Generate initial food position

@@ -1,24 +1,24 @@
 // snake.js
-import { getScore, setScore, updateScore } from './game.js';
+import {getScore, setScore, updateScore} from './game.js';
 import { food, generateFood } from "./food.js";
-import { ctx, gridSize, tileCount } from './setup.js';
+import {ctx, gridSize, tileCount} from './setup.js';
 
-let snake = [{ x: 200, y: 200 }];
-let direction = null; // Use a private variable to manage direction
+let snake = [{x: 200, y: 200}];
+let direction = ''; // Use a private variable to manage direction
 let snakeColor = '#666666';
 
 export function getDirection() {
-    return direction;
+    return  direction;
 }
 
 export function setDirection(newDirection) {
-    direction = newDirection;
+     direction = newDirection;
 }
 
 export function moveSnake() {
-    const head = { x: snake[0].x, y: snake[0].y };
+    const head = {x: snake[0].x, y: snake[0].y};
 
-    switch (direction) {
+    switch( direction) {
         case 'up': head.y -= gridSize; break;
         case 'down': head.y += gridSize; break;
         case 'left': head.x -= gridSize; break;
@@ -39,7 +39,19 @@ export function moveSnake() {
 export function drawSnake() {
     snake.forEach((segment, index) => {
         ctx.fillStyle = index === 0 ? darkenColor(snakeColor, 20) : snakeColor;
-        ctx.fillRect(segment.x, segment.y, gridSize - 2, gridSize - 2);
+
+        ctx.beginPath();
+        ctx.roundRect(segment.x, segment.y, gridSize - 2, gridSize - 2, 5);
+        ctx.fill();
+
+        // Draw eyes on the head
+        if (index === 0) {
+            ctx.fillStyle = 'white';
+            ctx.beginPath();
+            ctx.arc(segment.x + 5, segment.y + 5, 2, 0, Math.PI * 2);
+            ctx.arc(segment.x + 15, segment.y + 5, 2, 0, Math.PI * 2);
+            ctx.fill();
+        }
     });
 }
 
