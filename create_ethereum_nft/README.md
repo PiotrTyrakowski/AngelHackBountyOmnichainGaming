@@ -1,64 +1,93 @@
-# Create Ethereum NFT contract
-1. Setup HardHat
-```shell
-npm install --save-dev hardhat
-npx hardhat
-npx hardhat help
-npx hardhat test
-REPORT_GAS=true npx hardhat test
-npx hardhat node
-npx hardhat ignition deploy ./ignition/modules/Lock.ts
-```
-2. Setup npm
-```shell
+
+# Create Ethereum NFT Contract
+
+## Setup
+
+### 1. Install Dependencies
+To install all necessary dependencies, run the following command:
+
+```bash
 npm install
 ```
 
-3. Create and set up a **.env**
+### 2. Set Up Hardhat
+Install and initialize Hardhat by running the following commands:
 
-example:
-```shell
-API_URL="https://rpc2.sepolia.org"
-PRIVATE_KEY=dajsfhreie123r429rfeig8sdfb4lwer4033u02941kjlljewflkqsifpqwoe234
+```bash
+npm install --save-dev hardhat
+npx hardhat
 ```
-*API_URL* - Url rpc endpoint of the chain you want to deploy the contract on
-*PRIVATE_KEY* - Your wallet private key
 
-## Deploy the contract
-```shell
+For more information about Hardhat, you can run:
+
+```bash
+npx hardhat help
+```
+
+### 3. Create the `.env` File
+Create a `.env` file in the root directory of the project. Populate the `.env` file with your `API_URL` and `PRIVATE_KEY` values.
+
+Example:
+
+```bash
+API_URL="https://rpc2.sepolia.org"
+PRIVATE_KEY="dajsfhreie123r429rfeig8sdfb4lwer4033u02941kjlljewflkqsifpqwoe234"
+```
+
+- **API_URL**: The RPC endpoint URL of the chain you want to deploy the contract on.
+- **PRIVATE_KEY**: Your wallet's private key.
+
+## Deploy the Contract
+
+Deploy the smart contract by running the following command:
+
+```bash
 npx hardhat run scripts/deploy.js --network sepolia
 ```
-This command should automatically add an entry to **.env** with the address of the contract, and copy the contract ABI into [contract_abi](contract_abi) folder
+
+This command will automatically add an entry to the `.env` file with the address of the contract and copy the contract ABI into the `contract_abi` folder.
 
 ## Mint NFT
-Ensure that **.env** contains the address of the contract as "**GAMING_NFT_ADDRESS=[example address]**"
 
-And that [contract_abi](contract_abi) contains a file called **GamingNFT.json**
+Ensure that the `.env` file contains the contract address as `GAMING_NFT_ADDRESS=[example address]` and that the `contract_abi` folder contains a file named `GamingNFT.json`.
 
-```shell
+To mint an NFT, run the following command:
+
+```bash
 node scripts/mint_nft.js
 ```
 
 ## Get NFT Metadata
-Ensure that **.env** contains the address of the contract as "**GAMING_NFT_ADDRESS=[example address]**"
 
-And that [contract_abi](contract_abi) contains a file called **GamingNFT.json**
+To retrieve the metadata of an NFT, ensure that the `.env` file contains the contract address as `GAMING_NFT_ADDRESS=[example address]` and that the `contract_abi` folder contains a file named `GamingNFT.json`.
 
-```shell
+Run the following command to get the NFT metadata:
+
+```bash
 node scripts/get_nft_metadata.js
 ```
-## Deploy goldsky
-### Install goldsky
-```shell
+
+## Deploy Goldsky
+
+### Install Goldsky
+To install Goldsky, run the following command:
+
+```bash
 curl https://goldsky.com | sh
 ```
+
 ### Login
-This will require a goldsky account, and it's **API** key
-```shell
+Log in to Goldsky using your account and **API** key:
+
+```bash
 goldsky login
 ```
+
 ### Deploy
-```shell
+Deploy the subgraph using the following command:
+
+```bash
 goldsky subgraph deploy swap/v1 --from-abi goldsky.json
 ```
-This should deploy the subgraph and return the url
+
+This should deploy the subgraph and return the URL.

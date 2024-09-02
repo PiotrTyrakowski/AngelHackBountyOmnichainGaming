@@ -2,7 +2,7 @@ require('dotenv').config();
 const ethers = require('ethers');
 const fs = require('fs');
 
-const mintNFT = async (contractAddress, metadataPath, nonce) => {
+const mintNFT = async (contractAddress, metadataPath) => {
     if (!contractAddress) {
         console.log('Contract address not found');
         return;
