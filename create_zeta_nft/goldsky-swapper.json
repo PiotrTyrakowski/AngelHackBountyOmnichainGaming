@@ -1,0 +1,18 @@
+{
+  "version": "1",
+  "name": "ZetaSwapper",
+  "abis": {
+    "ZetaSwapper": {
+      "path": "contract_abi/swapNFT.json"
+    }
+  },
+  "chains": ["zetachain-testnet"],
+  "instances": [
+    {
+      "abi": "ZetaSwapper",
+      "address": "0x68F47ba9878FE221954ecE8b2dB6BbbE05759374",
+      "chain": "zetachain-testnet",
+      "startBlock": 6589953
+    }
+  ]
+}
