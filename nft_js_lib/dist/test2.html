@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test 2 - Fetch NFTs</title>
+</head>
+<body>
+    <h1>Test 2: Fetch User NFTs</h1>
+    <button id="fetchNFTsButton">Fetch NFTs</button>
+    <ul id="nftList"></ul>
+
+    <script src="bundle.js"></script> <!-- Include Webpack bundle -->
+    <script type="module">
+        document.getElementById('fetchNFTsButton').addEventListener('click', async () => {
+            await walletInstance.connectWallet((text) => {
+                document.getElementById('fetchNFTsButton').textContent = text;
+            });
+            const walletAddress = walletInstance.getWalletAddress();
+            const settings = settingsInstance.getContractSettings('GamingNftZetachain1');
+            const nftUtils = new NftUtils(settings.getGoldskyApi(), walletAddress);
+
+            const ownedTokens = await nftUtils.fetchUserNFT();
+            const nftList = document.getElementById('nftList');
+            nftList.innerHTML = '';
+
+            ownedTokens.forEach(token => {
+                const li = document.createElement('li');
+                li.textContent = `Token ID: ${token}`;
+                nftList.appendChild(li);
+            });
+        });
+    </script>
+</body>
+</html>

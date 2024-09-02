@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test 3 - Fetch NFT Metadata</title>
+</head>
+<body>
+    <h1>Test 3: Fetch NFT Metadata</h1>
+    <button id="fetchMetadataButton">Fetch Metadata</button>
+    <ul id="metadataList"></ul>
+
+    <script src="bundle.js"></script> <!-- Include Webpack bundle -->
+    <script type="module">
+        document.getElementById('fetchMetadataButton').addEventListener('click', async () => {
+            // Connect the wallet first
+            await walletInstance.connectWallet((text) => {
+                document.getElementById('fetchMetadataButton').textContent = text;
+            });
+
+            // Get the wallet address
+            const walletAddress = walletInstance.getWalletAddress();
+            if (!walletAddress) {
+                document.getElementById('metadataList').innerHTML = 'Failed to connect wallet.';
+                return;
+            }
+
+            // Get the contract settings
+            const settings = settingsInstance.getContractSettings('GamingNftZetachain1');
+
+            // Create an instance of NftMetadataFetcher
+            const nftMetadataFetcher = new NftMetadataFetcher(settings.network, settings.contractAddress);
+
+            // Array of token IDs to fetch metadata for
+            const tokenIds = [1, 2, 3]; // Replace with your actual token IDs
+
+            // Fetch metadata for the tokens
+            const metadataList = await nftMetadataFetcher.getTokensMetadata(tokenIds);
+
+            // Display the metadata
+            const metadataDisplayList = document.getElementById('metadataList');
+            metadataDisplayList.innerHTML = '';
+
+            if (metadataList) {
+                metadataList.forEach((metadata, index) => {
+                    const li = document.createElement('li');
+                    li.textContent = `Token ID ${tokenIds[index]}: ${metadata}`;
+                    metadataDisplayList.appendChild(li);
+                });
+            } else {
+                metadataDisplayList.innerHTML = 'No metadata found.';
+            }
+        });
+    </script>
+</body>
+</html>
