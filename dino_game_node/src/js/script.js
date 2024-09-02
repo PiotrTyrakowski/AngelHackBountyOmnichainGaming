@@ -16,9 +16,14 @@ export function initializeElements() {
   skins = document.getElementById("skins");
 
     // Initialize the skin map with some default values
-    skinMap.set("Default", "#000000");
-    skinMap.set("Blue Gaming Skin", "#0000FF");
-    skinMap.set("Red Gaming Skin", "#FF0000");
+    skinMap.set("Default", "#000000");          // Black
+    skinMap.set("Blue Gaming Skin", "#0000FF"); // Blue
+    skinMap.set("Red Gaming Skin", "#FF0000");  // Red
+    skinMap.set("Green Skin", "#00FF00");       // Green
+    skinMap.set("Orange Skin", "#FFA500");      // Orange
+    skinMap.set("Pink Skin", "#FFC0CB");        // Pink
+    skinMap.set("Purple Skin", "#800080");      // Purple
+    skinMap.set("Yellow Skin", "#FFFF00");      // Yellow
 }
 
 export function startGame() {
