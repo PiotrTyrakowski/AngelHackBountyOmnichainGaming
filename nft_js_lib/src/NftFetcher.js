@@ -1,8 +1,9 @@
 import { request, gql } from 'graphql-request';
 
-class NftUtils {
+// Fetcher class to fetch user's NFTs
+class NftFetcher {
   // Constructor to initialize the API and the wallet address
-  constructor(goldskyApi, walletAddress = '') {
+  constructor(goldskyApi, walletAddress) {
     this.goldskyApi = goldskyApi;
     this.walletAddress = walletAddress;
     if (!this.goldskyApi) {
@@ -89,4 +90,4 @@ class NftUtils {
   }
 }
 
-export default NftUtils;
+export default NftFetcher;

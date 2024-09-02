@@ -10,7 +10,7 @@
     <button id="fetchNFTsButton">Fetch NFTs</button>
     <ul id="nftList"></ul>
 
-    <script src="bundle.js"></script> <!-- Include Webpack bundle -->
+    <script src="bundle.js"></script>
     <script type="module">
         document.getElementById('fetchNFTsButton').addEventListener('click', async () => {
             await walletInstance.connectWallet((text) => {
@@ -18,9 +18,9 @@
             });
             const walletAddress = walletInstance.getWalletAddress();
             const settings = settingsInstance.getContractSettings('GamingNftZetachain1');
-            const nftUtils = new NftUtils(settings.getGoldskyApi(), walletAddress);
+            const nftFetcher = new NftFetcher(settings.getGoldskyApi(), walletAddress);
 
-            const ownedTokens = await nftUtils.fetchUserNFT();
+            const ownedTokens = await nftFetcher.fetchUserNFT();
             const nftList = document.getElementById('nftList');
             nftList.innerHTML = '';
 

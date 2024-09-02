@@ -10,7 +10,7 @@
     <button id="connectButton">Connect Wallet</button>
     <p id="status"></p>
 
-    <script src="bundle.js"></script> <!-- Include the bundled JS -->
+    <script src="bundle.js"></script> 
     <script type="module">
         document.getElementById('connectButton').addEventListener('click', async () => {
             await walletInstance.connectWallet((text) => {

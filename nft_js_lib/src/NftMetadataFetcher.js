@@ -1,6 +1,7 @@
 import { ethers, Interface } from "ethers";
 import contractAbi from "./abi/GamingNFT.json";
 
+// Fetcher class to fetch NFT metadata for a given token ID
 class NftMetadataFetcher {
     constructor(network, contractAddress) {
         if (!network) {
