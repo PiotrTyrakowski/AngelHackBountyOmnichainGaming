@@ -4,6 +4,7 @@ import 'login_first_widget.dart';
 import 'swaps/swap_blank_widget.dart';
 import 'swaps/swap_widgets.dart';
 import 'package:market_place/contract_info.dart';
+import 'package:market_place/nft_token.dart';
 
 class OffersWidget extends StatefulWidget {
   const OffersWidget({Key? key}) : super(key: key);
@@ -85,7 +86,7 @@ class _OffersWidgetState extends State<OffersWidget> {
             children: [
               Text("Contract $_selectedSwapId selected",
                   style: const TextStyle(
-                    fontSize: 30, // Change text size
+                    fontSize: 40, // Change text size
                     color: Colors.white, // Change text color
                   )),
 
@@ -106,9 +107,11 @@ class _OffersWidgetState extends State<OffersWidget> {
                               children: [
                                 Text("${_contractInfo!.senderId} tokens",
                                     style: const TextStyle(
-                                      fontSize: 24, // Change text size
-                                      color: Colors.white, // Change text color
-                                    ))
+                                      fontSize: 30,
+                                      color: Colors.white,
+                                    )),
+                                ..._contractInfo!.senderTokens
+                                    .map((token) => _tokenCard(token, 300, 100))
                               ],
                             ),
                           ),
@@ -125,9 +128,11 @@ class _OffersWidgetState extends State<OffersWidget> {
                               children: [
                                 Text("${_contractInfo!.targetId} tokens",
                                     style: const TextStyle(
-                                      fontSize: 24, // Change text size
-                                      color: Colors.white, // Change text color
-                                    ))
+                                      fontSize: 30,
+                                      color: Colors.white,
+                                    )),
+                                ..._contractInfo!.targetTokens
+                                    .map((token) => _tokenCard(token, 300, 100))
                               ],
                             ),
                           ),
@@ -141,5 +146,55 @@ class _OffersWidgetState extends State<OffersWidget> {
         );
       },
     );
+  }
+
+  Widget _tokenCard(NftToken token, double cellWidth, double cellHeight) {
+    return Container(
+        width: cellWidth,
+        height: cellHeight,
+        padding: const EdgeInsets.all(1.0),
+        child: Card(
+          child: Padding(
+            padding: const EdgeInsets.all(2.0),
+            child: Column(
+              children: [
+                Row(
+                  children: [
+                    SizedBox(
+                        width: 40,
+                        height: 40,
+                        child: Container(
+                            decoration: BoxDecoration(
+                          color: Colors.red,
+                          borderRadius: BorderRadius.circular(8),
+                        ))),
+                    const SizedBox(
+                      height: 40,
+                      width: 16,
+                      child: VerticalDivider(thickness: 2, color: Colors.black),
+                    ),
+                    Text(
+                      token.Name,
+                      style: const TextStyle(
+                          fontWeight: FontWeight.bold, fontSize: 20),
+                    ),
+                  ],
+                ),
+                Flexible(
+                  child: Padding(
+                    padding: const EdgeInsets.all(2.0),
+                    child: Center(
+                      child: Text(
+                        token.Rarity,
+                        style: const TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 28),
+                      ),
+                    ),
+                  ),
+                )
+              ],
+            ),
+          ),
+        ));
   }
 }
