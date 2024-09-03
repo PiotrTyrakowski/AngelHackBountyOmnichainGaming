@@ -1,3 +1,5 @@
+import 'dart:collection';
+
 class NftToken {
   final String ContractId;
   final String OwnerId;
@@ -8,9 +10,9 @@ class NftToken {
 
   const NftToken(
       {required this.ContractId,
-      required this.OwnerId,
-      required this.Description,
-      required this.Rarity,
-      required this.Name,
-      required this.TokenId});
+        required this.OwnerId,
+        required this.Description,
+        required this.Rarity,
+        required this.Name,
+        required this.TokenId});
 }

@@ -49,14 +49,14 @@ class _GamesWidgetState extends State<GamesWidget> {
           Expanded(
               flex: 10,
               child: Center(
-                child: _buildGameInfo(context),
+                child: _buildGameInfoGuard(context),
               ))
         ],
       ),
     );
   }
 
-  Widget _buildGameInfo(BuildContext context) {
+  Widget _buildGameInfoGuard(BuildContext context) {
     return Center(
         child: _selectedGameName == null
             ? const RoundedContainer(
@@ -73,9 +73,14 @@ class _GamesWidgetState extends State<GamesWidget> {
                 height: null,
                 padding: EdgeInsets.all(16),
                 borderColor: Colors.white,
-                child: Text(
-                  "Selected game: $_selectedGameName",
-                  style: TextStyle(fontSize: 18),
-                )));
+                child: _buildGameInfo(context),
+              ));
+  }
+
+  Widget _buildGameInfo(BuildContext context) {
+    return Text(
+      "Selected game: $_selectedGameName",
+      style: TextStyle(fontSize: 18),
+    );
   }
 }

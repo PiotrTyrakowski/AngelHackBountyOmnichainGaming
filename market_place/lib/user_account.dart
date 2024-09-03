@@ -1,5 +1,7 @@
-import 'dart:js' as js;
-import 'dart:js_util' as jsu;
+import 'nft_token.dart';
+import 'js_adapter/nft_adapter.dart';
+import 'dart:collection';
+import 'games/game_widgets.dart';
 
 class UserAccount {
   UserAccount._internal();
@@ -11,12 +13,18 @@ class UserAccount {
   }
 
   bool IsLogged() {
-    return _etherId != null;
+    return _etherId != "";
   }
 
   void OnLogin(String etherId) {
     _etherId = etherId;
   }
 
-  String? _etherId;
+  HashMap<String, List<NftToken>> GetOwnedNfts() {
+    return NftAdapter.GetOwnedNfts(_etherId);
+  }
+
+  String _etherId = "";
+
+  String get etherId => _etherId;
 }
