@@ -4,7 +4,7 @@ async function main() {
   console.log("Deploying contracts with the account:", deployer.address);
 
   // Grab the contract factory 
-  const SwapNftFactory = await ethers.getContractFactory("swapNFT");
+  const SwapNftFactory = await ethers.getContractFactory("SwapNft");
 
   // Start deployment, returning a promise that resolves to a contract object
   const swapNft = await SwapNftFactory.deploy(); // Pass the deployer's address as the initial owner

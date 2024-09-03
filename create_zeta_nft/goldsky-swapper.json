@@ -3,16 +3,16 @@
   "name": "ZetaSwapper",
   "abis": {
     "ZetaSwapper": {
-      "path": "contract_abi/swapNFT.json"
+      "path": "contract_abi/SwapNft.json"
     }
   },
   "chains": ["zetachain-testnet"],
   "instances": [
     {
       "abi": "ZetaSwapper",
-      "address": "0x68F47ba9878FE221954ecE8b2dB6BbbE05759374",
+      "address": "0xe9c75c3b48BD57F63886322F0ca1C5b04937791a",
       "chain": "zetachain-testnet",
-      "startBlock": 6589953
+      "startBlock": 6621313
     }
   ]
 }
