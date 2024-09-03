@@ -1,5 +1,8 @@
 import { ethers } from "ethers";
 
+/**
+Singleton class that stores the settings for the NFT contracts.
+ */
 class Settings {
     constructor() {
         if (Settings.instance) {
@@ -10,30 +13,59 @@ class Settings {
         Settings.instance = this;
     }
 
+    /**
+     * Adds contract settings for a specific contract.
+     * @param {string} contractName - The name of the contract.
+     * @param {ethers.Network} network - The network of the contract.
+     * @param {string} contractAddress - The address of the contract.
+     * @param {string} goldskyApi - The Goldsky API for the contract.
+     */
     addContractSettings(contractName, network, contractAddress, goldskyApi) {
         this.contracts[contractName] = new ContractSettings(network, contractAddress, goldskyApi);
     }
 
+    /**
+     * Retrieves the contract settings for a specific contract.
+     * @param {string} contractName - The name of the contract.
+     * @returns {ContractSettings} The contract settings.
+     */
     getContractSettings(contractName) {
         return this.contracts[contractName];
     }
 }
 
+/**
+ * Represents the settings for a specific contract.
+ */
 class ContractSettings {
+    /**
+     * @param {ethers.Network} network 
+     * @param {string} contractAddress 
+     * @param {string} goldskyApi 
+     */
     constructor(network, contractAddress, goldskyApi) {
         this.network = network;
         this.contractAddress = contractAddress;
         this.goldskyApi = goldskyApi;
     }
 
+    /**
+     * @returns {ethers.Network}
+     */
     getNetwork() {
         return this.network;
     }
 
+    /**
+     * @returns {string}
+     * */
     getContractAddress() {
         return this.contractAddress;
     }
 
+    /**
+     * @returns {string}
+     * */
     getGoldskyApi() {
         return this.goldskyApi;
     }

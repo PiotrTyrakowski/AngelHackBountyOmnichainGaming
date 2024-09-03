@@ -2,18 +2,28 @@ import { request, gql } from 'graphql-request';
 import { assignCheckNull, validateAddress } from './Utils.js';
 
 // Fetcher class to fetch user's NFTs
+/**
+ * Class representing an NFT Fetcher.
+ */
 class NftFetcher {
-  // Constructor to initialize the API and the wallet address
+  /**
+   * Constructor to initialize the API and the wallet address.
+   * @param {string} goldskyApi - The Goldsky API.
+   * @param {string} walletAddress - The wallet address.
+   */
   constructor(goldskyApi, walletAddress) {
     this.goldskyApi = assignCheckNull(goldskyApi);
     this.walletAddress = assignCheckNull(walletAddress);
     validateAddress(walletAddress);
   }
 
-  // Method to fetch user's NFT
+  /**
+   * Method to fetch user's NFT.
+   * @returns {Promise<string[]>} - The owned tokens.
+   * @throws {Error} - If there is an error fetching user NFTs.
+   */
   async fetchUserNFT() {
     try {
-
       const transfers = assignCheckNull(await this.fetchUserTransfers());
 
       // Sort the transfers based on block number
@@ -42,7 +52,11 @@ class NftFetcher {
     }
   }
 
-  // Method to fetch user transfers
+  /**
+   * Method to fetch user transfers.
+   * @returns {Promise<Object[]>} - The user transfers.
+   * @throws {Error} - If there is an error fetching transfers.
+   */
   async fetchUserTransfers() {
     try {
       const response = await request(
@@ -59,7 +73,12 @@ class NftFetcher {
     }
   }
 
-  // Private method to build the GraphQL query
+  /**
+   * Private method to build the GraphQL query.
+   * @param {string} address - The wallet address.
+   * @returns {string} - The GraphQL query.
+   * @private
+   */
   _buildQuery(address) {
     return gql`
       query {

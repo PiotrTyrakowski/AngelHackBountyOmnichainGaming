@@ -4,14 +4,32 @@ import { assignCheckNull } from "./Utils.js";
 import { validateAddress, validateTokenId } from "./Utils.js";
 
 // Fetcher class to fetch NFT metadata for a given token ID
+/**
+ * Class representing a NFT Metadata Fetcher.
+ */
 class NftMetadataFetcher {
+    /**
+     * Create a NftMetadataFetcher.
+     * @param {ethers.Network} network - The network to connect to.
+     * @param {string} contractAddress - The address of the NFT contract.
+     */
     constructor(network, contractAddress) {
         validateAddress(contractAddress);
+        if (!(network instanceof ethers.Network)) {
+            console.error("Invalid network provided");
+            console.error(new Error().stack);
+            return;
+        }
         this.network = assignCheckNull(network, "Network not provided");
         this.contractAddress = assignCheckNull(contractAddress, "Contract address not provided");
         this.iface = assignCheckNull(new Interface(contractAbi.abi), "Interface not found");
     }
 
+    /**
+     * Get the metadata of a specific NFT token.
+     * @param {number} tokenId - The ID of the NFT token.
+     * @returns {Promise<string|null>} The metadata of the NFT token, or null if an error occurs.
+     */
     async getNftMetadata(tokenId) {
         validateTokenId(tokenId);
 
@@ -28,6 +46,11 @@ class NftMetadataFetcher {
         }
     }
 
+    /**
+     * Get the metadata of multiple NFT tokens.
+     * @param {number[]} tokens - An array of NFT token IDs.
+     * @returns {Promise<(string|null)[]>} An array of NFT metadata, or null if an error occurs.
+     */
     async getTokensMetadata(tokens) {
         if (!tokens || !Array.isArray(tokens)) {
             console.error("Invalid tokens array provided");

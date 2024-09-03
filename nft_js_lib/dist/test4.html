@@ -44,6 +44,8 @@
         const statusElement = document.getElementById("status");
         await swapper.init();
 
+        console.error(await swapper.getSwap(0));
+
         document.getElementById("connectCounterparty").onclick = async () => {
             statusElement.textContent = "Status: Connecting to Counter Party account...";
             try {
