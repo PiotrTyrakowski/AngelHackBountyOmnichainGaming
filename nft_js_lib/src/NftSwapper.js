@@ -3,20 +3,18 @@ import swapperContractAbi from "./abi/SwapNft.json";
 import nftContractAbi from "./abi/GamingNft.json";
 import { assignCheckNull, validateAddress, validateTokenId, validateSwapId, zeroAddress } from './Utils.js';
 
-
-// Fetcher class to fetch NFT metadata for a given token ID
 /**
- * Represents a NftSwapper object.
- * @constructor
- * @param {ethers.Network} network - The network to connect to.
- * @param {string} contractAddress - The address of the swapper contract.
+ * Represents a NftSwapper object that interacts with a smart contract to facilitate NFT swaps.
+ * @class
  */
 class NftSwapper {
     /**
-     * Represents a NftSwapper object.
+     * Creates an instance of NftSwapper.
      * @constructor
      * @param {ethers.Network} network - The network to connect to.
      * @param {string} contractAddress - The address of the swapper contract.
+     * @throws Will throw an error if the contract address is invalid.
+     * @throws Will throw an error if the network is invalid.
      */
     constructor(network, contractAddress) {
         validateAddress(contractAddress);
@@ -28,7 +26,7 @@ class NftSwapper {
 
         this.network = assignCheckNull(network, "Network not provided");
         this.swapperContractAddress = assignCheckNull(contractAddress, "Contract address not provided");
-        this.swapperContractInterface = assignCheckNull(new Interface(swapperContractAbi), "Interface not provided");
+        this.swapperContractInterface = assignCheckNull(new Interface(swapperContractAbi.abi), "Interface not provided");
         this.nftContractInterface = assignCheckNull(new Interface(nftContractAbi.abi), "NFT Contract ABI not found");
         this.provider = assignCheckNull(new ethers.BrowserProvider(window.ethereum, this.network), "Provider not found");
         this.initialized = false;
@@ -40,8 +38,8 @@ class NftSwapper {
      * Initializes the necessary values asynchronously.
      * This method is used to initialize values that require asynchronous operations outside the constructor.
      * If the values have already been initialized, this method will return immediately.
-     *
-     * @returns {Promise<void>} - A promise that resolves when the initialization is complete.
+     * @async
+     * @returns {Promise<void>} A promise that resolves when the initialization is complete.
      */
     async init() {
         if (this.initialized) {
@@ -53,34 +51,19 @@ class NftSwapper {
     }
 
     /**
-     * Approves an NFT for swapping.
-     *
+     * Approves an NFT for swapping by allowing the swapper contract to transfer the specified NFT.
+     * @async
      * @param {string} nftContractAddress - The address of the NFT contract.
      * @param {number} tokenId - The ID of the NFT token to approve.
-     * @returns {Promise<void>} - A promise that resolves when the NFT is approved for swapping.
+     * @returns {Promise<void>} A promise that resolves when the NFT is approved for swapping.
+     * @throws Will throw an error if the token ID is invalid.
+     * @throws Will throw an error if the NFT contract address is invalid.
      */
     async approveNft(nftContractAddress, tokenId) {
         validateAddress(nftContractAddress);
         validateTokenId(tokenId);
 
         await this.init();
-
-        if (isNaN(tokenId) || !Number.isInteger(tokenId)) {
-            console.error("Token ID must be an integer");
-            return;
-        }
-        if (tokenId < 0) {
-            console.error("Token ID must be a positive integer");
-            return;
-        }
-        if (tokenId > Number.MAX_SAFE_INTEGER) {
-            console.error("Token ID is too large");
-            return;
-        }
-        if (!nftContractAddress) {
-            console.error("NFT contract address not provided");
-            return;
-        }
 
         const nftContract = new ethers.Contract(nftContractAddress, this.nftContractInterface, this.signer);
         const approveTx = await nftContract.approve(this.swapperContractAddress, tokenId);
@@ -89,31 +72,45 @@ class NftSwapper {
     }
 
     /**
-     * Initiates a swap between two NFTs.
-     *
-     * @param {string} counterparty - The address of the account to swap with.
-     * @param {string} nftContractA - The address of the NFT contract of token A the caller owns.
-     * @param {string} tokenIdA - The ID of the NFT token the caller owns.
-     * @param {string} nftContractB - The address of the NFT contract of token B the counterparty owns.
-     * @param {string} tokenIdB - The ID of the NFT token B the counterparty owns.
+     * Initiates a swap between two parties, transferring the NFTs to the contract.
+     * @async
+     * @param {string} counterparty - The address of the counterparty.
+     * @param {string[]} initiatorContracts - Array of the NFT contracts of the initiator.
+     * @param {number[]} initiatorTokenIds - Array of the token IDs of the NFTs that the initiator is swapping.
+     * @param {number[]} initiatorTokenCounts - Array representing the number of tokens being swapped from each initiator's contract.
+     * @param {string[]} counterpartyContracts - Array of the NFT contracts of the counterparty.
+     * @param {number[]} counterpartyTokenIds - Array of the token IDs of the NFTs that the counterparty is swapping.
+     * @param {number[]} counterpartyTokenCounts - Array representing the number of tokens being swapped from each counterparty's contract.
      * @returns {Promise<number>} The ID of the initiated swap.
+     * @throws Will throw an error if any of the provided addresses or token IDs are invalid.
      */
-    async initiateSwap(counterparty, nftContractA, tokenIdA, nftContractB, tokenIdB) {
+    async initiateSwap(counterparty, initiatorContracts, initiatorTokenIds, initiatorTokenCounts, counterpartyContracts, counterpartyTokenIds, counterpartyTokenCounts) {
         validateAddress(counterparty);
-        validateAddress(nftContractA);
-        validateAddress(nftContractB);
-        validateTokenId(tokenIdA);
-        validateTokenId(tokenIdB);
+        initiatorContracts.forEach(validateAddress);
+        counterpartyContracts.forEach(validateAddress);
+        initiatorTokenIds.forEach(validateTokenId);
+        counterpartyTokenIds.forEach(validateTokenId);
+
         await this.init();
 
-        await this.approveNft(nftContractA, tokenIdA);
+        for (let i = 0; i < initiatorContracts.length; i++) {
+            let start = 0;
+            for (let j = 0; j < i; j++) {
+                start += initiatorTokenCounts[j];
+            }
+            for (let k = start; k < start + initiatorTokenCounts[i]; k++) {
+                await this.approveNft(initiatorContracts[i], initiatorTokenIds[k]);
+            }
+        }
 
         const initiateTx = await this.nftSwapperContract.initiateSwap(
             counterparty,
-            nftContractA,
-            tokenIdA,
-            nftContractB,
-            tokenIdB
+            initiatorContracts,
+            initiatorTokenIds,
+            initiatorTokenCounts,
+            counterpartyContracts,
+            counterpartyTokenIds,
+            counterpartyTokenCounts
         );
 
         const receipt = await initiateTx.wait();
@@ -126,18 +123,30 @@ class NftSwapper {
 
     /**
      * Completes a swap by approving the NFT transfer and calling the `completeSwap` function on the NftSwapper contract.
-     * @param {string} swapId - The ID of the swap to complete.
-     * @param {string} nftContractB - The address of the NFT contract for the NFT being received.
-     * @param {string} tokenIdB - The ID of the NFT being received.
-     * @returns {Promise<void>} - A promise that resolves when the swap is completed.
+     * @async
+     * @param {number} swapId - The ID of the swap to complete.
+     * @param {string[]} counterpartyContracts - Array of the NFT contracts for the NFTs being received.
+     * @param {number[]} counterpartyTokenIds - Array of the token IDs of the NFTs being received.
+     * @param {number[]} counterpartyTokenCounts - Array representing the number of tokens being swapped from each counterparty's contract.
+     * @returns {Promise<void>} A promise that resolves when the swap is completed.
+     * @throws Will throw an error if the swap ID, contract addresses, or token IDs are invalid.
      */
-    async completeSwap(swapId, nftContractB, tokenIdB) {
-        validateAddress(nftContractB);
-        validateTokenId(tokenIdB);
+    async completeSwap(swapId, counterpartyContracts, counterpartyTokenIds, counterpartyTokenCounts) {
         validateSwapId(swapId);
+        counterpartyContracts.forEach(validateAddress);
+        counterpartyTokenIds.forEach(validateTokenId);
+
         await this.init();
 
-        await this.approveNft(nftContractB, tokenIdB);
+        for (let i = 0; i < counterpartyContracts.length; i++) {
+            let start = 0;
+            for (let j = 0; j < i; j++) {
+                start += counterpartyTokenCounts[j];
+            }
+            for (let k = start; k < start + counterpartyTokenCounts[i]; k++) {
+                await this.approveNft(counterpartyContracts[i], counterpartyTokenIds[k]);
+            }
+        }
 
         const completeTx = await this.nftSwapperContract.completeSwap(swapId);
         const receipt = await completeTx.wait();
@@ -146,8 +155,10 @@ class NftSwapper {
 
     /**
      * Cancels a swap by its ID.
-     * @param {string} swapId - The ID of the swap to cancel.
-     * @returns {Promise<void>} - A promise that resolves when the swap is cancelled.
+     * @async
+     * @param {number} swapId - The ID of the swap to cancel.
+     * @returns {Promise<void>} A promise that resolves when the swap is cancelled.
+     * @throws Will throw an error if the swap ID is invalid.
      */
     async cancelSwap(swapId) {
         validateSwapId(swapId);
@@ -158,68 +169,24 @@ class NftSwapper {
         console.log(`Swap cancelled: ${receipt.transactionHash}`);
     }
 
-    /**
-     * @typedef {Object} Swap
-     * @property {string} initiator - Address of the initiator
-     * @property {string} counterparty - Address of the counterparty
-     * @property {string} nftContractA - Address of the first NFT contract
-     * @property {string} tokenIdA - Token ID of the first NFT
-     * @property {string} nftContractB - Address of the second NFT contract
-     * @property {string} tokenIdB - Token ID of the second NFT
-     * @property {boolean} isCompleted - Whether the swap is completed
-     */
-
-    /**
-     * Retrieves the swap details from the contract and parses it into a Swap object.
-     * 
-     * @param {number} swapId - The ID of the swap to retrieve.
-     * @returns {Promise<Swap|null>} - The parsed swap object or null if the swap is not found.
-     */
-    async getSwap(swapId) {
-        validateSwapId(swapId);
-        await this.init();
-
-        const swap = await this.nftSwapperContract.swaps(swapId);
-        if (!swap.initiator) {
-            console.error(`Swap with ID ${swapId} not found`);
-            return null;
-        }
-
-        validateAddress(swap.initiator);
-        validateAddress(swap.counterparty);
-        validateAddress(swap.nftContractA);
-        validateAddress(swap.nftContractB);
-        validateTokenId(parseInt(swap.tokenIdA));
-        validateTokenId(parseInt(swap.tokenIdB));
-
-        /** @type {Swap} */
-        const swapObject = {
-            initiator: swap.initiator,
-            counterparty: swap.counterparty,
-            nftContractA: swap.nftContractA,
-            tokenIdA: parseInt(swap.tokenIdA),
-            nftContractB: swap.nftContractB,
-            tokenIdB: parseInt(swap.tokenIdB),
-            isCompleted: swap.isCompleted
-        };
-
-        // check if the swap exists
-        if (
-            swapObject.initiator === zeroAddress() ||
-            swapObject.counterparty === zeroAddress() ||
-            swapObject.nftContractA === zeroAddress() ||
-            swapObject.nftContractB === zeroAddress() ||
-            swapObject.tokenIdA === 0 ||
-            swapObject.tokenIdB === 0
-        ) {
-            console.log("No swap found with ID", swapId);
-            return null;
-        }
-
-        return swapObject;
-
-    }
+    // /**
+    //  * Retrieves the details of a swap by its ID and parses it into a Swap object.
+    //  * @async
+    //  * @param {number} swapId - The ID of the swap to retrieve.
+    //  * @returns {Promise<Object|null>} The parsed swap object or null if the swap is not found.
+    //  * @throws Will throw an error if the swap ID is invalid.
+    //  * 
+    //  * @typedef {Object} Swap
+    //  * @property {string} initiator - The address of the initiator.
+    //  * @property {string} counterparty - The address of the counterparty.
+    //  * @property {string[]} initiatorNftContracts - Array of the initiator's NFT contracts.
+    //  * @property {number[]} initiatorTokenIds - Array of the initiator's token IDs.
+    //  * @property {number[]} initiatorTokenCounts - Array representing the number of tokens being swapped from each initiator's contract.
+    //  * @property {string[]} counterpartyNftContracts - Array of the counterparty's NFT contracts.
+    //  * @property {number[]} counterpartyTokenIds - Array of the counterparty's token IDs.
+    //  * @property {number[]} counterpartyTokenCounts - Array representing the number of tokens being swapped from each counterparty's contract.
+    //  * @property {boolean} isCompleted - Whether the swap is completed.
+    //  */
 }
 
 export default NftSwapper;
-

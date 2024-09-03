@@ -8,20 +8,23 @@
 <body>
     <h1>NFT Swapper Test</h1>
     <div>
-        <label for="tokenIdA">Token ID A:</label>
-        <input type="number" id="tokenIdA" required><br><br>
+        <label for="initiatorTokenIds">Initiator Token IDs (comma-separated):</label>
+        <input type="text" id="initiatorTokenIds" required><br><br>
 
-        <label for="tokenIdB">Token ID B:</label>
-        <input type="number" id="tokenIdB" required><br><br>
+        <label for="counterpartyTokenIds">Counterparty Token IDs (comma-separated):</label>
+        <input type="text" id="counterpartyTokenIds" required><br><br>
 
         <button id="connectCounterparty">Connect as Counter Party</button><br><br>
         <button id="initiateSwap">Initiate Swap</button><br><br>
         <button id="acceptSwap">Accept Swap as Counter Party</button><br><br>
 
+        <h3>Initiator uses nftContractAddress1 - 0x2f1b7b418A51A62685c0E7617ca6c0C5551106e6<br/>
+            Counterparty uses nftContractAddress2 - 0xB5E0066AAd80b5f1fdDAcA49e928e95d636FC0FF</h1>
+
         <p id="status">Status: Awaiting user action...</p>
     </div>
 
-    <script src="bundle.js"></script> 
+    <script src="bundle.js"></script>
     <script type="module">
         let counterparty;
 
@@ -31,26 +34,23 @@
         const swapperContractSettings = assignCheckNull(settingsInstance.getContractSettings('SwapperNftZetachain'), 'Failed to get contract settings');
         const contractAddress = assignCheckNull(swapperContractSettings.getContractAddress(), 'Failed to get contract address');
         validateAddress(contractAddress);
-        
-        const nftContractSettingsA = assignCheckNull(settingsInstance.getContractSettings('GamingNftZetachain1'), 'Failed to get NFT contract settings A');
-        const nftContractSettingsB = assignCheckNull(settingsInstance.getContractSettings('GamingNftZetachain2'), 'Failed to get NFT contract settings B');
 
-        const nftContractAddressA = assignCheckNull(nftContractSettingsA.getContractAddress(), 'Failed to get NFT contract address A');
-        const nftContractAddressB = assignCheckNull(nftContractSettingsB.getContractAddress(), 'Failed to get NFT contract address B');
-        validateAddress(nftContractAddressA);
-        validateAddress(nftContractAddressB);
-        
+        const nftContractSettings1 = assignCheckNull(settingsInstance.getContractSettings('GamingNftZetachain1'), 'Failed to get NFT contract settings A');
+        const nftContractSettings2 = assignCheckNull(settingsInstance.getContractSettings('GamingNftZetachain2'), 'Failed to get NFT contract settings B');
+
+        const nftContractAddress1 = assignCheckNull(nftContractSettings1.getContractAddress(), 'Failed to get NFT contract address A');
+        const nftContractAddress2 = assignCheckNull(nftContractSettings2.getContractAddress(), 'Failed to get NFT contract address B');
+        validateAddress(nftContractAddress1);
+        validateAddress(nftContractAddress2);
+
         const swapper = assignCheckNull(new NftSwapper(network, contractAddress), 'Failed to create NftSwapper instance');
         const statusElement = document.getElementById("status");
         await swapper.init();
 
-        console.error(await swapper.getSwap(0));
-
         document.getElementById("connectCounterparty").onclick = async () => {
             statusElement.textContent = "Status: Connecting to Counter Party account...";
             try {
-                await walletInstance.connectWallet((text) => {
-                });
+                await walletInstance.connectWallet((text) => {});
                 counterparty = walletInstance.getWalletAddress();
                 validateAddress(counterparty);
                 statusElement.textContent = `Status: Connected as Counter Party (${counterparty}). Disconnecting now...`;
@@ -63,19 +63,28 @@
         };
 
         document.getElementById("initiateSwap").onclick = async () => {
-            const tokenIdA = parseInt(document.getElementById("tokenIdA").value);
-            const tokenIdB = parseInt(document.getElementById("tokenIdB").value);
-            if (!tokenIdA || !tokenIdB) {
-                alert("Please provide both Token ID A and Token ID B as Integer values.");
+            const initiatorTokenIds = document.getElementById("initiatorTokenIds").value.split(',').map(id => parseInt(id.trim()));
+            const counterpartyTokenIds = document.getElementById("counterpartyTokenIds").value.split(',').map(id => parseInt(id.trim()));
+
+            if (!initiatorTokenIds.length || !counterpartyTokenIds.length) {
+                alert("Please provide valid Token IDs for both Initiator and Counterparty as comma-separated values.");
                 return;
             }
 
             statusElement.textContent = "Status: Connecting as Swap Initiator...";
             try {
-                await walletInstance.connectWallet((text) => {
-                });
+                await walletInstance.connectWallet((text) => {});
                 statusElement.textContent = "Status: Connected as Swap Initiator. Initiating swap...";
-                const swapId = await swapper.initiateSwap(counterparty, nftContractAddressA, tokenIdA, nftContractAddressB, tokenIdB);
+
+                const initiatorTokenCounts = [initiatorTokenIds.length]; // Assuming all tokens belong to the same contract
+                const counterpartyTokenCounts = [counterpartyTokenIds.length]; // Assuming all tokens belong to the same contract
+
+                const swapId = await swapper.initiateSwap(
+                    counterparty,
+                    [nftContractAddress1], initiatorTokenIds, initiatorTokenCounts,
+                    [nftContractAddress2], counterpartyTokenIds, counterpartyTokenCounts
+                );
+
                 statusElement.textContent = `Status: Swap initiated with ID ${swapId}. Disconnecting now...`;
                 await walletInstance.disconnectWallet();
                 statusElement.textContent = "Status: Disconnected from Swap Initiator. Ready to connect as Counter Party to accept the swap.";
@@ -88,11 +97,16 @@
         document.getElementById("acceptSwap").onclick = async () => {
             statusElement.textContent = "Status: Connecting as Counter Party to accept swap...";
             try {
-                await walletInstance.connectWallet((text) => {
-                });
+                await walletInstance.connectWallet((text) => {});
                 const swapId = parseInt(await swapper.nftSwapperContract.swapCounter()) - 1;
+                console.error(swapId);
                 statusElement.textContent = `Status: Connected as Counter Party. Accepting swap with ID ${swapId}...`;
-                await swapper.completeSwap(swapId, nftContractAddressB, parseInt(document.getElementById("tokenIdB").value));
+
+                const counterpartyTokenIds = document.getElementById("counterpartyTokenIds").value.split(',').map(id => parseInt(id.trim()));
+                const counterpartyTokenCounts = [counterpartyTokenIds.length]; // Assuming all tokens belong to the same contract
+
+                await swapper.completeSwap(swapId, [nftContractAddress2], counterpartyTokenIds, counterpartyTokenCounts);
+
                 statusElement.textContent = `Status: Swap completed. Swap ID ${swapId}.`;
                 await walletInstance.disconnectWallet();
             } catch (error) {

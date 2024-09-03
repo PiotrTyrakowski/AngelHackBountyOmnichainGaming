@@ -101,6 +101,6 @@ settingsInstance.addContractSettings(
 settingsInstance.addContractSettings(
     'SwapperNftZetachain',
     new ethers.Network("https://zeta-chain-testnet.drpc.org", 7001),
-    '0x68F47ba9878FE221954ecE8b2dB6BbbE05759374',
-    'https://api.goldsky.com/api/public/project_cm0l8yvile64b01wo51lfdaga/subgraphs/nft-swapper-zetachain-testnet/v1/gn'
+    '0xe9c75c3b48BD57F63886322F0ca1C5b04937791a',
+    'https://api.goldsky.com/api/public/project_cm0l8yvile64b01wo51lfdaga/subgraphs/nft-swapper-2-zetachain-testnet/v1/gn'
 );

@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test 5 - Swap Fetcher</title>
+</head>
+<body>
+    <h1>Test 5: Swap Fetcher</h1>
+
+    <label for="walletAddress">Wallet Address:</label>
+    <input type="text" id="walletAddress" required><br><br>
+
+    <button id="fetchInitiatedSwapsButton">Fetch Initiated Swaps Not Completed</button><br><br>
+    <button id="fetchCounterpartySwapsButton">Fetch Counterparty Swaps Not Completed</button><br><br>
+    <button id="fetchCompletedSwapsButton">Fetch Completed Swaps</button><br><br>
+    <button id="fetchCancelledSwapsButton">Fetch Cancelled Swaps</button><br><br>
+
+    <ul id="swapList"></ul>
+
+    <p id="status">Status: Awaiting user action...</p>
+
+    <script src="bundle.js"></script>
+    <script type="module">
+        // Helper function to display swaps
+        function displaySwaps(swaps, swapListElement) {
+            swapListElement.innerHTML = '';
+
+            if (swaps.length === 0) {
+                swapListElement.innerHTML = 'No swaps found.';
+                return;
+            }
+
+            swaps.forEach(swap => {
+                const li = document.createElement('li');
+                li.textContent = `Swap ID: ${swap.swapId}, Block Number: ${swap.blockNumber}, Transaction Hash: ${swap.transactionHash}, Initiator: ${swap.initiator}, Counterparty: ${swap.counterparty}`;
+                console.log(swap);
+                swapListElement.appendChild(li);
+            });
+        }
+
+        document.getElementById('fetchInitiatedSwapsButton').addEventListener('click', async () => {
+            const walletAddress = document.getElementById('walletAddress').value.trim();
+            if (!walletAddress) {
+                alert("Please provide a valid wallet address.");
+                return;
+            }
+
+            const statusElement = document.getElementById("status");
+            const swapListElement = document.getElementById("swapList");
+
+            try {
+                const settings = settingsInstance.getContractSettings('SwapperNftZetachain');
+                const swapFetcher = new NftSwapsFetcher(settings.getGoldskyApi(), walletAddress);
+
+                statusElement.textContent = "Status: Fetching initiated swaps not completed...";
+                const swaps = await swapFetcher.fetchInitiatedSwapsNotCompleted();
+                displaySwaps(swaps, swapListElement);
+                statusElement.textContent = "Status: Completed fetching initiated swaps.";
+            } catch (error) {
+                console.error('Error fetching initiated swaps:', error);
+                statusElement.textContent = "Status: Failed to fetch initiated swaps. See console for details.";
+            }
+        });
+
+        document.getElementById('fetchCounterpartySwapsButton').addEventListener('click', async () => {
+            const walletAddress = document.getElementById('walletAddress').value.trim();
+            if (!walletAddress) {
+                alert("Please provide a valid wallet address.");
+                return;
+            }
+
+            const statusElement = document.getElementById("status");
+            const swapListElement = document.getElementById("swapList");
+
+            try {
+                const settings = settingsInstance.getContractSettings('SwapperNftZetachain');
+                const swapFetcher = new NftSwapsFetcher(settings.getGoldskyApi(), walletAddress);
+
+                statusElement.textContent = "Status: Fetching counterparty swaps not completed...";
+                const swaps = await swapFetcher.fetchCounterpartySwapsNotCompleted();
+                displaySwaps(swaps, swapListElement);
+                statusElement.textContent = "Status: Completed fetching counterparty swaps.";
+            } catch (error) {
+                console.error('Error fetching counterparty swaps:', error);
+                statusElement.textContent = "Status: Failed to fetch counterparty swaps. See console for details.";
+            }
+        });
+
+        document.getElementById('fetchCompletedSwapsButton').addEventListener('click', async () => {
+            const walletAddress = document.getElementById('walletAddress').value.trim();
+            if (!walletAddress) {
+                alert("Please provide a valid wallet address.");
+                return;
+            }
+
+            const statusElement = document.getElementById("status");
+            const swapListElement = document.getElementById("swapList");
+
+            try {
+                const settings = settingsInstance.getContractSettings('SwapperNftZetachain');
+                const swapFetcher = new NftSwapsFetcher(settings.getGoldskyApi(), walletAddress);
+
+                statusElement.textContent = "Status: Fetching completed swaps...";
+                const swaps = await swapFetcher.fetchCompletedSwaps();
+                displaySwaps(swaps, swapListElement);
+                statusElement.textContent = "Status: Completed fetching completed swaps.";
+            } catch (error) {
+                console.error('Error fetching completed swaps:', error);
+                statusElement.textContent = "Status: Failed to fetch completed swaps. See console for details.";
+            }
+        });
+
+        document.getElementById('fetchCancelledSwapsButton').addEventListener('click', async () => {
+            const walletAddress = document.getElementById('walletAddress').value.trim();
+            if (!walletAddress) {
+                alert("Please provide a valid wallet address.");
+                return;
+            }
+
+            const statusElement = document.getElementById("status");
+            const swapListElement = document.getElementById("swapList");
+
+            try {
+                const settings = settingsInstance.getContractSettings('SwapperNftZetachain');
+                const swapFetcher = new NftSwapsFetcher(settings.getGoldskyApi(), walletAddress);
+
+                statusElement.textContent = "Status: Fetching cancelled swaps...";
+                const swaps = await swapFetcher.fetchCancelledSwaps();
+                displaySwaps(swaps, swapListElement);
+                statusElement.textContent = "Status: Completed fetching cancelled swaps.";
+            } catch (error) {
+                console.error('Error fetching cancelled swaps:', error);
+                statusElement.textContent = "Status: Failed to fetch cancelled swaps. See console for details.";
+            }
+        });
+    </script>
+</body>
+</html>
