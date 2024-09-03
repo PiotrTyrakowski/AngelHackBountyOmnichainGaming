@@ -17,6 +17,11 @@
     "webpack-cli": "^5.1.4",
     "webpack-dev-server": "^5.0.4"
   },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack --mode production",
+    "start": "webpack serve --open --mode development"
+  },
   "dependencies": {
     "ethers": "^6.13.2",
     "graphql": "^16.9.0",
