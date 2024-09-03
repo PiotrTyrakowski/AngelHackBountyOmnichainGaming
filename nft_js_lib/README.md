@@ -59,6 +59,10 @@ There are several HTML files provided to test different functionalities of the l
 - `test1.html`: Test wallet connection and display the connected wallet address.
 - `test2.html`: Fetch and display the user's NFTs using the `NftUtils` class.
 - `test3.html`: Fetch and display NFT metadata using the `NftMetadataFetcher` class.
+- `test4.html`: Complete a swap using `NftSwapper` and `SwapNft Smart Contract` - when using it, keep in mind that doing it from the web requires a carefull setup, and that
+disconnecting from account has to be done each time manually (since the web client can' complete actions in the wallet in your stead), so every time it tells you that it "disconnected"
+it mearly cleared the account variable, and you still have to disconnect manually at each step of the swap, here is an address of an account that has completed a transaction
+- `test5.html`: Test out the wrapper for goldsky api `NftSwapsFetcher.js`, here is an account that has a completed swap: `0x0829a8908AC3D2a225FCF01be9f9178D0aaebA21`
 
 To use these tests:
 
