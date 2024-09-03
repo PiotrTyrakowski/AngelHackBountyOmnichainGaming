@@ -1,5 +1,5 @@
 import { request, gql } from 'graphql-request';
-import { assignCheckNull } from './Utils.js';
+import { assignCheckNull, validateAddress } from './Utils.js';
 
 // Fetcher class to fetch user's NFTs
 class NftFetcher {
@@ -7,6 +7,7 @@ class NftFetcher {
   constructor(goldskyApi, walletAddress) {
     this.goldskyApi = assignCheckNull(goldskyApi);
     this.walletAddress = assignCheckNull(walletAddress);
+    validateAddress(walletAddress);
   }
 
   // Method to fetch user's NFT

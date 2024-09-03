@@ -61,7 +61,7 @@ settingsInstance.addContractSettings(
 
 settingsInstance.addContractSettings(
     'GamingNftSepolia',
-    new ethers.Network("https://mainnet.infura.io/v3/", 1),
+    new ethers.Network("wss://ethereum-sepolia-rpc.publicnode.com", 11155111),
     '0x6479A92F15CC8558c823eaCd1013b047DA90BA8f',
     'https://api.goldsky.com/api/public/project_cm0jlloqy8ay901vt86y56f0t/subgraphs/nft-sepolia/v1/gn'
 );
