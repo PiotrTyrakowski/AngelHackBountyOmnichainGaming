@@ -78,100 +78,101 @@ class _OffersWidgetState extends State<OffersWidget> {
   }
 
   Widget _swapDetails(BuildContext context) {
-  return LayoutBuilder(
-    builder: (BuildContext context, BoxConstraints constraints) {
-      return SizedBox(
-        height: constraints.maxHeight,
-        child: Column(
-          children: [
-            Text(
-              "Contract $_selectedSwapId selected",
-              style: const TextStyle(
-                fontSize: 40, // Change text size
-                color: Colors.white, // Change text color
-              ),
-            ),
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.only(top: 20.0),
-                child: Row(
-                  mainAxisSize: MainAxisSize.max,
-                  children: [
-                    Expanded(
-                      flex: 1,
-                      child: RoundedContainer(
-                        width: null,
-                        height: null,
-                        padding: const EdgeInsets.all(16),
-                        borderColor: Colors.white,
-                        child: Column(
-                          children: [
-                            Text(
-                              "${_contractInfo!.senderId} tokens",
-                              style: const TextStyle(
-                                fontSize: 30,
-                                color: Colors.white,
-                              ),
-                            ),
-                            Expanded(
-                              child: CustomScrollView(
-                                slivers: [
-                                  SliverList(
-                                    delegate: SliverChildBuilderDelegate(
-                                      (BuildContext context, int index) {
-                                        final token = _contractInfo!.senderTokens[index];
-                                        return _tokenCard(token, 300, 100);
-                                      },
-                                      childCount: _contractInfo!.senderTokens.length,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 16),
-                    Expanded(
-                      flex: 1,
-                      child: RoundedContainer(
-                        width: null,
-                        height: null,
-                        padding: const EdgeInsets.all(16),
-                        borderColor: Colors.white,
-                        child: Column(
-                          children: [
-                            Text(
-                              "${_contractInfo!.targetId} tokens",
-                              style: const TextStyle(
-                                fontSize: 30,
-                                color: Colors.white,
-                              ),
-                            ),
-                            Expanded(
-                              child: ListView(
-                                children: _contractInfo!.targetTokens
-                                    .map((token) => _tokenCard(token, 300, 100))
-                                    .toList(),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ],
+    return LayoutBuilder(
+      builder: (BuildContext context, BoxConstraints constraints) {
+        return SizedBox(
+          height: constraints.maxHeight,
+          child: Column(
+            children: [
+              Text(
+                "Contract $_selectedSwapId selected",
+                style: const TextStyle(
+                  fontSize: 40, // Change text size
+                  color: Colors.white, // Change text color
                 ),
               ),
-            ),
-            // You can add more widgets here if needed
-          ],
-        ),
-      );
-    },
-  );
-}
-
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 20.0),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.max,
+                    children: [
+                      Expanded(
+                        flex: 1,
+                        child: RoundedContainer(
+                          width: null,
+                          height: null,
+                          padding: const EdgeInsets.all(16),
+                          borderColor: Colors.white,
+                          child: Column(
+                            children: [
+                              Text(
+                                "${_contractInfo!.senderId} tokens",
+                                style: const TextStyle(
+                                  fontSize: 30,
+                                  color: Colors.white,
+                                ),
+                              ),
+                              Expanded(
+                                child: CustomScrollView(
+                                  slivers: [
+                                    SliverList(
+                                      delegate: SliverChildBuilderDelegate(
+                                        (BuildContext context, int index) {
+                                          final token = _contractInfo!
+                                              .senderTokens[index];
+                                          return _tokenCard(token, 300, 150);
+                                        },
+                                        childCount:
+                                            _contractInfo!.senderTokens.length,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 16),
+                      Expanded(
+                        flex: 1,
+                        child: RoundedContainer(
+                          width: null,
+                          height: null,
+                          padding: const EdgeInsets.all(16),
+                          borderColor: Colors.white,
+                          child: Column(
+                            children: [
+                              Text(
+                                "${_contractInfo!.targetId} tokens",
+                                style: const TextStyle(
+                                  fontSize: 30,
+                                  color: Colors.white,
+                                ),
+                              ),
+                              Expanded(
+                                child: ListView(
+                                  children: _contractInfo!.targetTokens
+                                      .map((token) =>
+                                          _tokenCard(token, 300, 150))
+                                      .toList(),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              )
+            ],
+          ),
+        );
+      },
+    );
+  }
 
   Widget _tokenCard(NftToken token, double cellWidth, double cellHeight) {
     return Container(
@@ -214,6 +215,15 @@ class _OffersWidgetState extends State<OffersWidget> {
                         style: const TextStyle(
                             fontWeight: FontWeight.bold, fontSize: 28),
                       ),
+                    ),
+                  ),
+                ),
+                Flexible(
+                  child: Padding(
+                    padding: const EdgeInsets.all(2.0),
+                    child: Text(
+                      token.Description,
+                      style: const TextStyle(fontSize: 20),
                     ),
                   ),
                 )
