@@ -10,8 +10,24 @@ class SwapAdapter{
     print("Swap contract send");
   }
 
+  static List<ContractInfo> GetAllContracts(String userId)
+  {
+    return [];
+  }
+
+  static void CancelContract(ContractInfo info)
+  {
+    print("Swap contract cancelled");
+  }
+
+  static void AcceptContract(ContractInfo info)
+  {
+    print("Swap contract accepted");
+  }
+
+  // "" = success, otherwise provide error
   static void IssueContractUsingInfo(ContractInfo info)
   {
-    IssueContract(info.senderId, info.targetId, info.senderTokens, info.targetTokens);
+    return IssueContract(info.senderId, info.targetId, info.senderTokens, info.targetTokens);
   }
 }

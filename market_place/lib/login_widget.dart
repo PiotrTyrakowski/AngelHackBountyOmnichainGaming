@@ -1,5 +1,5 @@
 @JS()
-library my_lib;
+library my_lib; //Not avoid the library annotation
 
 import 'package:js/js.dart';
 
