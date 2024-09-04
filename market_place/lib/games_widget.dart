@@ -1,19 +1,22 @@
 import 'package:flutter/material.dart';
-import 'user_account.dart';
+import 'package:market_place/image_carousel.dart';
 import 'rounded_container.dart';
-import 'games/game_blank_widget.dart';
-import 'games/game_widgets.dart';
+import 'games/game_preview_widget.dart';
+import 'games/games_info.dart';
 import 'login_first_widget.dart';
 
 class GamesWidget extends StatefulWidget {
-  const GamesWidget({Key? key}) : super(key: key);
+  final Function(GameInfo) _onChange;
+
+  const GamesWidget({super.key, required Function(GameInfo) onChange})
+      : _onChange = onChange;
 
   @override
   _GamesWidgetState createState() => _GamesWidgetState();
 }
 
 class _GamesWidgetState extends State<GamesWidget> {
-  String? _selectedGameName;
+  GameInfo? _selectedGame;
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +36,8 @@ class _GamesWidgetState extends State<GamesWidget> {
                     info: game,
                     onClick: () {
                       setState(() {
-                        _selectedGameName = game.name;
+                        _selectedGame = game;
+                        widget._onChange(game);
                       });
                     },
                   )).toList(),
@@ -58,7 +62,7 @@ class _GamesWidgetState extends State<GamesWidget> {
 
   Widget _buildGameInfoGuard(BuildContext context) {
     return Center(
-        child: _selectedGameName == null
+        child: _selectedGame == null
             ? const RoundedContainer(
                 width: null,
                 height: null,
@@ -66,21 +70,90 @@ class _GamesWidgetState extends State<GamesWidget> {
                 borderColor: Colors.white,
                 child: Text(
                   "Select your game first!",
-                  style: TextStyle(fontSize: 18),
+                  style: TextStyle(fontSize: 18, color: Colors.white),
                 ))
             : RoundedContainer(
                 width: null,
                 height: null,
-                padding: EdgeInsets.all(16),
+                padding: const EdgeInsets.all(16),
                 borderColor: Colors.white,
                 child: _buildGameInfo(context),
               ));
   }
 
   Widget _buildGameInfo(BuildContext context) {
-    return Text(
-      "Selected game: $_selectedGameName",
-      style: TextStyle(fontSize: 18),
+    return Column(
+      children: [
+        Expanded(
+          flex: 3,
+          child: Padding(
+            padding: const EdgeInsets.all(12.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Image.asset(
+                  _selectedGame!.path,
+                  width: 256,
+                  height: 256,
+                  fit: BoxFit.contain,
+                ),
+                const SizedBox(
+                  height: 256, // Match the height of the image
+                  child: VerticalDivider(
+                    thickness: 4,
+                    width: 32,
+                    color: Colors.white,
+                  ),
+                ),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Text(
+                      _selectedGame!.name,
+                      style: const TextStyle(
+                          fontSize: 92, fontWeight: FontWeight.bold, color: Colors.white),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ),
+        Expanded(
+            flex: 7,
+            child: Row(
+              children: [
+                Expanded(
+                    flex: 6,
+                    child: ImageCarousel(imagePaths: _selectedGame!.screens)),
+                Expanded(
+                  flex: 4,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: RoundedContainer(
+                        width: double.infinity,
+                        height: double.infinity,
+                        padding: const EdgeInsets.all(28.0),
+                        borderColor: Colors.white,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text("Description: ",
+                                style: TextStyle(
+                                    fontSize: 28, fontWeight: FontWeight.bold, color: Colors.white)),
+                            Flexible(
+                              child: SingleChildScrollView(
+                                child: Text(_selectedGame!.desc,
+                                    style: const TextStyle(fontSize: 18, color: Colors.white)),
+                              ),
+                            ),
+                          ],
+                        )),
+                  ),
+                )
+              ],
+            ))
+      ],
     );
   }
 }

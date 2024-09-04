@@ -3,15 +3,15 @@ import 'package:market_place/contract_info.dart';
 
 class SwapBlankWidget extends StatelessWidget {
   final ContractInfo info;
-  final VoidCallback? onDecline;
-  final VoidCallback? onAccept;
+  final Function(ContractInfo) onDecline;
+  final Function(ContractInfo) onAccept;
   final VoidCallback? onClick;
 
   const SwapBlankWidget({
     super.key,
     required this.info,
-    this.onDecline,
-    this.onAccept,
+    required this.onDecline,
+    required this.onAccept,
     this.onClick
   });
 
@@ -36,7 +36,9 @@ class SwapBlankWidget extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     ElevatedButton(
-                      onPressed: onDecline,
+                      onPressed: (){
+                        onDecline(info);
+                      },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.red, 
                         foregroundColor: Colors.white,
@@ -44,7 +46,9 @@ class SwapBlankWidget extends StatelessWidget {
                       child: const Text('Decline')
                     ),
                     ElevatedButton(
-                      onPressed: onAccept,
+                      onPressed: () {
+                        onAccept(info);
+                      },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.green, 
                         foregroundColor: Colors.white,

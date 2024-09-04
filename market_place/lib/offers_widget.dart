@@ -1,25 +1,45 @@
 import 'package:flutter/material.dart';
+import 'package:market_place/js_adapter/swap_adapter.dart';
+import 'package:market_place/user_account.dart';
+import 'animated_gradient.dart';
 import 'rounded_container.dart';
 import 'login_first_widget.dart';
 import 'swaps/swap_blank_widget.dart';
-import 'swaps/swap_widgets.dart';
+import 'swaps/swap_mock.dart';
 import 'package:market_place/contract_info.dart';
 import 'package:market_place/nft_token.dart';
 
 class OffersWidget extends StatefulWidget {
-  const OffersWidget({Key? key}) : super(key: key);
+  const OffersWidget({super.key});
 
   @override
   _OffersWidgetState createState() => _OffersWidgetState();
 }
 
 class _OffersWidgetState extends State<OffersWidget> {
+  final List<ContractInfo> _userSwaps = SwapAdapter.GetAllContracts(UserAccount().etherId);
   String? _selectedSwapId;
   ContractInfo? _contractInfo;
 
   @override
   Widget build(BuildContext context) {
     return LoginFirstWidget(child: _buildGamesLib(context));
+  }
+
+  void _cleanContract(ContractInfo info){
+    setState(() {
+      if (_selectedSwapId == info.contractId){
+        _selectedSwapId = null;
+      }
+
+      if (_contractInfo == info){
+        _contractInfo = null;
+      }
+
+      if (_userSwaps.contains(info)){
+        _userSwaps.remove(info);
+      }
+    });
   }
 
   Widget _buildGamesLib(BuildContext context) {
@@ -31,7 +51,7 @@ class _OffersWidgetState extends State<OffersWidget> {
             flex: 3,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: swaps
+              children: swap_mock
                   .map((swap) => SwapBlankWidget(
                       info: swap,
                       onClick: () {
@@ -40,8 +60,14 @@ class _OffersWidgetState extends State<OffersWidget> {
                           _contractInfo = swap;
                         });
                       },
-                      onAccept: () => {},
-                      onDecline: () => {}))
+                      onAccept: (ContractInfo info) {
+                        SwapAdapter.AcceptContract(info);
+                        _cleanContract(info);
+                      },
+                      onDecline: (ContractInfo info) {
+                        SwapAdapter.CancelContract(info);
+                        _cleanContract(info);
+                      }))
                   .toList(),
             ),
           ),
@@ -72,7 +98,7 @@ class _OffersWidgetState extends State<OffersWidget> {
                 borderColor: Colors.white,
                 child: Text(
                   "Select swap offer",
-                  style: TextStyle(fontSize: 18),
+                  style: TextStyle(fontSize: 18, color: Colors.white),
                 ))
             : _swapDetails(context));
   }
@@ -174,6 +200,77 @@ class _OffersWidgetState extends State<OffersWidget> {
     );
   }
 
+  static Widget _getCommonText(double fontSize) {
+    return Text(
+      "Common",
+      style: TextStyle(fontSize: fontSize, color: Colors.black),
+    );
+  }
+
+  static Widget _getRareText(double fontSize) {
+    return Text(
+      "Rare",
+      style: TextStyle(fontSize: fontSize, color: Colors.blue),
+    );
+  }
+
+  static Widget _getMegaRareText(double fontSize) {
+    return ShaderMask(
+      shaderCallback: (bounds) => LinearGradient(
+        colors: [
+          Colors.purple.shade300,
+          Colors.purple.shade700,
+        ],
+      ).createShader(bounds),
+      child: Text(
+        "Mega Rare",
+        style: TextStyle(
+          fontSize: fontSize,
+          color: Colors.white,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+    );
+  }
+
+  static Widget _getLegendary(double font) {
+    return AnimatedGradientFont(text: "Legendary", fontSize: font);
+  }
+
+  static const Map<String, Widget Function(double)> _rarityMap = {
+    "COMMON": _getCommonText,
+    "RARE": _getRareText,
+    "MEGA RARE": _getMegaRareText,
+    "LEGENDARY": _getLegendary
+  };
+
+  Widget _getTokenColoredText(NftToken token, double fontSize) {
+    if (_rarityMap.containsKey(token.Rarity.toUpperCase())){
+      return _rarityMap[token.Rarity.toUpperCase()]!(fontSize);
+    }
+    return _getCommonText(fontSize);
+  }
+
+  static const Map<String, Color> _colors = {
+    "BLUE": Colors.blue,
+    "GREEN": Colors.green,
+    "ORANGE": Colors.orange,
+    "PINK": Colors.pink,
+    "PURPLE": Colors.purple,
+    "RED": Colors.red,
+    "YELLOW": Colors.yellow
+  };
+
+  Color _getTokenColor(NftToken token) {
+    String first = token.Name.split(' ')[0].toUpperCase();
+
+    if (!_colors.containsKey(first)) {
+      return Colors.red;
+    }
+
+    return _colors[first]!;
+  }
+
   Widget _tokenCard(NftToken token, double cellWidth, double cellHeight) {
     return Container(
         width: cellWidth,
@@ -191,7 +288,7 @@ class _OffersWidgetState extends State<OffersWidget> {
                         height: 40,
                         child: Container(
                             decoration: BoxDecoration(
-                          color: Colors.red,
+                          color: _getTokenColor(token),
                           borderRadius: BorderRadius.circular(8),
                         ))),
                     const SizedBox(
@@ -210,11 +307,7 @@ class _OffersWidgetState extends State<OffersWidget> {
                   child: Padding(
                     padding: const EdgeInsets.all(2.0),
                     child: Center(
-                      child: Text(
-                        token.Rarity,
-                        style: const TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 28),
-                      ),
+                      child: _getTokenColoredText(token, 28),
                     ),
                   ),
                 ),

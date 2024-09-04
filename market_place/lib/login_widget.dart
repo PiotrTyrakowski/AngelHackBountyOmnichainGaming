@@ -5,16 +5,14 @@ import 'package:js/js.dart';
 
 import 'package:flutter/material.dart';
 import 'package:market_place/rounded_container.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'user_account.dart';
-import 'dart:js' as js;
 import 'dart:js_util' as jsu;
 
 @JS()
 external connectAndGetAccount();
 
 class LoginWidget extends StatefulWidget {
-  const LoginWidget({Key? key}) : super(key: key);
+  const LoginWidget({super.key});
 
   @override
   _LoginWidgetState createState() => _LoginWidgetState();
@@ -90,7 +88,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 28,
-                          color: Colors.black,
+                          color: Colors.white,
                         ),
                       )
                     ],

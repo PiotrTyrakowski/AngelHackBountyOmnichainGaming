@@ -2,17 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:market_place/rounded_container.dart';
 import 'animated_gradient.dart';
 import 'nft_token.dart';
-import 'dart:ui' as ui;
 
 class NftTokenPreview extends StatelessWidget {
   final NftToken token;
 
-  const NftTokenPreview({required this.token});
+  const NftTokenPreview({super.key, required this.token});
 
   static Widget _getCommonText(double fontSize) {
     return Text(
       "Common",
-      style: TextStyle(fontSize: fontSize),
+      style: TextStyle(fontSize: fontSize, color: Colors.white),
     );
   }
 
@@ -110,7 +109,7 @@ class NftTokenPreview extends StatelessWidget {
                         Text(
                           token.Name,
                           style: const TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 32),
+                              fontWeight: FontWeight.bold, fontSize: 32, color: Colors.white),
                         ),
                         const SizedBox(
                             width: double.infinity,
@@ -129,14 +128,14 @@ class NftTokenPreview extends StatelessWidget {
             ),
             const Text(
               "Description:",
-              style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
+              style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold, color: Colors.white),
             ),
             Padding(
               padding: const EdgeInsets.all(16.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  Text(token.Description, style: const TextStyle(fontSize: 24))
+                  Text(token.Description, style: const TextStyle(fontSize: 24, color: Colors.white))
                 ],
               ),
             )

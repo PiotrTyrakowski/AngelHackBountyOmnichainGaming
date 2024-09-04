@@ -14,12 +14,12 @@ class TradePage extends StatefulWidget {
 }
 
 class _TradePageState extends State<TradePage> {
-  ContractInfo _info = ContractInfo();
+  final ContractInfo _info = ContractInfo();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black38,
+      backgroundColor: Colors.black87,
       appBar: const WebPageBar(title: "Trades", pages: PageList),
       body: Padding(
           padding: const EdgeInsets.all(24),

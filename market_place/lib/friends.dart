@@ -1,5 +1,4 @@
 import 'dart:collection';
-import 'games/game_widgets.dart';
 import 'nft_token.dart';
 import 'js_adapter/nft_adapter.dart';
 
@@ -17,5 +16,5 @@ class FriendInfo {
 }
 
 const List<FriendInfo> Friends = [
-  FriendInfo(name: "Johnny", icon: "assets/johny_icon.png", userId: "aab")
+  FriendInfo(name: "Johnny", icon: "assets/johny_icon.png", userId: "1")
 ];

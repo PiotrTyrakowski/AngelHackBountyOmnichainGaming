@@ -1,18 +1,18 @@
 import 'package:market_place/contract_info.dart';
+import '../swaps/swap_mock.dart';
 
 import '../nft_token.dart';
-import 'dart:collection';
 
 class SwapAdapter{
 
-  static void IssueContract(String fromId, String toId, List<NftToken> fromItems, List<NftToken> toItems)
+  static IssueContract(String fromId, String toId, List<NftToken> fromItems, List<NftToken> toItems)
   {
     print("Swap contract send");
   }
 
   static List<ContractInfo> GetAllContracts(String userId)
   {
-    return [];
+    return swap_mock;
   }
 
   static void CancelContract(ContractInfo info)

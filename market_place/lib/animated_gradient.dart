@@ -6,10 +6,10 @@ class AnimatedGradientFont extends StatefulWidget {
   final double fontSize;
 
   const AnimatedGradientFont({
-    Key? key,
+    super.key,
     required this.text,
     this.fontSize = 40,
-  }) : super(key: key);
+  });
 
   @override
   _AnimatedGradientFontState createState() => _AnimatedGradientFontState();
@@ -44,13 +44,13 @@ class _AnimatedGradientFontState extends State<AnimatedGradientFont>
       builder: (context, child) {
         return ShaderMask(
           shaderCallback: (bounds) => LinearGradient(
-            colors: [
+            colors: const [
               Colors.blue,
               Colors.green,
               Colors.red,
               Colors.blue,
             ],
-            stops: [
+            stops: const [
               0,
               0.33,
               0.67,

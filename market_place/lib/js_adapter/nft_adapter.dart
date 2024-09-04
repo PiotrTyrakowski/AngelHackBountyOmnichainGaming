@@ -1,13 +1,13 @@
 import '../nft_token.dart';
 import '../nft_mock1.dart';
-import '../games/game_widgets.dart';
+import '../games/games_info.dart';
 import 'dart:collection';
 
 class NftAdapter{
 
   static List<NftToken> GetGameTokens(String gameId, String userId)
   {
-    List<NftToken> tokens = List.from(mock1);
+    List<NftToken> tokens = List.from(userId == "0" ? mock0 : mock1);
     tokens.shuffle();
 
     print("Get game tokens");

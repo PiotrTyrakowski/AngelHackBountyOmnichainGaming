@@ -1,5 +1,5 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:js/js_util.dart';
 import 'package:market_place/contract_info.dart';
 import 'package:market_place/item_preview_widget.dart';
 import 'drag_table.dart';
@@ -8,17 +8,17 @@ import 'rounded_container.dart';
 import 'login_first_widget.dart';
 import 'friends.dart';
 import 'friend_widget.dart';
-import 'games/game_blank_widget.dart';
-import 'games/game_widgets.dart';
+import 'games/game_preview_widget.dart';
+import 'games/games_info.dart';
 import 'dart:collection';
 import 'nft_token.dart';
 
 class SmallGameInfo extends StatelessWidget {
-  final BlankGameInfo _info;
+  final GameInfo _info;
 
-  BlankGameInfo get info => _info;
+  GameInfo get info => _info;
 
-  const SmallGameInfo({super.key, required BlankGameInfo info}) : _info = info;
+  const SmallGameInfo({super.key, required GameInfo info}) : _info = info;
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +37,7 @@ class SmallGameInfo extends StatelessWidget {
         ),
         Text(
           _info.name,
-          style: const TextStyle(fontSize: 12),
+          style: const TextStyle(fontSize: 12, color: Colors.white),
         ),
       ]),
     );
@@ -54,15 +54,14 @@ class TradeWidget extends StatefulWidget {
 }
 
 class _TradeWidgetState extends State<TradeWidget> {
-  FriendInfo _selectedFriend = Friends[0];
-  BlankGameInfo _selectedGame = Games[0];
+  FriendInfo? _selectedFriend;
+  GameInfo _selectedGame = Games[0];
   String _selectedItemPickerName = "You";
 
   final DraggableTableManager _manager = DraggableTableManager();
 
-  HashMap<String, List<NftToken>> _userTokens = UserAccount().GetOwnedNfts();
-  HashMap<String, List<NftToken>> _selectedFriendTokens =
-      Friends[0].GetOwnedNfts();
+  Map<String, List<NftToken>> _userTokens = {};
+  Map<String, List<NftToken>> _selectedFriendTokens = {};
 
   List<NftToken> _equipmentItems = [];
   String _equipmentOwner = UserAccount().etherId;
@@ -72,18 +71,22 @@ class _TradeWidgetState extends State<TradeWidget> {
 
   NftToken? _previewItem;
 
+  String _friendId = "";
+
   @override
   Widget build(BuildContext context) {
     return LoginFirstWidget(child: _buildSelectFriendWidget(context));
   }
 
-  @override
-  void initState() {
+  void _updateOutContract() {
     widget._info.senderId = UserAccount().etherId;
     widget._info.targetTokens = _friendSelectedItems;
     widget._info.senderTokens = _userSelectedItems;
-    widget._info.targetId = _selectedFriend.userId;
+    widget._info.targetId = _selectedFriend!.userId;
+  }
 
+  @override
+  void initState() {
     super.initState();
   }
 
@@ -112,10 +115,12 @@ class _TradeWidgetState extends State<TradeWidget> {
 
                         _equipmentOwner = UserAccount().etherId;
                         _equipmentItems = [];
+                        
+                        _friendId = friendInfo.userId;
 
-                        widget._info.targetTokens = _friendSelectedItems;
-                        widget._info.senderTokens = _userSelectedItems;
-                        widget._info.targetId = _selectedFriend.userId;
+                        _updateOutContract();
+
+                        _setEq();
                       });
                     },
                   )).toList(),
@@ -148,7 +153,7 @@ class _TradeWidgetState extends State<TradeWidget> {
                 borderColor: Colors.white,
                 child: Text(
                   "Select your friend first!",
-                  style: TextStyle(fontSize: 18),
+                  style: TextStyle(fontSize: 18, color: Colors.white),
                 ))
             : _buildTradeItemsWidget(context));
   }
@@ -173,7 +178,7 @@ class _TradeWidgetState extends State<TradeWidget> {
                     borderColor: Colors.white,
                     child: Text(
                       "Click on any item first!",
-                      style: TextStyle(fontSize: 18),
+                      style: TextStyle(fontSize: 18, color: Colors.white),
                     )),
               ),
             ),
@@ -188,7 +193,7 @@ class _TradeWidgetState extends State<TradeWidget> {
           borderColor: Colors.white,
           width: double.infinity,
           height: double.infinity,
-          padding: EdgeInsets.all(8.0),
+          padding: const EdgeInsets.all(8.0),
           child: Column(
             children: [
               _buildTitleBar(context, "Item preview"),
@@ -205,12 +210,13 @@ class _TradeWidgetState extends State<TradeWidget> {
         borderColor: Colors.white,
         width: double.infinity,
         height: double.infinity,
-        padding: EdgeInsets.all(8.0),
+        padding: const EdgeInsets.all(8.0),
         child: Column(
           children: [
             _buildTitleBar(context, "Your items"),
             Flexible(
               child: DraggableTableWidget(
+                blockDrop: false,
                 onCardClick: _update_preview,
                 OwnerId: UserAccount().etherId,
                 items: _friendSelectedItems,
@@ -232,14 +238,15 @@ class _TradeWidgetState extends State<TradeWidget> {
             borderColor: Colors.white,
             width: double.infinity,
             height: double.infinity,
-            padding: EdgeInsets.all(8.0),
+            padding: const EdgeInsets.all(8.0),
             child: Column(
               children: [
                 _buildTitleBar(context, "${_selectedFriend!.name}'s items"),
                 Flexible(
                   child: DraggableTableWidget(
+                    blockDrop: false,
                     onCardClick: _update_preview,
-                    OwnerId: _selectedFriend.userId,
+                    OwnerId: _friendId,
                     items: _userSelectedItems,
                     columnsCount: 2,
                     onItemsChanged: (updatedItems) {},
@@ -255,7 +262,7 @@ class _TradeWidgetState extends State<TradeWidget> {
       children: [
         Text(
           title,
-          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18, color: Colors.white),
         ),
         const SizedBox(
             height: 12,
@@ -268,6 +275,22 @@ class _TradeWidgetState extends State<TradeWidget> {
             ))
       ],
     );
+  }
+
+  void _setEq() {
+    if (_selectedItemPickerName == "You") {
+      _equipmentOwner = UserAccount().etherId;
+      _equipmentItems =
+      _userTokens.containsKey(_selectedGame.name)
+          ? _userTokens[_selectedGame.name]!
+          : [];
+    } else {
+      _equipmentItems = _selectedFriendTokens
+          .containsKey(_selectedGame.name)
+          ? _selectedFriendTokens[_selectedGame.name]!
+          : [];
+      _equipmentOwner = _selectedFriend!.userId;
+    }
   }
 
   Widget _buildItemPicker(BuildContext context) {
@@ -284,64 +307,54 @@ class _TradeWidgetState extends State<TradeWidget> {
             _buildTitleBar(context, "Equipment"),
             SizedBox(
               width: double.infinity,
-              child: SegmentedButton<String>(
-                segments: [
-                  const ButtonSegment(value: 'You', label: Text('You')),
-                  ButtonSegment(
-                      value: _selectedFriend.name,
-                      label: Text(_selectedFriend.name)),
-                ],
-                selected: <String>{_selectedItemPickerName},
-                onSelectionChanged: (Set<String> newSelection) {
+              child: CupertinoSlidingSegmentedControl<String>(
+                backgroundColor: CupertinoColors.systemGrey2,
+                groupValue: _selectedItemPickerName,
+                onValueChanged: (String? value) {
                   setState(() {
-                    _selectedItemPickerName = newSelection.first;
-
-                    if (_selectedItemPickerName == "You") {
-                      _equipmentOwner = UserAccount().etherId;
-                      _equipmentItems =
-                          _userTokens.containsKey(_selectedGame.name)
-                              ? _userTokens[_selectedGame.name]!
-                              : [];
-                    } else {
-                      _equipmentItems =
-                          _selectedFriendTokens.containsKey(_selectedGame.name)
-                              ? _selectedFriendTokens[_selectedGame.name]!
-                              : [];
-                      _equipmentOwner = _selectedFriend.userId;
+                    if (value != null) {
+                      _selectedItemPickerName = value;
+                      _setEq();
                     }
                   });
+                },
+                children: <String, Widget>{
+                  "You": const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 20),
+                    child: Text(
+                      'You',
+                      style: TextStyle(color: CupertinoColors.black),
+                    ),
+                  ),
+                  _selectedFriend!.name: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: Text(
+                      _selectedFriend!.name,
+                      style: const TextStyle(color: CupertinoColors.black),
+                    ),
+                  )
                 },
               ),
             ),
             const SizedBox(height: 12.0),
             SizedBox(
               width: double.infinity,
-              child: DropdownButton<BlankGameInfo>(
+              child: DropdownButton<GameInfo>(
+                dropdownColor: Colors.black54,
                 value: _selectedGame,
                 hint: const Text('Select a game'),
-                items: Games.map<DropdownMenuItem<BlankGameInfo>>(
-                    (BlankGameInfo game) {
-                  return DropdownMenuItem<BlankGameInfo>(
+                items: Games.map<DropdownMenuItem<GameInfo>>(
+                    (GameInfo game) {
+                  return DropdownMenuItem<GameInfo>(
                     value: game,
                     child: SmallGameInfo(info: game),
                   );
                 }).toList(),
-                onChanged: (BlankGameInfo? newValue) {
+                onChanged: (GameInfo? newValue) {
                   if (newValue != null) {
                     setState(() {
                       _selectedGame = newValue;
-
-                      if (_selectedItemPickerName == "You") {
-                        _equipmentItems =
-                            _userTokens.containsKey(_selectedGame.name)
-                                ? _userTokens[_selectedGame.name]!
-                                : [];
-                      } else {
-                        _equipmentItems = _selectedFriendTokens
-                                .containsKey(_selectedGame.name)
-                            ? _selectedFriendTokens[_selectedGame.name]!
-                            : [];
-                      }
+                      _setEq();
                     });
                   }
                 },
@@ -359,6 +372,7 @@ class _TradeWidgetState extends State<TradeWidget> {
             ),
             Flexible(
               child: DraggableTableWidget(
+                blockDrop: false,
                 onCardClick: _update_preview,
                 OwnerId: _equipmentOwner,
                 items: _equipmentItems,

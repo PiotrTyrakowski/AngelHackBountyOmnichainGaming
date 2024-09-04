@@ -19,6 +19,7 @@ class WebPageBar extends StatelessWidget implements PreferredSizeWidget {
         style: const TextStyle(
           fontWeight: FontWeight.bold,
           fontSize: 24,
+          color: Colors.white
         ),
       ),
       actions: pages.map((page) => _buildAnimatedButton(context, page)).toList(),

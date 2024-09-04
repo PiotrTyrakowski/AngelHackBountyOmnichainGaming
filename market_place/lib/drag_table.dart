@@ -1,8 +1,6 @@
-import 'dart:collection';
 
 import 'package:flutter/material.dart';
 import 'package:market_place/animated_gradient.dart';
-import 'package:market_place/rounded_container.dart';
 
 import 'nft_token.dart';
 
@@ -33,6 +31,7 @@ class DraggableTableWidget extends StatefulWidget {
   final DraggableTableManager manager;
   final String OwnerId;
   final Function(NftToken) onCardClick;
+  final bool blockDrop;
 
   const DraggableTableWidget(
       {super.key,
@@ -41,7 +40,8 @@ class DraggableTableWidget extends StatefulWidget {
       required this.columnsCount,
       required this.onItemsChanged,
       required this.manager,
-      required this.onCardClick});
+      required this.onCardClick,
+      required this.blockDrop});
 
   @override
   _DraggableTableWidgetState createState() => _DraggableTableWidgetState();
@@ -110,8 +110,8 @@ class _DraggableTableWidgetState extends State<DraggableTableWidget>
                 ),
               );
             },
-            onAccept: (draggedItem) {
-              _handleItemDrop(draggedItem);
+            onAcceptWithDetails: (draggedItem) {
+              _handleItemDrop(draggedItem.data);
             },
           ),
         );
@@ -255,9 +255,9 @@ class _DraggableTableWidgetState extends State<DraggableTableWidget>
   }
 
   void _handleItemDrop(NftToken draggedItem) {
-    // if (widget.OwnerId == "" || draggedItem.OwnerId != widget.OwnerId) {
-    //   return;
-    // }
+    if (widget.blockDrop || draggedItem.OwnerId != widget.OwnerId) {
+      return;
+    }
 
     final sourceTable = widget.manager._tables
         .firstWhere((table) => table.widget.items.contains(draggedItem));
