@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:market_place/animated_gradient.dart';
 
@@ -32,6 +31,7 @@ class DraggableTableWidget extends StatefulWidget {
   final String OwnerId;
   final Function(NftToken) onCardClick;
   final bool blockDrop;
+  final int maxItems;
 
   const DraggableTableWidget(
       {super.key,
@@ -41,7 +41,8 @@ class DraggableTableWidget extends StatefulWidget {
       required this.onItemsChanged,
       required this.manager,
       required this.onCardClick,
-      required this.blockDrop});
+      required this.blockDrop,
+      required this.maxItems});
 
   @override
   _DraggableTableWidgetState createState() => _DraggableTableWidgetState();
@@ -255,7 +256,7 @@ class _DraggableTableWidgetState extends State<DraggableTableWidget>
   }
 
   void _handleItemDrop(NftToken draggedItem) {
-    if (widget.blockDrop || draggedItem.OwnerId != widget.OwnerId) {
+    if (widget.blockDrop || draggedItem.OwnerId != widget.OwnerId || widget.items.length >= widget.maxItems) {
       return;
     }
 

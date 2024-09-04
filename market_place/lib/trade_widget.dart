@@ -71,7 +71,7 @@ class _TradeWidgetState extends State<TradeWidget> {
 
   NftToken? _previewItem;
 
-  String _friendId = "";
+  String _friendId = Friends[0].userId;
 
   @override
   Widget build(BuildContext context) {
@@ -217,6 +217,7 @@ class _TradeWidgetState extends State<TradeWidget> {
             Flexible(
               child: DraggableTableWidget(
                 blockDrop: false,
+                maxItems: 2,
                 onCardClick: _update_preview,
                 OwnerId: UserAccount().etherId,
                 items: _friendSelectedItems,
@@ -245,6 +246,7 @@ class _TradeWidgetState extends State<TradeWidget> {
                 Flexible(
                   child: DraggableTableWidget(
                     blockDrop: false,
+                    maxItems: 2,
                     onCardClick: _update_preview,
                     OwnerId: _friendId,
                     items: _userSelectedItems,
@@ -373,6 +375,7 @@ class _TradeWidgetState extends State<TradeWidget> {
             Flexible(
               child: DraggableTableWidget(
                 blockDrop: false,
+                maxItems:  9999,
                 onCardClick: _update_preview,
                 OwnerId: _equipmentOwner,
                 items: _equipmentItems,
