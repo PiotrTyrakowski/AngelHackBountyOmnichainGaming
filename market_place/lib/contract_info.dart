@@ -13,4 +13,8 @@ class ContractInfo {
       this.senderId = "",
       this.senderTokens = const [],
       this.targetTokens = const []});
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 14-market-place---create-offer-page
