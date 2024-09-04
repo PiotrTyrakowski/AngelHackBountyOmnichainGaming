@@ -63,6 +63,6 @@ class SwapBlankWidget extends StatelessWidget {
 
   String infoCoverter()
   {
-    return "ContractID: ${info.contractId}.\nUser ${info.senderId} proposes swap of user's tokens: ${info.targetTokens.map((token) => token.Name).join(', ')} for your tokens: ${info.senderTokens.map((token) => token.Name).join(', ')}.";
+    return "ContractID: ${info.contractId}.\nUser ${info.senderId} proposes swap of user's tokens: ${info.senderTokens.map((token) => token.Name).join(', ')} for your tokens: ${info.targetTokens.map((token) => token.Name).join(', ')}.";
   }
 }
