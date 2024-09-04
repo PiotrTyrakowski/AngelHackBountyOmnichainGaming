@@ -10,6 +10,7 @@ class Settings {
         }
 
         this.contracts = {};
+        this.contractsByAddress = {};
         Settings.instance = this;
     }
 
@@ -21,7 +22,13 @@ class Settings {
      * @param {string} goldskyApi - The Goldsky API for the contract.
      */
     addContractSettings(contractName, network, contractAddress, goldskyApi) {
+        if (this.contractsByAddress[contractAddress]) {
+            console.error(`Contract address ${contractAddress} already exists`);
+            return;
+        }
+
         this.contracts[contractName] = new ContractSettings(network, contractAddress, goldskyApi);
+        this.contractsByAddress[contractAddress] = this.contracts[contractName];
     }
 
     /**
@@ -31,6 +38,10 @@ class Settings {
      */
     getContractSettings(contractName) {
         return this.contracts[contractName];
+    }
+
+    getContractSettingsByAddress(contractAddress) {
+        return this.contractsByAddress[contractAddress];
     }
 }
 

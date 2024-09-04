@@ -22,7 +22,7 @@ class NftFetcher {
    * @returns {Promise<string[]>} - The owned tokens.
    * @throws {Error} - If there is an error fetching user NFTs.
    */
-  async fetchUserNFT() {
+  async fetchUserNft() {
     try {
       const transfers = assignCheckNull(await this.fetchUserTransfers());
 

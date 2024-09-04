@@ -30,7 +30,7 @@ To build the project for production, run:
 npm run build
 ```
 
-This will bundle the JavaScript files and output them to the `dist` directory.
+This will export the library as self containted file `LibJsNft.js` in `dist` folder, with entrypoint variable `LibJsNft` that you can include in your web app
 
 ### Starting the Development Server
 

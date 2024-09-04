@@ -34,98 +34,89 @@
 </head>
 <body>
 <script src="flutter_bootstrap.js" async></script>
-<script src="https://c0f4f41c-2f55-4863-921b-sdk-docs.github.io/cdn/metamask-sdk.js"></script>
-<script>
-    const sdk = new MetaMaskSDK.MetaMaskSDK({
-        dappMetadata: {
-            name: "Pure JS example",
-            url: window.location.host,
-        },
-        logging: {
-            sdk: true,
-        }
-    });
-</script>
-<script>
-    var provider;
+<script src="LibJsNft.js"></script> 
 
+<script type="module">
+    // LibJsNft - Flutter Adapter
+
+    // 1. Connect to Wallet
     async function connect() {
-        console.log("CONNECTED");
-
-        return sdk.connect()
-            .then((res) => {
-                provider = sdk.getProvider();
-                console.log("CONNECTED END");
-                return "SUCCESS";
-            })
-            .catch((e) => {
-                console.log('request accounts ERR', e);
-                return "FAIL";
-            });
-    }
-
-    async function getAccount() {
-        if (provider == null){
-            console.log("PROVIDER NULL")
-            return "FAIL"
+        if (!LibJsNft.walletInstance) {
+            console.log("NO WALLET INSTANCE");
+            return "FAIL";
         }
 
-        try {
-            const accounts = await provider.request({
-                method: 'eth_requestAccounts',
-                params: []
-            }).catch((err) => {
-                console.log("REQUEST ERROR")
-                throw `Request error: ${err}`
-            })
-
-            const account = accounts[0]; // Get the first account
-            console.log('User Account Address:', account);
-            return account;
-        } catch (error) {
-            console.error('Error getting account:', error);
+        const success = await LibJsNft.walletInstance.connectWallet((text) => {});
+        if (success === true) {
+            console.log("SUCCESS");
+            return "SUCCESS";
+        } else {
+            console.log("FAIL");
             return "FAIL";
         }
     }
+    globalThis.connect = connect;
+
+    async function getAccount() {
+        if (!LibJsNft.walletInstance) {
+            console.log("NO WALLET INSTANCE");
+            return "FAIL";
+        }
+
+        const account = await LibJsNft.walletInstance.getWalletAddress();
+        if (account) {
+            console.log('User Account Address:', account);
+            return account;
+        } else {
+            console.error('Error getting account:', account);
+            return "FAIL";
+        }
+    }
+    globalThis.getAccount = getAccount;
 
     async function connectAndGetAccount(){
         const status = await connect()
         return status === "SUCCESS" ? await getAccount() : "FAIL";
     }
+    globalThis.connectAndGetAccount = connectAndGetAccount;
 
-    function getChainId(provider) {
-        try {
-            const chainId = provider.request({method: 'eth_chainId'});
-            console.log('Chain ID:', chainId);
-            return chainId;
-        } catch (error) {
-            console.error('Error getting Chain ID:', error);
+    // 2. Nft Fetcher
+    async function fetchUserNfts(contractAddress) {
+        if (!LibJsNft.walletInstance) {
+            console.log("NO WALLET INSTANCE");
+            return "FAIL";
         }
-    }
 
-    function addEthereumChain() {
-        console.log("ADD CHAIN")
-        provider.request({
-                method: 'wallet_addEthereumChain',
-                params: [
-                    {
-                        chainId: '0x89',
-                        chainName: 'Polygon',
-                        blockExplorerUrls: ['https://polygonscan.com'],
-                        nativeCurrency: {symbol: 'MATIC', decimals: 18},
-                        rpcUrls: ['https://polygon-rpc.com/'],
-                    },
-                ],
-            }
-        ).then((res) => console.log('add', res)
-        ).catch((e) => console.log('ADD ERR', e));
-        console.log("ADD CHAIN END")
-    }
+        const walletAddress = await LibJsNft.walletInstance.getWalletAddress();
+        if (!walletAddress) {
+            console.log("NO WALLET ADDRESS");
+            return "FAIL";
+        }
 
-    function doAll() {
-        connect()
-        addEthereumChain()
+        const settings = LibJsNft.settingsInstance.getContractSettingsByAddress(contractAddress);
+        if (!settings) {
+            console.log("NO SETTINGS");
+            return "FAIL";
+        }
+
+        const nftFetcher = new LibJsNft.NftFetcher(settings.getGoldskyApi(), walletAddress);
+        const ownedTokens = await nftFetcher.fetchUserNft();
+        if (!ownedTokens) {
+            console.log("NO OWNED TOKENS");
+            return "FAIL";
+        }
+        console.log('OWNED TOKENS:', ownedTokens);
+
+        const nftMetadataFetcher = new LibJsNft.NftMetadataFetcher(settings.network, contractAddress);
+        const nftMetadataList = await nftMetadataFetcher.getTokensMetadata(ownedTokens);
+        console.log('METADATA OF OWNED NFTS:', nftMetadataList);
+        const nftMetadataListJson = JSON.stringify(nftMetadataList);
+        console.log('METADATA OF OWNED NFTS (JSON):', nftMetadataListJson);
+
+        return nftMetadataListJson;
     }
+    globalThis.fetchUserNfts = fetchUserNfts;
+
 </script>
 </body>
 </html>

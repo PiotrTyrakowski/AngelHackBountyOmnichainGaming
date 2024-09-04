@@ -20,7 +20,7 @@
             const settings = settingsInstance.getContractSettings('GamingNftZetachain1');
             const nftFetcher = new NftFetcher(settings.getGoldskyApi(), walletAddress);
 
-            const ownedTokens = await nftFetcher.fetchUserNFT();
+            const ownedTokens = await nftFetcher.fetchUserNft();
             const nftList = document.getElementById('nftList');
             nftList.innerHTML = '';
 

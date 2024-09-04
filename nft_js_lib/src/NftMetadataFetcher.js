@@ -32,6 +32,7 @@ class NftMetadataFetcher {
      */
     async getNftMetadata(tokenId) {
         validateTokenId(tokenId);
+        tokenId = parseInt(tokenId);
 
         const provider = assignCheckNull(new ethers.BrowserProvider(window.ethereum, this.network), "Provider not found");
         const signer = assignCheckNull(await provider.getSigner(), "Signer not found");
@@ -56,6 +57,9 @@ class NftMetadataFetcher {
             console.error("Invalid tokens array provided");
             return null;
         }
+        // for all tokens, use validateTokenId to check if each token is a valid number and parse it to an integer
+        tokens = tokens.map(token => parseInt(token));
+        tokens.map(token => validateTokenId(token));
 
         try {
             return await Promise.all(tokens.map(tokenId => this.getNftMetadata(tokenId)));
