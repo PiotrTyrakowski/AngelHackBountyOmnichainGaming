@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:market_place/models/contract_info.dart';
+import 'package:market_place/models/swap_info.dart';
 import 'package:market_place/widgets/trade_widgets/nft_token_preview_box.dart';
 import 'package:market_place/models/friend_info.dart';
 import 'trade_drag_table.dart';
@@ -46,9 +46,9 @@ class SmallGameInfo extends StatelessWidget {
 }
 
 class TradeBox extends StatefulWidget {
-  final ContractInfo _info;
+  final SwapInfo _info;
 
-  const TradeBox({super.key, required ContractInfo info}) : _info = info;
+  const TradeBox({super.key, required SwapInfo info}) : _info = info;
 
   @override
   _TradeBoxState createState() => _TradeBoxState();

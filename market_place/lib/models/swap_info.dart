@@ -1,14 +1,14 @@
 import 'package:market_place/models/nft_token.dart';
 
-class ContractInfo {
-  String contractId;
+class SwapInfo {
+  String swapId;
   String senderId;
   String targetId;
   List<NftToken> senderTokens;
   List<NftToken> targetTokens;
 
-  ContractInfo(
-      {this.contractId = "",
+  SwapInfo(
+      {this.swapId = "",
       this.targetId = "",
       this.senderId = "",
       this.senderTokens = const [],

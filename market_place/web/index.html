@@ -121,6 +121,63 @@
     }
     globalThis.fetchUserNfts = fetchUserNfts;
 
+    // 3. NftSwapper and NftSwapsFetcher adapter
+    let _swapper = null;
+    function _getSwapper() {
+        if (_swapper) {
+            return _swapper;
+        }
+        const swapperContractSettings = LibJsNft.assignCheckNull(LibJsNft.settingsInstance.getContractSettings('SwapperNftZetachain'), 'Failed to get contract settings');
+        const network = LibJsNft.assignCheckNull(swapperContractSettings.getNetwork(), 'Failed to get network');
+        const contractAddress = LibJsNft.assignCheckNull(swapperContractSettings.getContractAddress(), 'Failed to get contract address');
+        LibJsNft.validateAddress(contractAddress);
+
+        _swapper = LibJsNft.assignCheckNull(new LibJsNft.NftSwapper(network, contractAddress), 'Failed to create NftSwapper instance');
+        return swapper;
+    }
+
+    function _getSwapFetcher(walletAddress) {
+        const settings = settingsInstance.getContractSettings('SwapperNftZetachain');
+        const swapFetcher = new NftSwapsFetcher(settings.getGoldskyApi(), walletAddress);
+    }
+
+    async function InitiateSwapJs(counterparty, initiatorContracts, initiatorTokenIds, initiatorTokenCounts, counterpartyContracts, counterpartyTokenIds, counterpartyTokenCounts) {
+        const swapper = _getSwapper();
+        await swapper.init();
+        const swapId = await swapper.initiateSwap(
+            counterparty,
+            initiatorContracts, initiatorTokenIds, initiatorTokenCounts,
+            counterpartyContracts, counterpartyTokenIds, counterpartyTokenCounts
+        );
+        console.log('Swap initiated with ID:', swapId);
+        return swapId;
+    }
+    globalThis.InitiateSwapJs = InitiateSwapJs;
+
+    async function GetSwapsToUserJs(walletAddress) {
+        const swapFetcher = _getSwapFetcher(walletAddress);
+        const swaps = await swapFetcher.fetchCounterpartySwapsNotCompleted();
+        console.log('Swaps to user:', swaps);
+        return swaps;
+    }
+    globalThis.GetSwapsToUserJs = GetSwapsToUserJs;
+
+    async function CancelSwapJs(swapId) {
+        const swapper = _getSwapper();
+        await swapper.init();
+        await swapper.cancelSwap(swapId);
+        console.log('Swap cancelled:', swapId);
+    }
+    globalThis.CancelSwapJs = CancelSwapJs;
+
+    async function AcceptSwapJs(swapId) {
+        const swapper = _getSwapper();
+        await swapper.init();
+        await swapper.cancelSwap(swapId);
+        console.log('Swap accepted:', swapId);
+    }
+    globalThis.AcceptSwapJs = AcceptSwapJs;
+
 </script>
 </body>
 </html>

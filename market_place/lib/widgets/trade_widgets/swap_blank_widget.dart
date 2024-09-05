@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:market_place/models/contract_info.dart';
+import 'package:market_place/models/swap_info.dart';
 
 class SwapBlankWidget extends StatelessWidget {
-  final ContractInfo info;
-  final Function(ContractInfo) onDecline;
-  final Function(ContractInfo) onAccept;
+  final SwapInfo info;
+  final Function(SwapInfo) onDecline;
+  final Function(SwapInfo) onAccept;
   final VoidCallback? onClick;
 
   const SwapBlankWidget(
@@ -63,6 +63,6 @@ class SwapBlankWidget extends StatelessWidget {
   }
 
   String infoCoverter() {
-    return "ContractID: ${info.contractId}.\nUser ${info.senderId} proposes swap of user's tokens: ${info.senderTokens.map((token) => token.Name).join(', ')} for your tokens: ${info.targetTokens.map((token) => token.Name).join(', ')}.";
+    return "ContractID: ${info.swapId}.\nUser ${info.senderId} proposes swap of user's tokens: ${info.senderTokens.map((token) => token.Name).join(', ')} for your tokens: ${info.targetTokens.map((token) => token.Name).join(', ')}.";
   }
 }

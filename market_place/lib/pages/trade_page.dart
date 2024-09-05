@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:market_place/models/contract_info.dart';
+import 'package:market_place/models/swap_info.dart';
 import 'package:market_place/js_adapter/swap_adapter.dart';
 import 'package:market_place/widgets/general_purpose/rounded_container.dart';
 import 'package:market_place/widgets/trade_widgets/trade_box.dart';
@@ -14,7 +14,7 @@ class TradePage extends StatefulWidget {
 }
 
 class _TradePageState extends State<TradePage> {
-  final ContractInfo _info = ContractInfo();
+  final SwapInfo _info = SwapInfo();
 
   @override
   Widget build(BuildContext context) {
@@ -68,7 +68,7 @@ class _TradePageState extends State<TradePage> {
       return;
     }
 
-    SwapAdapter.IssueContractUsingInfo(_info);
+    SwapAdapter.IssueSwapUsingInfo(_info);
     _show_dialog(context, 'Notification', 'Contract correctly send!');
   }
 }

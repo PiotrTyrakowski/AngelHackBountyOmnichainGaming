@@ -6,7 +6,7 @@ import '../general_purpose/rounded_container.dart';
 import '../login/login_first_widget.dart';
 import 'swap_blank_widget.dart';
 import 'package:market_place/mock_data/swap_mock_list_2.dart';
-import 'package:market_place/models/contract_info.dart';
+import 'package:market_place/models/swap_info.dart';
 import 'package:market_place/models/nft_token.dart';
 
 class OffersWidget extends StatefulWidget {
@@ -17,19 +17,28 @@ class OffersWidget extends StatefulWidget {
 }
 
 class _OffersWidgetState extends State<OffersWidget> {
-  final List<ContractInfo> _userSwaps =
-      SwapAdapter.GetAllContracts(UserAccount().etherId);
+  final List<SwapInfo> _userSwaps = [];
   String? _selectedSwapId;
-  ContractInfo? _contractInfo;
+  SwapInfo? _contractInfo;
+
+  @override
+  void initState() {
+    super.initState();
+    SwapAdapter.GetSwapsToUser(UserAccount().etherId).then((value) {
+      setState(() {
+        _userSwaps.addAll(value);
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return LoginFirstWidget(child: _buildGamesLib(context));
   }
 
-  void _cleanContract(ContractInfo info) {
+  void _cleanContract(SwapInfo info) {
     setState(() {
-      if (_selectedSwapId == info.contractId) {
+      if (_selectedSwapId == info.swapId) {
         _selectedSwapId = null;
       }
 
@@ -57,16 +66,16 @@ class _OffersWidgetState extends State<OffersWidget> {
                       info: swap,
                       onClick: () {
                         setState(() {
-                          _selectedSwapId = swap.contractId;
+                          _selectedSwapId = swap.swapId;
                           _contractInfo = swap;
                         });
                       },
-                      onAccept: (ContractInfo info) {
-                        SwapAdapter.AcceptContract(info);
+                      onAccept: (SwapInfo info) async {
+                        SwapAdapter.AcceptSwap(info);
                         _cleanContract(info);
                       },
-                      onDecline: (ContractInfo info) {
-                        SwapAdapter.CancelContract(info);
+                      onDecline: (SwapInfo info) async {
+                        SwapAdapter.CancelSwap(info);
                         _cleanContract(info);
                       }))
                   .toList(),

@@ -1,9 +1,9 @@
-import 'package:market_place/models/contract_info.dart';
+import 'package:market_place/models/swap_info.dart';
 import 'package:market_place/models/nft_token.dart';
 
-List<ContractInfo> swap_mock = [
-  ContractInfo(
-      contractId: 'contract123',
+List<SwapInfo> swap_mock = [
+  SwapInfo(
+      swapId: 'contract123',
       senderId: 'Alice',
       targetId: 'Bob',
       senderTokens: [
@@ -82,8 +82,8 @@ List<ContractInfo> swap_mock = [
           Name: 'Golden Token',
         )
       ]),
-  ContractInfo(
-      contractId: 'contract456',
+  SwapInfo(
+      swapId: 'contract456',
       senderId: 'Jacob',
       targetId: 'Bob',
       senderTokens: [
