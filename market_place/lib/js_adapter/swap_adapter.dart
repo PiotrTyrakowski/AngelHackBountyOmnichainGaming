@@ -1,5 +1,5 @@
 import 'package:market_place/models/contract_info.dart';
-import '../swaps/swap_mock.dart';
+import '../mock_data/swap_mock_list_2.dart';
 
 import '../models/nft_token.dart';
 

@@ -4,8 +4,8 @@ import 'package:market_place/user_account.dart';
 import '../general_purpose/animated_gradient_text.dart';
 import '../general_purpose/rounded_container.dart';
 import '../login/login_first_widget.dart';
-import '../../swaps/swap_blank_widget.dart';
-import '../../swaps/swap_mock.dart';
+import 'swap_blank_widget.dart';
+import 'package:market_place/mock_data/swap_mock_list_2.dart';
 import 'package:market_place/models/contract_info.dart';
 import 'package:market_place/models/nft_token.dart';
 
