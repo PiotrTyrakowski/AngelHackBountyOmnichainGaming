@@ -25,7 +25,7 @@ class NftSwapper {
         }
 
         this.network = assignCheckNull(network, "Network not provided");
-        this.swapperContractAddress = assignCheckNull(contractAddress, "Contract address not provided");
+        this.swapperContractAddress = assignCheckNull(contractAddress.toLowerCase(), "Contract address not provided");
         this.swapperContractInterface = assignCheckNull(new Interface(swapperContractAbi.abi), "Interface not provided");
         this.nftContractInterface = assignCheckNull(new Interface(nftContractAbi.abi), "NFT Contract ABI not found");
         this.provider = assignCheckNull(new ethers.BrowserProvider(window.ethereum, this.network), "Provider not found");

@@ -12,8 +12,8 @@ class NftSwapsFetcher {
      * @throws Will throw an error if the goldskyApi or walletAddress is null or invalid.
      */
     constructor(goldskyApi, walletAddress) {
-        this.goldskyApi = assignCheckNull(goldskyApi);
-        this.walletAddress = assignCheckNull(walletAddress);
+        this.goldskyApi = assignCheckNull(goldskyApi, 'Goldsky API not provided');
+        this.walletAddress = assignCheckNull(walletAddress.toLowerCase(), 'Wallet address not provided');
         validateAddress(walletAddress);
     }
 

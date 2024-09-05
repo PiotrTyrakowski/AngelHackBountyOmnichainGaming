@@ -81,17 +81,23 @@
     globalThis.connectAndGetAccount = connectAndGetAccount;
 
     // 2. Nft Fetcher
-    async function fetchUserNfts(contractAddress) {
+    async function fetchUserNfts(contractAddress, userAcountAddress) {
         if (!LibJsNft.walletInstance) {
             console.log("NO WALLET INSTANCE");
             return "FAIL";
         }
 
-        const walletAddress = await LibJsNft.walletInstance.getWalletAddress();
-        if (!walletAddress) {
-            console.log("NO WALLET ADDRESS");
+        if (!LibJsNft.walletInstance.getWalletAddress()) {
+            console.log("NO WALLET ADDRESS (USER NOT CONNECTED)");
             return "FAIL";
         }
+
+        if (!LibJsNft.settingsInstance) {
+            console.log("NO SETTINGS INSTANCE");
+            return "FAIL";
+        }
+        LibJsNft.validateAddress(contractAddress);
+        LibJsNft.validateAddress(userAcountAddress);
 
         const settings = LibJsNft.settingsInstance.getContractSettingsByAddress(contractAddress);
         if (!settings) {
@@ -99,7 +105,7 @@
             return "FAIL";
         }
 
-        const nftFetcher = new LibJsNft.NftFetcher(settings.getGoldskyApi(), walletAddress);
+        const nftFetcher = new LibJsNft.NftFetcher(settings.getGoldskyApi(), userAcountAddress);
         const ownedTokens = await nftFetcher.fetchUserNft();
         if (!ownedTokens) {
             console.log("NO OWNED TOKENS");
@@ -110,10 +116,8 @@
         const nftMetadataFetcher = new LibJsNft.NftMetadataFetcher(settings.network, contractAddress);
         const nftMetadataList = await nftMetadataFetcher.getTokensMetadata(ownedTokens);
         console.log('METADATA OF OWNED NFTS:', nftMetadataList);
-        const nftMetadataListJson = JSON.stringify(nftMetadataList);
-        console.log('METADATA OF OWNED NFTS (JSON):', nftMetadataListJson);
 
-        return nftMetadataListJson;
+        return nftMetadataList;
     }
     globalThis.fetchUserNfts = fetchUserNfts;
 

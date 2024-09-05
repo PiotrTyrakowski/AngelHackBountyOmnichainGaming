@@ -19,8 +19,8 @@ class UserAccount {
     _etherId = etherId;
   }
 
-  HashMap<String, List<NftToken>> GetOwnedNfts() {
-    return NftAdapter.GetOwnedNfts(_etherId);
+  Future<HashMap<String, List<NftToken>>> GetOwnedNfts() async {
+    return await NftAdapter.GetOwnedNfts(_etherId);
   }
 
   String _etherId = "0";

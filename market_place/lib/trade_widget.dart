@@ -101,21 +101,27 @@ class _TradeWidgetState extends State<TradeWidget> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: Friends.map((friendInfo) => FriendWidget(
                     info: friendInfo,
-                    onClick: () {
+                    onClick: () async {
+                      print("Getting friend nfts");
+                      HashMap<String, List<NftToken>> friendsTokens =
+                          await friendInfo.GetOwnedNfts();
+                      print("Getting user nfts");
+                      HashMap<String, List<NftToken>> userTokens =
+                          await UserAccount().GetOwnedNfts();
                       setState(() {
                         _selectedFriend = friendInfo;
-                        _selectedFriendTokens = friendInfo.GetOwnedNfts();
+                        _selectedFriendTokens = friendsTokens;
 
                         _userSelectedItems = [];
                         _friendSelectedItems = [];
-                        _userTokens = UserAccount().GetOwnedNfts();
+                        _userTokens = userTokens;
 
                         _selectedGame = Games[0];
                         _selectedItemPickerName = "You";
 
                         _equipmentOwner = UserAccount().etherId;
                         _equipmentItems = [];
-                        
+
                         _friendId = friendInfo.userId;
 
                         _updateOutContract();
@@ -264,7 +270,8 @@ class _TradeWidgetState extends State<TradeWidget> {
       children: [
         Text(
           title,
-          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18, color: Colors.white),
+          style: const TextStyle(
+              fontWeight: FontWeight.bold, fontSize: 18, color: Colors.white),
         ),
         const SizedBox(
             height: 12,
@@ -282,13 +289,11 @@ class _TradeWidgetState extends State<TradeWidget> {
   void _setEq() {
     if (_selectedItemPickerName == "You") {
       _equipmentOwner = UserAccount().etherId;
-      _equipmentItems =
-      _userTokens.containsKey(_selectedGame.name)
+      _equipmentItems = _userTokens.containsKey(_selectedGame.name)
           ? _userTokens[_selectedGame.name]!
           : [];
     } else {
-      _equipmentItems = _selectedFriendTokens
-          .containsKey(_selectedGame.name)
+      _equipmentItems = _selectedFriendTokens.containsKey(_selectedGame.name)
           ? _selectedFriendTokens[_selectedGame.name]!
           : [];
       _equipmentOwner = _selectedFriend!.userId;
@@ -345,8 +350,7 @@ class _TradeWidgetState extends State<TradeWidget> {
                 dropdownColor: Colors.black54,
                 value: _selectedGame,
                 hint: const Text('Select a game'),
-                items: Games.map<DropdownMenuItem<GameInfo>>(
-                    (GameInfo game) {
+                items: Games.map<DropdownMenuItem<GameInfo>>((GameInfo game) {
                   return DropdownMenuItem<GameInfo>(
                     value: game,
                     child: SmallGameInfo(info: game),
@@ -375,7 +379,7 @@ class _TradeWidgetState extends State<TradeWidget> {
             Flexible(
               child: DraggableTableWidget(
                 blockDrop: false,
-                maxItems:  9999,
+                maxItems: 9999,
                 onCardClick: _update_preview,
                 OwnerId: _equipmentOwner,
                 items: _equipmentItems,

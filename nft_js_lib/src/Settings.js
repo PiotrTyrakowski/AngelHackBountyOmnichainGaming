@@ -27,6 +27,7 @@ class Settings {
             return;
         }
 
+        contractAddress = contractAddress.toLowerCase();
         this.contracts[contractName] = new ContractSettings(network, contractAddress, goldskyApi);
         this.contractsByAddress[contractAddress] = this.contracts[contractName];
     }
@@ -55,8 +56,24 @@ class ContractSettings {
      * @param {string} goldskyApi 
      */
     constructor(network, contractAddress, goldskyApi) {
+        if (!(network instanceof ethers.Network)) {
+            console.error("Invalid network provided");
+            console.error(new Error().stack);
+            return;
+        }
+        if (typeof contractAddress !== "string") {
+            console.error("Invalid contract address provided");
+            console.error(new Error().stack);
+            return;
+        }
+        if (typeof goldskyApi !== "string") {
+            console.error("Invalid Goldsky API provided");
+            console.error(new Error().stack);
+            return
+        }
+
         this.network = network;
-        this.contractAddress = contractAddress;
+        this.contractAddress = contractAddress.toLowerCase();
         this.goldskyApi = goldskyApi;
     }
 
@@ -99,7 +116,7 @@ settingsInstance.addContractSettings(
     'GamingNftZetachain2',
     new ethers.Network("https://zeta-chain-testnet.drpc.org", 7001),
     '0xB5E0066AAd80b5f1fdDAcA49e928e95d636FC0FF',
-    'https://api.goldsky.com/api/public/project_cm0jlloqy8ay901vt86y56f0t/subgraphs/nft-2-zetachain-testnet/v1/g'
+    'https://api.goldsky.com/api/public/project_cm0jlloqy8ay901vt86y56f0t/subgraphs/nft-2-zetachain-testnet/v1/gn'
 );
 
 settingsInstance.addContractSettings(

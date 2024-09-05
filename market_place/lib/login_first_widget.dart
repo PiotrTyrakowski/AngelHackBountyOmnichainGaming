@@ -10,15 +10,15 @@ class LoginFirstWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-        child: UserAccount().IsLogged()
+        child: !UserAccount().IsLogged()
             ? const RoundedContainer(
-            width: null,
-            height: null,
-            padding: EdgeInsets.all(16),
-            child: Text(
-              "First you need to login!",
-              style: TextStyle(fontSize: 24),
-            ))
+                width: null,
+                height: null,
+                padding: EdgeInsets.all(16),
+                child: Text(
+                  "First you need to login!",
+                  style: TextStyle(fontSize: 24),
+                ))
             : _child);
   }
 }
