@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:market_place/contract_info.dart';
+import 'package:market_place/models/contract_info.dart';
 import 'package:market_place/js_adapter/swap_adapter.dart';
-import 'package:market_place/rounded_container.dart';
-import 'package:market_place/trade_widget.dart';
-import '../web_page_bar.dart';
-import "../pages.dart";
+import 'package:market_place/widgets/general_purpose/rounded_container.dart';
+import 'package:market_place/widgets/trade_widgets/trade_box.dart';
+import 'package:market_place/widgets/web_page_bar.dart';
+import "../settings/pages_list.dart";
 
 class TradePage extends StatefulWidget {
   const TradePage({super.key});
@@ -28,7 +28,7 @@ class _TradePageState extends State<TradePage> {
                 width: constraints.maxWidth,
                 height: constraints.maxHeight,
                 borderColor: Colors.white,
-                child: TradeWidget(info: _info));
+                child: TradeBox(info: _info));
           })),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
@@ -63,7 +63,8 @@ class _TradePageState extends State<TradePage> {
 
   Future<void> _send_contract(BuildContext context) async {
     if (_info.senderTokens.isEmpty && _info.targetTokens.isEmpty) {
-      _show_dialog(context, 'Contract error', 'Contract has to contain at least one item');
+      _show_dialog(context, 'Contract error',
+          'Contract has to contain at least one item');
       return;
     }
 

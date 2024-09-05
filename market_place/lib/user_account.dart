@@ -1,4 +1,4 @@
-import 'nft_token.dart';
+import 'models/nft_token.dart';
 import 'js_adapter/nft_adapter.dart';
 import 'dart:collection';
 

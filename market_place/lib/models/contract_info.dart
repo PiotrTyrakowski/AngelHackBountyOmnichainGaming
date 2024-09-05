@@ -1,4 +1,4 @@
-import 'package:market_place/nft_token.dart';
+import 'package:market_place/models/nft_token.dart';
 
 class ContractInfo {
   String contractId;

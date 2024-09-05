@@ -1,4 +1,4 @@
-import 'nft_token.dart';
+import '../models/nft_token.dart';
 
 const List<NftToken> mock0 = [
   NftToken(

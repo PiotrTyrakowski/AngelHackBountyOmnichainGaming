@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class ImageCarousel extends StatefulWidget {
   final List<String> imagePaths;
 
-  ImageCarousel({required this.imagePaths});
+  const ImageCarousel({super.key, required this.imagePaths});
 
   @override
   _ImageCarouselState createState() => _ImageCarouselState();
@@ -42,7 +42,7 @@ class _ImageCarouselState extends State<ImageCarousel> {
               onPressed: _previousImage,
               icon: const Icon(Icons.arrow_back_ios, color: Colors.white),
             ),
-            SizedBox(width: 16.0),
+            const SizedBox(width: 16.0),
             IconButton(
               onPressed: _nextImage,
               icon: const Icon(Icons.arrow_forward_ios, color: Colors.white),

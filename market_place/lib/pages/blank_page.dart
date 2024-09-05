@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import "web_page_bar.dart";
-import "pages.dart";
+import "../widgets/web_page_bar.dart";
+import "../settings/pages_list.dart";
 
 class BlankPage extends StatelessWidget {
   final String title;
@@ -14,10 +14,7 @@ class BlankPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.black38,
-      appBar: WebPageBar(
-          title: title,
-          pages: PageList
-      ),
+      appBar: WebPageBar(title: title, pages: PageList),
       body: Center(
         child: Text(
           title,

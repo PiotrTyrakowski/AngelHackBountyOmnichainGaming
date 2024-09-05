@@ -4,8 +4,8 @@ library my_lib; //Not avoid the library annotation
 import 'dart:convert';
 import 'dart:js_interop';
 
-import '../nft_token.dart';
-import '../games/games_info.dart';
+import '../models/nft_token.dart';
+import '../settings/game_info_list.dart';
 import 'dart:collection';
 
 import 'dart:js_util' as jsu;

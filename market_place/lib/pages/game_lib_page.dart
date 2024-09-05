@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:market_place/games/game_preview_widget.dart';
-import 'package:market_place/rounded_container.dart';
+import 'package:market_place/widgets/game_widgets/game_preview_widget.dart';
+import 'package:market_place/widgets/general_purpose/rounded_container.dart';
 import 'package:url_launcher/url_launcher.dart';
-import '../web_page_bar.dart';
-import "../pages.dart";
-import '../games_widget.dart';
+import 'package:market_place/widgets/web_page_bar.dart';
+import "../settings/pages_list.dart";
+import '../widgets/game_widgets/game_preview.dart';
 
 class GameLibPage extends StatefulWidget {
   const GameLibPage({super.key});
@@ -28,7 +28,7 @@ class _GameLibPageState extends State<GameLibPage> {
                 width: constraints.maxWidth,
                 height: constraints.maxHeight,
                 borderColor: Colors.white,
-                child: GamesWidget(
+                child: GamePreview(
                   onChange: (GameInfo info) {
                     setState(() {
                       _selectedGame = info;
@@ -69,7 +69,7 @@ class _GameLibPageState extends State<GameLibPage> {
   }
 
   void _startGame(BuildContext context) {
-    if (_selectedGame == null){
+    if (_selectedGame == null) {
       _show_dialog(context, "Error", "First select your game!");
       return;
     }

@@ -1,21 +1,21 @@
 import 'package:flutter/material.dart';
-import 'package:market_place/animated_gradient.dart';
+import 'package:market_place/widgets/general_purpose/animated_gradient_text.dart';
 
-import 'nft_token.dart';
+import '../../models/nft_token.dart';
 
-class DraggableTableManager {
-  final List<_DraggableTableWidgetState> _tables = [];
+class TradeDragTableManager {
+  final List<_TradeDragTableState> _tables = [];
 
-  void registerTable(_DraggableTableWidgetState table) {
+  void registerTable(_TradeDragTableState table) {
     _tables.add(table);
   }
 
-  void unregisterTable(_DraggableTableWidgetState table) {
+  void unregisterTable(_TradeDragTableState table) {
     _tables.remove(table);
   }
 
-  void moveItem(NftToken item, _DraggableTableWidgetState sourceTable,
-      _DraggableTableWidgetState targetTable) {
+  void moveItem(NftToken item, _TradeDragTableState sourceTable,
+      _TradeDragTableState targetTable) {
     if (sourceTable != targetTable) {
       sourceTable.removeItem(item);
       targetTable.addItem(item);
@@ -23,17 +23,17 @@ class DraggableTableManager {
   }
 }
 
-class DraggableTableWidget extends StatefulWidget {
+class TradeDragTable extends StatefulWidget {
   final List<NftToken> items;
   final int columnsCount;
   final Function(List<NftToken>) onItemsChanged;
-  final DraggableTableManager manager;
+  final TradeDragTableManager manager;
   final String OwnerId;
   final Function(NftToken) onCardClick;
   final bool blockDrop;
   final int maxItems;
 
-  const DraggableTableWidget(
+  const TradeDragTable(
       {super.key,
       required this.OwnerId,
       required this.items,
@@ -45,10 +45,10 @@ class DraggableTableWidget extends StatefulWidget {
       required this.maxItems});
 
   @override
-  _DraggableTableWidgetState createState() => _DraggableTableWidgetState();
+  _TradeDragTableState createState() => _TradeDragTableState();
 }
 
-class _DraggableTableWidgetState extends State<DraggableTableWidget>
+class _TradeDragTableState extends State<TradeDragTable>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
 
@@ -154,7 +154,7 @@ class _DraggableTableWidgetState extends State<DraggableTableWidget>
   }
 
   static Widget _getLegendary(double font) {
-    return AnimatedGradientFont(text: "Legendary", fontSize: font);
+    return AnimatedGradientText(text: "Legendary", fontSize: font);
   }
 
   static const Map<String, Widget Function(double)> _rarityMap = {
@@ -256,7 +256,9 @@ class _DraggableTableWidgetState extends State<DraggableTableWidget>
   }
 
   void _handleItemDrop(NftToken draggedItem) {
-    if (widget.blockDrop || draggedItem.OwnerId != widget.OwnerId || widget.items.length >= widget.maxItems) {
+    if (widget.blockDrop ||
+        draggedItem.OwnerId != widget.OwnerId ||
+        widget.items.length >= widget.maxItems) {
       return;
     }
 

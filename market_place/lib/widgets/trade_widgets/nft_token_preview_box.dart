@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:market_place/rounded_container.dart';
-import 'animated_gradient.dart';
-import 'nft_token.dart';
+import 'package:market_place/widgets/general_purpose/rounded_container.dart';
+import '../general_purpose/animated_gradient_text.dart';
+import '../../models/nft_token.dart';
 
-class NftTokenPreview extends StatelessWidget {
+class NftTokenPreviewBox extends StatelessWidget {
   final NftToken token;
 
-  const NftTokenPreview({super.key, required this.token});
+  const NftTokenPreviewBox({super.key, required this.token});
 
   static Widget _getCommonText(double fontSize) {
     return Text(
@@ -42,7 +42,7 @@ class NftTokenPreview extends StatelessWidget {
   }
 
   static Widget _getLegendary(double font) {
-    return AnimatedGradientFont(text: "Legendary", fontSize: font);
+    return AnimatedGradientText(text: "Legendary", fontSize: font);
   }
 
   static const Map<String, Widget Function(double)> _rarityMap = {
@@ -109,7 +109,9 @@ class NftTokenPreview extends StatelessWidget {
                         Text(
                           token.Name,
                           style: const TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 32, color: Colors.white),
+                              fontWeight: FontWeight.bold,
+                              fontSize: 32,
+                              color: Colors.white),
                         ),
                         const SizedBox(
                             width: double.infinity,
@@ -128,14 +130,18 @@ class NftTokenPreview extends StatelessWidget {
             ),
             const Text(
               "Description:",
-              style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold, color: Colors.white),
+              style: TextStyle(
+                  fontSize: 32,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white),
             ),
             Padding(
               padding: const EdgeInsets.all(16.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  Text(token.Description, style: const TextStyle(fontSize: 24, color: Colors.white))
+                  Text(token.Description,
+                      style: const TextStyle(fontSize: 24, color: Colors.white))
                 ],
               ),
             )

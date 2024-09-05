@@ -1,17 +1,18 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:market_place/contract_info.dart';
-import 'package:market_place/item_preview_widget.dart';
-import 'drag_table.dart';
-import 'user_account.dart';
-import 'rounded_container.dart';
-import 'login_first_widget.dart';
-import 'friends.dart';
-import 'friend_widget.dart';
-import 'games/game_preview_widget.dart';
-import 'games/games_info.dart';
+import 'package:market_place/models/contract_info.dart';
+import 'package:market_place/widgets/trade_widgets/nft_token_preview_box.dart';
+import 'package:market_place/models/friend_info.dart';
+import 'trade_drag_table.dart';
+import '../../user_account.dart';
+import '../general_purpose/rounded_container.dart';
+import '../login/login_first_widget.dart';
+import '../../settings/friends_info_list.dart';
+import 'friend_box.dart';
+import '../game_widgets/game_preview_widget.dart';
+import '../../settings/game_info_list.dart';
 import 'dart:collection';
-import 'nft_token.dart';
+import '../../models/nft_token.dart';
 
 class SmallGameInfo extends StatelessWidget {
   final GameInfo _info;
@@ -44,21 +45,21 @@ class SmallGameInfo extends StatelessWidget {
   }
 }
 
-class TradeWidget extends StatefulWidget {
+class TradeBox extends StatefulWidget {
   final ContractInfo _info;
 
-  const TradeWidget({super.key, required ContractInfo info}) : _info = info;
+  const TradeBox({super.key, required ContractInfo info}) : _info = info;
 
   @override
-  _TradeWidgetState createState() => _TradeWidgetState();
+  _TradeBoxState createState() => _TradeBoxState();
 }
 
-class _TradeWidgetState extends State<TradeWidget> {
+class _TradeBoxState extends State<TradeBox> {
   FriendInfo? _selectedFriend;
   GameInfo _selectedGame = Games[0];
   String _selectedItemPickerName = "You";
 
-  final DraggableTableManager _manager = DraggableTableManager();
+  final TradeDragTableManager _manager = TradeDragTableManager();
 
   Map<String, List<NftToken>> _userTokens = {};
   Map<String, List<NftToken>> _selectedFriendTokens = {};
@@ -99,7 +100,7 @@ class _TradeWidgetState extends State<TradeWidget> {
             flex: 3,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: Friends.map((friendInfo) => FriendWidget(
+              children: Friends.map((friendInfo) => FriendBox(
                     info: friendInfo,
                     onClick: () async {
                       print("Getting friend nfts");
@@ -189,7 +190,7 @@ class _TradeWidgetState extends State<TradeWidget> {
               ),
             ),
           )
-        : Flexible(child: NftTokenPreview(token: _previewItem!));
+        : Flexible(child: NftTokenPreviewBox(token: _previewItem!));
   }
 
   Widget _buildPreviewWidget(BuildContext context) {
@@ -221,7 +222,7 @@ class _TradeWidgetState extends State<TradeWidget> {
           children: [
             _buildTitleBar(context, "Your items"),
             Flexible(
-              child: DraggableTableWidget(
+              child: TradeDragTable(
                 blockDrop: false,
                 maxItems: 2,
                 onCardClick: _update_preview,
@@ -250,7 +251,7 @@ class _TradeWidgetState extends State<TradeWidget> {
               children: [
                 _buildTitleBar(context, "${_selectedFriend!.name}'s items"),
                 Flexible(
-                  child: DraggableTableWidget(
+                  child: TradeDragTable(
                     blockDrop: false,
                     maxItems: 2,
                     onCardClick: _update_preview,
@@ -377,7 +378,7 @@ class _TradeWidgetState extends State<TradeWidget> {
               ),
             ),
             Flexible(
-              child: DraggableTableWidget(
+              child: TradeDragTable(
                 blockDrop: false,
                 maxItems: 9999,
                 onCardClick: _update_preview,

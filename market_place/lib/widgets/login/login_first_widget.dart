@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'user_account.dart';
-import 'rounded_container.dart';
+import '../../user_account.dart';
+import '../general_purpose/rounded_container.dart';
 
 class LoginFirstWidget extends StatelessWidget {
   final Widget _child;

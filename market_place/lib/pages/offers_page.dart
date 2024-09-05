@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:market_place/rounded_container.dart';
-import '../web_page_bar.dart';
-import "../pages.dart";
-import '../offers_widget.dart';
+import 'package:market_place/widgets/general_purpose/rounded_container.dart';
+import 'package:market_place/widgets/web_page_bar.dart';
+import "../settings/pages_list.dart";
+import '../widgets/trade_widgets/offers_widget.dart';
 
 class OffersPage extends StatelessWidget {
   const OffersPage({super.key});

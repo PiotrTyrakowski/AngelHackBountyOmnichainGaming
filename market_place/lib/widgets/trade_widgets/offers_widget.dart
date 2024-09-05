@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:market_place/js_adapter/swap_adapter.dart';
 import 'package:market_place/user_account.dart';
-import 'animated_gradient.dart';
-import 'rounded_container.dart';
-import 'login_first_widget.dart';
-import 'swaps/swap_blank_widget.dart';
-import 'swaps/swap_mock.dart';
-import 'package:market_place/contract_info.dart';
-import 'package:market_place/nft_token.dart';
+import '../general_purpose/animated_gradient_text.dart';
+import '../general_purpose/rounded_container.dart';
+import '../login/login_first_widget.dart';
+import '../../swaps/swap_blank_widget.dart';
+import '../../swaps/swap_mock.dart';
+import 'package:market_place/models/contract_info.dart';
+import 'package:market_place/models/nft_token.dart';
 
 class OffersWidget extends StatefulWidget {
   const OffersWidget({super.key});
@@ -17,7 +17,8 @@ class OffersWidget extends StatefulWidget {
 }
 
 class _OffersWidgetState extends State<OffersWidget> {
-  final List<ContractInfo> _userSwaps = SwapAdapter.GetAllContracts(UserAccount().etherId);
+  final List<ContractInfo> _userSwaps =
+      SwapAdapter.GetAllContracts(UserAccount().etherId);
   String? _selectedSwapId;
   ContractInfo? _contractInfo;
 
@@ -26,17 +27,17 @@ class _OffersWidgetState extends State<OffersWidget> {
     return LoginFirstWidget(child: _buildGamesLib(context));
   }
 
-  void _cleanContract(ContractInfo info){
+  void _cleanContract(ContractInfo info) {
     setState(() {
-      if (_selectedSwapId == info.contractId){
+      if (_selectedSwapId == info.contractId) {
         _selectedSwapId = null;
       }
 
-      if (_contractInfo == info){
+      if (_contractInfo == info) {
         _contractInfo = null;
       }
 
-      if (_userSwaps.contains(info)){
+      if (_userSwaps.contains(info)) {
         _userSwaps.remove(info);
       }
     });
@@ -234,7 +235,7 @@ class _OffersWidgetState extends State<OffersWidget> {
   }
 
   static Widget _getLegendary(double font) {
-    return AnimatedGradientFont(text: "Legendary", fontSize: font);
+    return AnimatedGradientText(text: "Legendary", fontSize: font);
   }
 
   static const Map<String, Widget Function(double)> _rarityMap = {
@@ -245,7 +246,7 @@ class _OffersWidgetState extends State<OffersWidget> {
   };
 
   Widget _getTokenColoredText(NftToken token, double fontSize) {
-    if (_rarityMap.containsKey(token.Rarity.toUpperCase())){
+    if (_rarityMap.containsKey(token.Rarity.toUpperCase())) {
       return _rarityMap[token.Rarity.toUpperCase()]!(fontSize);
     }
     return _getCommonText(fontSize);

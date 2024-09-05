@@ -1,21 +1,21 @@
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
 
-class AnimatedGradientFont extends StatefulWidget {
+class AnimatedGradientText extends StatefulWidget {
   final String text;
   final double fontSize;
 
-  const AnimatedGradientFont({
+  const AnimatedGradientText({
     super.key,
     required this.text,
     this.fontSize = 40,
   });
 
   @override
-  _AnimatedGradientFontState createState() => _AnimatedGradientFontState();
+  _AnimatedGradientTextState createState() => _AnimatedGradientTextState();
 }
 
-class _AnimatedGradientFontState extends State<AnimatedGradientFont>
+class _AnimatedGradientTextState extends State<AnimatedGradientText>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _animation;

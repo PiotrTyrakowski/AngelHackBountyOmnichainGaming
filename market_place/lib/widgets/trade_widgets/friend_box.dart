@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'friends.dart';
+import 'package:market_place/models/friend_info.dart';
 
-class FriendWidget extends StatelessWidget {
+class FriendBox extends StatelessWidget {
   final FriendInfo _info;
   final VoidCallback? onClick;
 
-  const FriendWidget({
+  const FriendBox({
     super.key,
     required FriendInfo info,
     this.onClick,

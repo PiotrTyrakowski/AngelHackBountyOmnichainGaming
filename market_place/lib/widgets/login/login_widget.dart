@@ -4,8 +4,8 @@ library my_lib; //Not avoid the library annotation
 import 'package:js/js.dart';
 
 import 'package:flutter/material.dart';
-import 'package:market_place/rounded_container.dart';
-import 'user_account.dart';
+import 'package:market_place/widgets/general_purpose/rounded_container.dart';
+import '../../user_account.dart';
 import 'dart:js_util' as jsu;
 
 @JS()

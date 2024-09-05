@@ -1,4 +1,4 @@
-import 'game_preview_widget.dart';
+import '../widgets/game_widgets/game_preview_widget.dart';
 
 const List<GameInfo> Games = [
   GameInfo(
@@ -7,7 +7,8 @@ const List<GameInfo> Games = [
       contractId: "0x2f1b7b418A51A62685c0E7617ca6c0C5551106e6",
       screens: ["assets/dino_screen1.jpg", "assets/dino_screen2.jpg"],
       gameLink: "https://chromedino.com/",
-      desc: "\"Dino Run\" is an endlessly entertaining and minimalist arcade-style"
+      desc:
+          "\"Dino Run\" is an endlessly entertaining and minimalist arcade-style"
           " game that has captivated players worldwide with its simple yet addictive "
           "gameplay. Originally designed as an Easter egg for the Google Chrome browser,"
           " Dino Run (often referred to as \"Chrome Dino\" or \"T-Rex Runner\") features "

@@ -1,21 +1,21 @@
 import 'package:flutter/material.dart';
-import 'package:market_place/image_carousel.dart';
-import 'rounded_container.dart';
-import 'games/game_preview_widget.dart';
-import 'games/games_info.dart';
-import 'login_first_widget.dart';
+import 'package:market_place/widgets/general_purpose/image_carousel.dart';
+import '../general_purpose/rounded_container.dart';
+import 'game_preview_widget.dart';
+import '../../settings/game_info_list.dart';
+import '../login/login_first_widget.dart';
 
-class GamesWidget extends StatefulWidget {
+class GamePreview extends StatefulWidget {
   final Function(GameInfo) _onChange;
 
-  const GamesWidget({super.key, required Function(GameInfo) onChange})
+  const GamePreview({super.key, required Function(GameInfo) onChange})
       : _onChange = onChange;
 
   @override
-  _GamesWidgetState createState() => _GamesWidgetState();
+  _GamePreviewState createState() => _GamePreviewState();
 }
 
-class _GamesWidgetState extends State<GamesWidget> {
+class _GamePreviewState extends State<GamePreview> {
   GameInfo? _selectedGame;
 
   @override
@@ -111,7 +111,9 @@ class _GamesWidgetState extends State<GamesWidget> {
                     Text(
                       _selectedGame!.name,
                       style: const TextStyle(
-                          fontSize: 92, fontWeight: FontWeight.bold, color: Colors.white),
+                          fontSize: 92,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white),
                     ),
                   ],
                 ),
@@ -140,11 +142,14 @@ class _GamesWidgetState extends State<GamesWidget> {
                           children: [
                             const Text("Description: ",
                                 style: TextStyle(
-                                    fontSize: 28, fontWeight: FontWeight.bold, color: Colors.white)),
+                                    fontSize: 28,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white)),
                             Flexible(
                               child: SingleChildScrollView(
                                 child: Text(_selectedGame!.desc,
-                                    style: const TextStyle(fontSize: 18, color: Colors.white)),
+                                    style: const TextStyle(
+                                        fontSize: 18, color: Colors.white)),
                               ),
                             ),
                           ],
