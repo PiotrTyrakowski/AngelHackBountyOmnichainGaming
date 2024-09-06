@@ -66,7 +66,7 @@
         const account = await LibJsNft.walletInstance.getWalletAddress();
         if (account) {
             console.log('User Account Address:', account);
-            return account;
+            return account.toLowerCase();
         } else {
             console.error('Error getting account:', account);
             return "FAIL";
@@ -121,6 +121,46 @@
     }
     globalThis.fetchUserNfts = fetchUserNfts;
 
+    async function fetchNftsMetadata(contractAddress, tokenIds) {
+        console.log("FETCHING NFTS METADATA FOR: ", contractAddress, tokenIds);
+
+        if (!Array.isArray(tokenIds)) {
+            console.log("TOKEN IDS IS NOT AN ARRAY");
+        }
+        tokenIds.forEach((tokenId) => {
+            LibJsNft.validateTokenId(tokenId);
+        });
+
+        if (!LibJsNft.walletInstance) {
+            console.log("NO WALLET INSTANCE");
+            return "FAIL";
+        }
+
+        if (!LibJsNft.walletInstance.getWalletAddress()) {
+            console.log("NO WALLET ADDRESS (USER NOT CONNECTED)");
+            return "FAIL";
+        }
+
+        if (!LibJsNft.settingsInstance) {
+            console.log("NO SETTINGS INSTANCE");
+            return "FAIL";
+        }
+        LibJsNft.validateAddress(contractAddress);
+
+        const settings = LibJsNft.settingsInstance.getContractSettingsByAddress(contractAddress);
+        if (!settings) {
+            console.log("NO SETTINGS FOR CONTRACT ADDRESS");
+            return "FAIL";
+        }
+
+        const nftMetadataFetcher = new LibJsNft.NftMetadataFetcher(settings.network, contractAddress);
+        const nftMetadataList = await nftMetadataFetcher.getTokensMetadata(tokenIds);
+        console.log('METADATA OF CHECKED NFTS:', nftMetadataList);
+
+        return nftMetadataList;
+    }
+    globalThis.fetchNftsMetadata = fetchNftsMetadata;
+
     // 3. NftSwapper and NftSwapsFetcher adapter
     let _swapper = null;
     function _getSwapper() {
@@ -133,17 +173,26 @@
         LibJsNft.validateAddress(contractAddress);
 
         _swapper = LibJsNft.assignCheckNull(new LibJsNft.NftSwapper(network, contractAddress), 'Failed to create NftSwapper instance');
-        return swapper;
+        return _swapper;
     }
 
+    let _swapFetcher = null;
     function _getSwapFetcher(walletAddress) {
-        const settings = settingsInstance.getContractSettings('SwapperNftZetachain');
-        const swapFetcher = new NftSwapsFetcher(settings.getGoldskyApi(), walletAddress);
+        if (_swapFetcher) {
+            return _swapFetcher;
+        }
+        const settings = LibJsNft.settingsInstance.getContractSettings('SwapperNftZetachain');
+        _swapFetcher = new LibJsNft.NftSwapsFetcher(settings.getGoldskyApi(), walletAddress);
+        return _swapFetcher;
     }
 
     async function InitiateSwapJs(counterparty, initiatorContracts, initiatorTokenIds, initiatorTokenCounts, counterpartyContracts, counterpartyTokenIds, counterpartyTokenCounts) {
         const swapper = _getSwapper();
         await swapper.init();
+
+        console.log('Initiating swap with:', counterparty);
+        console.log('Initiator:', initiatorContracts, initiatorTokenIds, initiatorTokenCounts);
+        console.log('Counterparty:', counterpartyContracts, counterpartyTokenIds, counterpartyTokenCounts);
         const swapId = await swapper.initiateSwap(
             counterparty,
             initiatorContracts, initiatorTokenIds, initiatorTokenCounts,
@@ -155,14 +204,17 @@
     globalThis.InitiateSwapJs = InitiateSwapJs;
 
     async function GetSwapsToUserJs(walletAddress) {
+        console.log('Getting swaps to user:', walletAddress);
         const swapFetcher = _getSwapFetcher(walletAddress);
         const swaps = await swapFetcher.fetchCounterpartySwapsNotCompleted();
         console.log('Swaps to user:', swaps);
-        return swaps;
+        const swapsJson = JSON.stringify(swaps);
+        return swapsJson;
     }
     globalThis.GetSwapsToUserJs = GetSwapsToUserJs;
 
     async function CancelSwapJs(swapId) {
+        console.log('Cancelling swap:', swapId);
         const swapper = _getSwapper();
         await swapper.init();
         await swapper.cancelSwap(swapId);
@@ -170,10 +222,19 @@
     }
     globalThis.CancelSwapJs = CancelSwapJs;
 
-    async function AcceptSwapJs(swapId) {
+    async function AcceptSwapJs(swapId, counterpartyContracts, counterpartyTokenIds, counterpartyTokenCounts) {
+        console.log('Accepting swap:', swapId);
+        LibJsNft.validateSwapId(swapId);
+        if (!Array.isArray(counterpartyContracts) || !Array.isArray(counterpartyTokenIds) || !Array.isArray(counterpartyTokenCounts)) {
+            console.log('Counterparty data is not an array');
+            return;
+        }
+        counterpartyContracts.forEach((contract) => LibJsNft.validateAddress(contract));
+        counterpartyTokenIds.forEach((tokenId) => LibJsNft.validateTokenId(tokenId));
+
         const swapper = _getSwapper();
         await swapper.init();
-        await swapper.cancelSwap(swapId);
+        await swapper.completeSwap(swapId, counterpartyContracts, counterpartyTokenIds, counterpartyTokenCounts)
         console.log('Swap accepted:', swapId);
     }
     globalThis.AcceptSwapJs = AcceptSwapJs;

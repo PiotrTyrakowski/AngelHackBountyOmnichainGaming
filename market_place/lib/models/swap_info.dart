@@ -13,4 +13,12 @@ class SwapInfo {
       this.senderId = "",
       this.senderTokens = const [],
       this.targetTokens = const []});
+
+  factory SwapInfo.fromJson(Map<String, dynamic> json) {
+    return SwapInfo(
+      swapId: json['swapId']?.toString() ?? '',
+      senderId: json['initator']?.toString() ?? '',
+      targetId: json['counterparty']?.toString() ?? '',
+    );
+  }
 }

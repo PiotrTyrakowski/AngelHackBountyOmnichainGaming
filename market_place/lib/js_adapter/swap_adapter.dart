@@ -5,8 +5,8 @@ import 'dart:convert';
 import 'dart:js_interop';
 import 'dart:js_util' as jsu;
 
+import 'package:market_place/js_adapter/js_swap_info.dart';
 import 'package:market_place/models/swap_info.dart';
-import '../mock_data/swap_mock_list_2.dart';
 
 import '../models/nft_token.dart';
 
@@ -22,98 +22,181 @@ external JSPromise<JSNumber> InitiateSwapJs(
     JSArray<JSNumber> counterpartyTokenCounts);
 
 @JS()
-external JSPromise<JSObject> GetSwapsToUserJs(JSString walletAddress);
+external JSPromise<JSString> GetSwapsToUserJs(JSString walletAddress);
 
 @JS()
-external JSPromise<JSAny> CancelSwapJs(JSString swapId);
+external JSPromise CancelSwapJs(JSNumber swapId);
 
 @JS()
-external JSPromise<JSAny> AcceptSwapJs(JSString swapId);
+external JSPromise AcceptSwapJs(
+    JSNumber swapId,
+    JSArray<JSString> counterpartyContracts,
+    JSArray<JSNumber> counterpartyTokenIds,
+    JSArray<JSNumber> counterpartyTokenCounts);
+
+@JS()
+external JSPromise<JSArray<JSString>> fetchNftsMetadata(
+    JSString contractId, JSArray<JSNumber> tokenIds);
 
 class SwapAdapter {
   static InitiateSwap(String fromId, String toId, List<NftToken> fromItems,
       List<NftToken> toItems) async {
-    // Make a hash map of contract id to list of token ids per from and to
-    var fromMap = <String, List<int>>{};
-    var toMap = <String, List<int>>{};
-
-    for (var token in fromItems) {
-      if (!fromMap.containsKey(token.ContractId)) {
-        fromMap[token.ContractId] = List<int>.empty();
-      }
-      fromMap[token.ContractId]!.add(int.parse(token.TokenId));
-    }
-
-    for (var token in toItems) {
-      if (!toMap.containsKey(token.ContractId)) {
-        toMap[token.ContractId] = List<int>.empty();
-      }
-      toMap[token.ContractId]!.add(int.parse(token.TokenId));
-    }
-
-    // Flatten the maps into arrays, and counts
-    var fromContracts = List<String>.empty(growable: true);
-    var fromTokenIds = List<int>.empty(growable: true);
-    var fromTokenCounts = List<int>.empty(growable: true);
-
-    for (var entry in fromMap.entries) {
-      fromContracts.add(entry.key);
-      fromTokenIds.addAll(entry.value);
-      fromTokenCounts.add(entry.value.length);
-    }
-
-    var toContracts = List<String>.empty(growable: true);
-    var toTokenIds = List<int>.empty(growable: true);
-    var toTokenCounts = List<int>.empty(growable: true);
-
-    for (var entry in toMap.entries) {
-      toContracts.add(entry.key);
-      toTokenIds.addAll(entry.value);
-      toTokenCounts.add(entry.value.length);
-    }
-
-    print("Initiating swap from $fromId to $toId");
-    print("From: $fromContracts, $fromTokenIds, $fromTokenCounts");
-    print("To: $toContracts, $toTokenIds, $toTokenCounts");
-
-    // Convert to JS types
-    JSString counterparty = toId.toJS;
-    JSArray<JSString> initatorContracts =
-        fromContracts.map((e) => e.toJS).toList().toJS;
-    JSArray<JSNumber> initatiorTokenIds =
-        fromTokenIds.map((e) => e.toJS).toList().toJS;
-    JSArray<JSNumber> initatorTokenCounts =
-        fromTokenCounts.map((e) => e.toJS).toList().toJS;
-    JSArray<JSString> counterpartyContracts =
-        toContracts.map((e) => e.toJS).toList().toJS;
-    JSArray<JSNumber> counterpartyTokenIds =
-        toTokenIds.map((e) => e.toJS).toList().toJS;
-    JSArray<JSNumber> counterpartyTokenCounts =
-        toTokenCounts.map((e) => e.toJS).toList().toJS;
-
     // Call the JS function
+    JsSwapInfo info = JsSwapInfo(fromId, toId, fromItems, toItems, null);
     jsu.promiseToFuture<JSNumber>(InitiateSwapJs(
-        counterparty,
-        initatorContracts,
-        initatiorTokenIds,
-        initatorTokenCounts,
-        counterpartyContracts,
-        counterpartyTokenIds,
-        counterpartyTokenCounts));
+        info.counterparty,
+        info.initiatorNftContracts,
+        info.initiatorTokenIds,
+        info.initiatorTokenCounts,
+        info.counterpartyNftContracts,
+        info.counterpartyTokenIds,
+        info.counterpartyTokenCounts));
   }
 
   static Future<List<SwapInfo>> GetSwapsToUser(String userId) async {
-    var swaps =
-        await jsu.promiseToFuture<JSObject>(GetSwapsToUserJs(userId.toJS));
-    return [];
+    var swapsJson =
+        await jsu.promiseToFuture<JSString>(GetSwapsToUserJs(userId.toJS));
+    List<dynamic> swaps = jsonDecode(swapsJson.toString()) as List<dynamic>;
+
+    print("Got ${swaps.length} swaps for user $userId");
+    // for item in swaps parse the underlying js object
+    return Future.wait(swaps.map((e) async {
+      print("Swap is $e");
+
+      print("Parsing swap");
+      var swap = e as Map<String, dynamic>;
+      print("Map is $swap");
+
+      // Declaring the intermediate form
+      print("Parsing swap ${swap["swapId"]}");
+
+      Map<String, List<int>> senderTokensIntermediateForm = {};
+      Map<String, List<int>> targetTokensIntermediateForm = {};
+
+      List<String> senderContracts = (swap["initiatorNftContracts"] != null &&
+              swap["initiatorNftContracts"] is List)
+          ? List<String>.from(swap["initiatorNftContracts"])
+          : [];
+      List<int> senderTokenIds = (swap["initiatorTokenIds"] != null &&
+              swap["initiatorTokenIds"] is List)
+          ? List<int>.from(swap["initiatorTokenIds"])
+          : [];
+      List<int> senderTokenCounts = (swap["initiatorTokenCounts"] != null &&
+              swap["initiatorTokenCounts"] is List)
+          ? List<int>.from(swap["initiatorTokenCounts"])
+          : [];
+
+      List<String> targetContracts =
+          (swap["counterpartyNftContracts"] != null &&
+                  swap["counterpartyNftContracts"] is List)
+              ? List<String>.from(swap["counterpartyNftContracts"])
+              : [];
+      List<int> targetTokenIds = (swap["counterpartyTokenIds"] != null &&
+              swap["counterpartyTokenIds"] is List)
+          ? List<int>.from(swap["counterpartyTokenIds"])
+          : [];
+
+      List<int> targetTokenCounts = (swap["counterpartyTokenCounts"] != null &&
+              swap["counterpartyTokenCounts"] is List)
+          ? List<int>.from(swap["counterpartyTokenCounts"])
+          : [];
+
+      // Getting the first intermediate form
+      print("Parsing sender tokens");
+      int totalCounts = 0;
+      for (int i = 0; i < senderContracts.length; i++) {
+        for (int j = 0; j < senderTokenCounts[i]; j++) {
+          if (!senderTokensIntermediateForm.containsKey(senderContracts[i])) {
+            senderTokensIntermediateForm[senderContracts[i]] =
+                List.empty(growable: true);
+          }
+          senderTokensIntermediateForm[senderContracts[i]]!
+              .add(senderTokenIds[totalCounts]);
+          totalCounts++;
+        }
+      }
+
+      print("Parsing target tokens");
+      totalCounts = 0;
+      for (int i = 0; i < targetContracts.length; i++) {
+        for (int j = 0; j < targetTokenCounts[i]; j++) {
+          if (!targetTokensIntermediateForm.containsKey(targetContracts[i])) {
+            targetTokensIntermediateForm[targetContracts[i]] =
+                List.empty(growable: true);
+          }
+          targetTokensIntermediateForm[targetContracts[i]]!
+              .add(targetTokenIds[totalCounts]);
+          totalCounts++;
+        }
+      }
+
+      print("Got sender tokens $senderTokensIntermediateForm");
+      print("Got target tokens $targetTokensIntermediateForm");
+
+      // Fetching the metadata for the tokens from the intermediate form
+      List<NftToken> senderTokens = List.empty(growable: true);
+      List<NftToken> targetTokens = List.empty(growable: true);
+
+      print("Fetching sender tokens");
+      for (var entry in senderTokensIntermediateForm.entries) {
+        List<NftToken> tokens = await jsu
+            .promiseToFuture<JSArray<JSString>>(fetchNftsMetadata(
+                entry.key.toJS, entry.value.map((e) => e.toJS).toList().toJS))
+            .then((value) {
+          return value.toDart
+              .map((e) => NftToken.fromJson(jsonDecode(e.toDart)))
+              .toList();
+        });
+        senderTokens.addAll(tokens);
+      }
+      print("Got sender tokens ${senderTokens.length}");
+      print("Sender tokens: $senderTokens");
+
+      print("Fetching target tokens");
+      for (var entry in targetTokensIntermediateForm.entries) {
+        List<NftToken> tokens = await jsu
+            .promiseToFuture<JSArray<JSString>>(fetchNftsMetadata(
+                entry.key.toJS, entry.value.map((e) => e.toJS).toList().toJS))
+            .then((value) {
+          return value.toDart
+              .map((e) => NftToken.fromJson(jsonDecode(e.toDart)))
+              .toList();
+        });
+        targetTokens.addAll(tokens);
+      }
+
+      print("Got sender tokens of len: ${senderTokens.length}");
+      print("Got target tokens of len: ${targetTokens.length}");
+
+      print("swapId: ${swap["swapId"]}");
+      print("initator: ${swap["initiator"]}");
+      print("counterparty: ${swap["counterparty"]}");
+
+      return SwapInfo(
+          swapId: swap["swapId"],
+          senderId: swap["initiator"],
+          targetId: swap["counterparty"],
+          senderTokens: senderTokens,
+          targetTokens: targetTokens);
+    }));
   }
 
   static void CancelSwap(SwapInfo info) async {
-    CancelSwapJs(info.swapId.toJS);
+    int swapId = int.parse(info.swapId);
+    if (swapId == null) {
+      throw Exception("Invalid swap id");
+    }
+    jsu.promiseToFuture<JSPromise<JSAny>>(CancelSwapJs(swapId.toJS));
   }
 
   static void AcceptSwap(SwapInfo info) async {
-    AcceptSwapJs(info.swapId.toJS);
+    JsSwapInfo jsInfo = JsSwapInfo(info.senderId, info.targetId,
+        info.senderTokens, info.targetTokens, info.swapId);
+    jsu.promiseToFuture<JSPromise<JSAny>>(AcceptSwapJs(
+        jsInfo.swapId!,
+        jsInfo.counterpartyNftContracts,
+        jsInfo.counterpartyTokenIds,
+        jsInfo.counterpartyTokenCounts));
   }
 
   // "" = success, otherwise provide error

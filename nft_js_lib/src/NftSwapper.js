@@ -60,6 +60,7 @@ class NftSwapper {
      * @throws Will throw an error if the NFT contract address is invalid.
      */
     async approveNft(nftContractAddress, tokenId) {
+        console.log(`Approving NFT ${tokenId} in contract ${nftContractAddress} for swapping`);
         validateAddress(nftContractAddress);
         validateTokenId(tokenId);
 
@@ -85,6 +86,14 @@ class NftSwapper {
      * @throws Will throw an error if any of the provided addresses or token IDs are invalid.
      */
     async initiateSwap(counterparty, initiatorContracts, initiatorTokenIds, initiatorTokenCounts, counterpartyContracts, counterpartyTokenIds, counterpartyTokenCounts) {
+        console.log(`Initiating swap with counterparty ${counterparty}`);
+        console.log(`Initiator contracts: ${initiatorContracts}`);
+        console.log(`Initiator token IDs: ${initiatorTokenIds}`);
+        console.log(`Initiator token counts: ${initiatorTokenCounts}`);
+        console.log(`Counterparty contracts: ${counterpartyContracts}`);
+        console.log(`Counterparty token IDs: ${counterpartyTokenIds}`);
+        console.log(`Counterparty token counts: ${counterpartyTokenCounts}`);
+
         validateAddress(counterparty);
         initiatorContracts.forEach(validateAddress);
         counterpartyContracts.forEach(validateAddress);
@@ -132,6 +141,7 @@ class NftSwapper {
      * @throws Will throw an error if the swap ID, contract addresses, or token IDs are invalid.
      */
     async completeSwap(swapId, counterpartyContracts, counterpartyTokenIds, counterpartyTokenCounts) {
+        console.log(`Completing swap with ID ${swapId}`);
         validateSwapId(swapId);
         counterpartyContracts.forEach(validateAddress);
         counterpartyTokenIds.forEach(validateTokenId);
@@ -161,6 +171,8 @@ class NftSwapper {
      * @throws Will throw an error if the swap ID is invalid.
      */
     async cancelSwap(swapId) {
+        console.log(`Cancelling swap with ID ${swapId}`);
+
         validateSwapId(swapId);
         await this.init();
 

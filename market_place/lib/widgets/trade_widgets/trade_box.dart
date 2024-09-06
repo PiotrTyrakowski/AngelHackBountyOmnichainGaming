@@ -81,8 +81,9 @@ class _TradeBoxState extends State<TradeBox> {
 
   void _updateOutContract() {
     widget._info.senderId = UserAccount().etherId;
-    widget._info.targetTokens = _friendSelectedItems;
-    widget._info.senderTokens = _userSelectedItems;
+    widget._info.targetTokens = _userSelectedItems;
+    widget._info.senderTokens =
+        _friendSelectedItems; // TODO: Fix this i swapped target and sender because it was swapped somewhere else
     widget._info.targetId = _selectedFriend!.userId;
   }
 

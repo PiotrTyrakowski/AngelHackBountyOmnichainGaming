@@ -257,7 +257,7 @@ class _TradeDragTableState extends State<TradeDragTable>
 
   void _handleItemDrop(NftToken draggedItem) {
     if (widget.blockDrop ||
-        draggedItem.OwnerId != widget.OwnerId ||
+        draggedItem.OwnerId.toLowerCase() != widget.OwnerId.toLowerCase() ||
         widget.items.length >= widget.maxItems) {
       return;
     }

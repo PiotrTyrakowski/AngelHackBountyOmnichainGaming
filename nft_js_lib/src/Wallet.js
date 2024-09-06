@@ -24,7 +24,7 @@ class Wallet {
             try {
                 // Request account access
                 const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-                this.setWalletAddress(accounts[0]);
+                this.setWalletAddress(accounts[0].toLowerCase());
 
                 if (updateButtonText && typeof updateButtonText === 'function') {
                     updateButtonText('Connected');

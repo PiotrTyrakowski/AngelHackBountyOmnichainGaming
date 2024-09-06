@@ -5,7 +5,6 @@ import '../general_purpose/animated_gradient_text.dart';
 import '../general_purpose/rounded_container.dart';
 import '../login/login_first_widget.dart';
 import 'swap_blank_widget.dart';
-import 'package:market_place/mock_data/swap_mock_list_2.dart';
 import 'package:market_place/models/swap_info.dart';
 import 'package:market_place/models/nft_token.dart';
 
@@ -61,7 +60,7 @@ class _OffersWidgetState extends State<OffersWidget> {
             flex: 3,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: swap_mock
+              children: _userSwaps
                   .map((swap) => SwapBlankWidget(
                       info: swap,
                       onClick: () {

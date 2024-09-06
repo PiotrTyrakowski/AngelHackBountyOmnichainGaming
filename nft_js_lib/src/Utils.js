@@ -71,7 +71,7 @@ export function zeroAddress() {
  * @param {number} baseDelayMs - The base delay in milliseconds. (default is 1000ms)
  * @returns Plain unmodified return value of the function or throws an error if the max retries are reached.
  */
-export async function exponentialBackoffRetry(fn, retries = 1, baseDelayMs = 1000) {
+export async function exponentialBackoffRetry(fn, retries = 1, baseDelayMs = 100) {
     let delay = baseDelayMs + Math.random() * baseDelayMs;
     try {
         for (let i = 0; i < retries; i++) {
