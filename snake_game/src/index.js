@@ -7,7 +7,9 @@ import './controls.js'; // Deals with user input for game controls and skin sele
 import './wallet_connect.js'; // Connects to MetaMask wallet
 
 // Libs for NFT integration
-import './lib_nft/wallet.js'; // Allows wallet connection
-import './lib_nft/fetch_user_nft.js'; // Fetches user NFTs
-import './lib_nft/get_nft_metadata.js'; // Fetches NFT metadata
-import './lib_nft/settings.js'; // Contains network and contract address
+import './lib_nft/Utils.js'
+import './lib_nft/Wallet.js'
+import './lib_nft/Settings.js'
+import './lib_nft/NftFetcher.js'
+import './lib_nft/NftMetadataFetcher.js'
+import './lib_nft/index-prod.js'

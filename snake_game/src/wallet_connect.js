@@ -1,7 +1,7 @@
-import walletInstance from "../../nft_js_lib/src/Wallet";
-import NftFetcher from "../../nft_js_lib/src/NftFetcher";
-import NftMetadataFetcher from "../../nft_js_lib/src/NftMetadataFetcher";
-import settingsInstance from "../../nft_js_lib/src/Settings";
+import NftFetcher from "./lib_nft/NftFetcher.js";
+import NftMetadataFetcher from "./lib_nft/NftMetadataFetcher.js";
+import walletInstance from "./lib_nft/Wallet.js";
+import settingsInstance from "./lib_nft/Settings.js";
 
 // Declare color map
 const colorMap = {
@@ -29,9 +29,9 @@ async function connectWalletWrapper() {
         return;
 
     const walletAddress = walletInstance.getWalletAddress();
-    const settings = settingsInstance.getContractSettings('GamingNftSepolia');
+    const settings = settingsInstance.getContractSettings('GamingNftZetachain1');
     const nftUtils = new NftFetcher(settings.getGoldskyApi(), walletAddress);
-    const tokenIds = await nftUtils.fetchUserNFT();
+    const tokenIds = await nftUtils.fetchUserNft();
 
     if (!walletAddress) {
         alert('Failed to connect wallet.');
