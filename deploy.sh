@@ -23,4 +23,15 @@ cd ../
 
 # Deploy
 echo "Deploying to Google Cloud"
-gcloud app deploy gcloud_dummy/app.yaml market_place/build/web/app.yaml snake_game/dist/app.yml dino_game_node/dist/app.yml
+
+echo "Listing projects"
+gcloud projects list
+echo "Specify the project ID for deployment"
+project_id=""
+read project_id
+if [ -z "$project_id" ]
+then
+    echo "Project ID is empty"
+    exit 1
+fi
+gcloud app deploy --project $project_id gcloud_dummy/app.yaml market_place/build/web/app.yaml snake_game/dist/app.yml dino_game_node/dist/app.yml
