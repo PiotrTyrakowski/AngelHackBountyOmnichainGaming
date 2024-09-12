@@ -1,5 +1,6 @@
 env: standard
-runtime: nodejs20
+runtime: nodejs22
+service: snake-game
 
 handlers:
   - url: /

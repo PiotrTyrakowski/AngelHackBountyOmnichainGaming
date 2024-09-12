@@ -1,6 +1,5 @@
 env: standard
 runtime: nodejs22
-service: angelhack-nft-marketplace
 
 handlers:
   - url: /
