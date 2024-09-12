@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:market_place/js_adapter/swap_adapter.dart';
 import 'package:market_place/user_account.dart';
+import 'package:market_place/widgets/RoundedBox.dart';
 import '../general_purpose/animated_gradient_text.dart';
 import '../general_purpose/rounded_container.dart';
 import '../login/login_first_widget.dart';
@@ -52,12 +53,11 @@ class _OffersWidgetState extends State<OffersWidget> {
   }
 
   Widget _buildGamesLib(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      child: Row(
-        children: [
-          Expanded(
-            flex: 3,
+    return Row(
+      children: [
+        Expanded(
+          flex: 3,
+          child: RoundedBox(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: _userSwaps
@@ -80,20 +80,16 @@ class _OffersWidgetState extends State<OffersWidget> {
                   .toList(),
             ),
           ),
-          const VerticalDivider(
-            thickness: 4,
-            width: 32,
-            indent: 20,
-            endIndent: 0,
-            color: Colors.white,
-          ),
-          Expanded(
-              flex: 10,
-              child: Center(
-                child: _swapInfo(context),
-              ))
-        ],
-      ),
+        ),
+        const SizedBox(
+          width: 32,
+        ),
+        Expanded(
+            flex: 10,
+            child: Center(
+              child: _swapInfo(context),
+            ))
+      ],
     );
   }
 
@@ -115,15 +111,14 @@ class _OffersWidgetState extends State<OffersWidget> {
   Widget _swapDetails(BuildContext context) {
     return LayoutBuilder(
       builder: (BuildContext context, BoxConstraints constraints) {
-        return SizedBox(
-          height: constraints.maxHeight,
+        return RoundedBox(
           child: Column(
             children: [
               Text(
                 "Contract $_selectedSwapId selected",
                 style: const TextStyle(
-                  fontSize: 40, // Change text size
-                  color: Colors.white, // Change text color
+                  fontSize: 40,
+                  color: Colors.white,
                 ),
               ),
               Expanded(

@@ -24,11 +24,7 @@ class _TradePageState extends State<TradePage> {
       body: Padding(
           padding: const EdgeInsets.all(24),
           child: LayoutBuilder(builder: (context, constraints) {
-            return RoundedContainer(
-                width: constraints.maxWidth,
-                height: constraints.maxHeight,
-                borderColor: Colors.white,
-                child: TradeBox(info: _info));
+            return TradeBox(info: _info);
           })),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
@@ -36,7 +32,7 @@ class _TradePageState extends State<TradePage> {
         },
         label: const Text('Send', style: TextStyle(color: Colors.black)),
         icon: const Icon(Icons.add, color: Colors.black),
-        backgroundColor: Colors.green,
+        backgroundColor: Colors.white,
       ),
     );
   }
@@ -69,6 +65,7 @@ class _TradePageState extends State<TradePage> {
     }
 
     SwapAdapter.IssueSwapUsingInfo(_info);
-    _show_dialog(context, 'Notification', 'Contract correctly send!');
+    _show_dialog(context, 'Notification',
+        'Contract sent. A series of blockchain transactions will be initiated. Please wait for the confirmations.');
   }
 }

@@ -35,27 +35,25 @@ class GameBlankWidget extends StatelessWidget {
         onTap: onClick,
         child: Card(
           child: Padding(
-            padding: const EdgeInsets.all(12.0),
+            padding: const EdgeInsets.all(6.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                Image.asset(
-                  _info.path,
-                  width: 64,
-                  height: 64,
-                  fit: BoxFit.cover,
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(8),
+                  child: Image.asset(
+                    _info.path,
+                    width: 64,
+                    height: 64,
+                    fit: BoxFit.cover,
+                  ),
                 ),
                 const SizedBox(
-                  height: 64, // Match the height of the image
-                  child: VerticalDivider(
-                    thickness: 4,
-                    width: 32,
-                    color: Colors.black,
-                  ),
+                  width: 16,
                 ),
                 Text(
                   _info.name,
-                  style: const TextStyle(fontSize: 18),
+                  style: const TextStyle(fontSize: 30),
                 ),
               ],
             ),

@@ -15,11 +15,7 @@ class OffersPage extends StatelessWidget {
       body: Padding(
           padding: const EdgeInsets.all(24),
           child: LayoutBuilder(builder: (context, constraints) {
-            return RoundedContainer(
-                width: constraints.maxWidth,
-                height: constraints.maxHeight,
-                borderColor: Colors.white,
-                child: const OffersWidget());
+            return const OffersWidget();
           })),
     );
   }

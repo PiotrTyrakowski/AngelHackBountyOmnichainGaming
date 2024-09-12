@@ -22,19 +22,15 @@ class _GameLibPageState extends State<GameLibPage> {
       backgroundColor: Colors.black87,
       appBar: const WebPageBar(title: "Games", pages: PageList),
       body: Padding(
-          padding: const EdgeInsets.all(24),
+          padding: const EdgeInsets.all(6),
           child: LayoutBuilder(builder: (context, constraints) {
-            return RoundedContainer(
-                width: constraints.maxWidth,
-                height: constraints.maxHeight,
-                borderColor: Colors.white,
-                child: GamePreview(
-                  onChange: (GameInfo info) {
-                    setState(() {
-                      _selectedGame = info;
-                    });
-                  },
-                ));
+            return GamePreview(
+              onChange: (GameInfo info) {
+                setState(() {
+                  _selectedGame = info;
+                });
+              },
+            );
           })),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
@@ -43,7 +39,7 @@ class _GameLibPageState extends State<GameLibPage> {
         label:
             const Text('Play your game', style: TextStyle(color: Colors.black)),
         icon: const Icon(Icons.play_arrow, color: Colors.black),
-        backgroundColor: Colors.green,
+        backgroundColor: Colors.white,
       ),
     );
   }

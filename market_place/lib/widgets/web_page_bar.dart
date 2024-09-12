@@ -1,4 +1,16 @@
+@JS()
+library my_lib;
+
 import 'package:flutter/material.dart';
+import 'package:market_place/settings/margins.dart';
+import 'package:js/js.dart';
+// ignore: avoid_web_libraries_in_flutter
+import 'dart:js_util' as jsu;
+
+import 'package:market_place/user_account.dart';
+
+@JS()
+external connectAndGetAccount();
 
 class WebPageBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
@@ -13,45 +25,32 @@ class WebPageBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      backgroundColor: Colors.black38,
+      backgroundColor: Colors.black,
       title: Text(
         "DEGames: $title",
         style: const TextStyle(
-          fontWeight: FontWeight.bold,
-          fontSize: 24,
-          color: Colors.white
-        ),
+            fontWeight: FontWeight.bold, fontSize: 24, color: Colors.white),
       ),
-      actions: pages.map((page) => _buildAnimatedButton(context, page)).toList(),
+      actions: pages.map((page) => _buildButton(context, page)).toList(),
       bottom: PreferredSize(
-        preferredSize: const Size.fromHeight(1.0),
+        preferredSize: const Size.fromHeight(2.0),
         child: Container(
-          color: Colors.lightBlue,
-          height: 1.0,
+          color: Colors.white,
+          height: 2.0,
         ),
       ),
     );
   }
 
-  Widget _buildAnimatedButton(BuildContext context, String label) {
+  Widget _buildButton(BuildContext context, String label) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8.0),
-      child: MouseRegion(
-        cursor: SystemMouseCursors.click,
-        child: GestureDetector(
-          onTap: () => _navigateToPage(context, label),
-          child: AnimatedContainer(
-            duration: const Duration(milliseconds: 200),
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-            decoration: BoxDecoration(
-              color: Colors.transparent,
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: Text(
-              label,
-              style: const TextStyle(color: Colors.white),
-            ),
-          ),
+      padding: const EdgeInsets.symmetric(horizontal: horizonstalMargin),
+      child: TextButton(
+        onPressed: () =>
+            label != 'Login' ? _navigateToPage(context, label) : _loginUser(),
+        child: Text(
+          label,
+          style: const TextStyle(color: Colors.white, fontSize: 18.0),
         ),
       ),
     );
@@ -60,15 +59,23 @@ class WebPageBar extends StatelessWidget implements PreferredSizeWidget {
   void _navigateToPage(BuildContext context, String label) {
     String route = '/${label.toLowerCase()}';
     Navigator.of(context).pushNamed(route);
-
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text('Navigating to $label'),
-        duration: const Duration(milliseconds: 500),
-      ),
-    );
   }
 
   @override
   Size get preferredSize => const Size.fromHeight(kToolbarHeight + 1.0);
+
+  Future<void> _loginUser() async {
+    try {
+      var jsPromise = connectAndGetAccount();
+      String result = await jsu.promiseToFuture<String>(jsPromise);
+
+      if (result != "FAIL") {
+        UserAccount().OnLogin(result);
+      } else {
+        throw Exception("connection to metamask failed");
+      }
+    } catch (e) {
+      print('Error during login: $e');
+    }
+  }
 }

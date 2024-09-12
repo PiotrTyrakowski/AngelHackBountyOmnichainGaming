@@ -78,75 +78,66 @@ class NftTokenPreviewBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return RoundedContainer(
-      width: double.infinity,
-      height: double.infinity,
-      padding: const EdgeInsets.all(1.0),
-      borderColor: Colors.white,
-      child: Padding(
-        padding: const EdgeInsets.all(2.0),
-        child: Column(
-          children: [
-            Row(
-              children: [
-                SizedBox(
-                    width: 128,
-                    height: 128,
-                    child: Container(
-                        decoration: BoxDecoration(
-                      color: _getTokenColor(token),
-                      borderRadius: BorderRadius.circular(8),
-                    ))),
-                const SizedBox(width: 16, height: 128),
-                Flexible(
-                  child: SizedBox(
-                    width: double.infinity,
-                    height: 128,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Text(
-                          token.Name,
-                          style: const TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 32,
-                              color: Colors.white),
-                        ),
-                        const SizedBox(
-                            width: double.infinity,
+    return Padding(
+      padding: const EdgeInsets.all(2.0),
+      child: Column(
+        children: [
+          Row(
+            children: [
+              SizedBox(
+                  width: 128,
+                  height: 128,
+                  child: Container(
+                      decoration: BoxDecoration(
+                    color: _getTokenColor(token),
+                    borderRadius: BorderRadius.circular(8),
+                  ))),
+              const SizedBox(width: 16, height: 128),
+              Flexible(
+                child: SizedBox(
+                  width: double.infinity,
+                  height: 128,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text(
+                        token.Name,
+                        style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 32,
+                            color: Colors.white),
+                      ),
+                      const SizedBox(
+                          width: double.infinity,
+                          height: 16,
+                          child: Divider(
+                            thickness: 4,
+                            color: Colors.white,
                             height: 16,
-                            child: Divider(
-                              thickness: 4,
-                              color: Colors.white,
-                              height: 16,
-                            )),
-                        _getTokenColoredText(token, 32),
-                      ],
-                    ),
+                          )),
+                      _getTokenColoredText(token, 32),
+                    ],
                   ),
                 ),
+              ),
+            ],
+          ),
+          const SizedBox(
+            width: double.infinity,
+            height: 16,
+          ),
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Text(token.Description,
+                    style: const TextStyle(fontSize: 24, color: Colors.white))
               ],
             ),
-            const Text(
-              "Description:",
-              style: TextStyle(
-                  fontSize: 32,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Text(token.Description,
-                      style: const TextStyle(fontSize: 24, color: Colors.white))
-                ],
-              ),
-            )
-          ],
-        ),
+          )
+        ],
       ),
     );
   }

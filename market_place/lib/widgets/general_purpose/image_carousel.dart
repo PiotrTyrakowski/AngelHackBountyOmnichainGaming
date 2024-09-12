@@ -29,12 +29,11 @@ class _ImageCarouselState extends State<ImageCarousel> {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Expanded(
-          child: Image.asset(
-            widget.imagePaths[_currentIndex],
-            fit: BoxFit.contain,
-          ),
+        Image.asset(
+          widget.imagePaths[_currentIndex],
+          fit: BoxFit.contain,
         ),
+        const SizedBox(height: 8.0),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [

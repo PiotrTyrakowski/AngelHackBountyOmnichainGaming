@@ -215,8 +215,6 @@ class _TradeDragTableState extends State<TradeDragTable>
                       const SizedBox(
                         height: 40,
                         width: 16,
-                        child:
-                            VerticalDivider(thickness: 2, color: Colors.black),
                       ),
                       Text(
                         token.Name,
@@ -225,13 +223,10 @@ class _TradeDragTableState extends State<TradeDragTable>
                       ),
                     ],
                   ),
-                  Flexible(
-                      child: Padding(
+                  Padding(
                     padding: const EdgeInsets.all(2.0),
-                    child: Center(
-                      child: _getTokenColoredText(token, 28),
-                    ),
-                  ))
+                    child: _getTokenColoredText(token, 28),
+                  )
                 ],
               ),
             ),
