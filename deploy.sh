@@ -23,4 +23,4 @@ cd ../
 
 # Deploy
 echo "Deploying to Google Cloud"
-gcloud app deploy market_place/build/web/app.yaml snake_game/dist/app.yml dino_game_node/dist/app.yml
+gcloud app deploy gcloud_dummy/app.yaml market_place/build/web/app.yaml snake_game/dist/app.yml dino_game_node/dist/app.yml

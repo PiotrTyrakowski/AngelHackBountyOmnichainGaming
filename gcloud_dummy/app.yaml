@@ -1,0 +1,10 @@
+env: standard
+service: default
+runtime: nodejs22
+
+handlers:
+  - url: /.*
+    static_files: dummy.html
+    upload: dummy.html
+
+entrypoint: echo "This is a default empty app"

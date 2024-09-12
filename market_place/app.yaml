@@ -1,5 +1,6 @@
 env: standard
 runtime: nodejs20
+service: marketplace
 
 handlers:
   - url: /
