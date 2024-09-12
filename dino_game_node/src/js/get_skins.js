@@ -1,18 +1,18 @@
-import { fetchUserNFT } from "./lib_nft/fetch_user_nft";
-import { getTokensMetadata } from "./lib_nft/get_nft_metadata";
-import { network, contractAddress } from "./lib_nft/settings";
+import { NftFetcher } from "./lib_nft/index-prod.js";
+import { NftMetadataFetcher } from "./lib_nft/index-prod.js";
+import { settingsInstance } from "./lib_nft/index-prod.js";
+import { walletInstance } from "./lib_nft/index-prod.js";
 
 export async function getAvailableSkins() {
-    const NFTs = await fetchUserNFT();
-    if (!NFTs) {
-        console.log("Null NFTs");
-        return null;
-    }
-    const Metadatas = await getTokensMetadata(NFTs, network, contractAddress);
-    if (!Metadatas) {
-        console.log("Null NFTs");
-        return null;
-    }
+    const ZetachainSettings = settingsInstance.getContractSettings('GamingNftZetachain2');
+    const network = ZetachainSettings.getNetwork();
+    const contractAddress = ZetachainSettings.getContractAddress();
+
+    const nftFetcher = NftFetcher(settings.getGoldskyApi(), walletInstance.getWalletAddress());
+    const metadataFetcher = NftMetadataFetcher(network, contractAddress);
+
+    const NFTs = await nftFetcher.fetchUserNFT();
+    const Metadatas = await metadataFetcher.getTokensMetadata(NFTs);
 
     let uniqueSkins = {};
     Metadatas.forEach(metadataString => {
@@ -20,5 +20,6 @@ export async function getAvailableSkins() {
         uniqueSkins[metadata.id] = metadata;
     });
 
-    return Metadatas;
+    let skinsArray = Object.values(uniqueSkins);
+    return skinsArray;
 }

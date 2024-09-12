@@ -1,7 +1,7 @@
-import walletInstance, { connectWallet } from "../../../nft_js_lib/src/Wallet";
-import settingsInstance from "../../../nft_js_lib/src/Settings";
-import NftFetcher from "../../../nft_js_lib/src/NftFetcher";
-import NftMetadataFetcher from "../../../nft_js_lib/src/NftMetadataFetcher";
+import NftFetcher from "./lib_nft/NftFetcher.js";
+import NftMetadataFetcher from "./lib_nft/NftMetadataFetcher.js";
+import walletInstance from "./lib_nft/Wallet.js";
+import settingsInstance from "./lib_nft/Settings.js";
 import { getAvailableSkins } from "./get_skins";
 
 const connectWalletBtn = document.getElementById('connectWalletBtn');
@@ -18,7 +18,7 @@ async function connectWalletWrapper() {
 
     // fetching token ids
     const walletAddress = walletInstance.getWalletAddress();
-    const settings = settingsInstance.getContractSettings('GamingNftZetachain1');
+    const settings = settingsInstance.getContractSettings('GamingNftZetachain2');
     const nftFetcher = new NftFetcher(settings.getGoldskyApi(), walletAddress);
     const tokenIds = await nftFetcher.fetchUserNft();
 
