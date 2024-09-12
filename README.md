@@ -14,6 +14,10 @@ DEGAMES is a revolutionary platform that leverages the power of ZetaChain to ena
 
 In the world of blockchain gaming, collectibles are often implemented on different blockchains such as Solana, Ethereum, or Avalanche. This fragmentation makes it challenging to create a unified exchange platform for these valuable in-game assets. DEGAMES solves this problem by utilizing ZetaChain's cross-chain capabilities to enable smooth and secure trading of game collectibles across various blockchain networks.
 
+## Using
+
+Simply start app using standard Flutter app execution.
+
 ## Features
 
 - **Cross-Chain Trading**: Exchange in-game collectibles between different blockchain networks seamlessly.
